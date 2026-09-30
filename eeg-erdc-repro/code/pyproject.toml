@@ -1,0 +1,41 @@
+[project]
+name = "eeg-brainit"
+version = "0.1.0"
+description = "EEG-to-Image decoding via Spec2VolCAMU-Net + Brain-IT Cross-Transformer fusion"
+requires-python = ">=3.10,<3.13"
+dependencies = [
+  "accelerate>=0.27,<1.2",
+  "diffusers>=0.27,<0.32",
+  "einops>=0.8",
+  "h5py>=3.10",
+  "huggingface-hub[cli]>=0.25,<1.0",
+  "lpips>=0.1.4",
+  "matplotlib>=3.8",
+  "mne>=1.8",
+  # Torch 2.2.2 cu121 wheels on peilab are built against NumPy 1.x.
+  "numpy>=1.26,<2",
+  "omegaconf>=2.3",
+  "open-clip-torch>=2.24",
+  "Pillow>=10.0",
+  "pyyaml>=6.0",
+  "safetensors>=0.4",
+  "scikit-image>=0.22",
+  "scikit-learn>=1.5",
+  "scipy>=1.11",
+  "tensorboard>=2.14",
+  "timm>=0.9",
+  # Installed from the cu121 index by scripts/setup_env.sh. Pinning prevents
+  # unconstrained deps from upgrading to a mismatched CUDA wheel.
+  "torch==2.2.2",
+  "torchvision==0.17.2",
+  "torchmetrics>=1.3",
+  "tqdm>=4.66",
+  "transformers>=4.37,<4.47",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"

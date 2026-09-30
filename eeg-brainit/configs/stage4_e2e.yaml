@@ -1,0 +1,12 @@
+# Stage 4: full end-to-end fine-tuning (tiny LR)
+output_dir: outputs/stage4_e2e
+train:
+  stage: 4
+  epochs: 30
+  learning_rate: 5.0e-6
+  batch_size: 2
+  grad_accum_steps: 8
+  early_stopping_patience: 8
+  resume: outputs/stage3_brainit/checkpoints/stage3_best_e18.pt
+loss:
+  lambda_reg: 5.0e-4

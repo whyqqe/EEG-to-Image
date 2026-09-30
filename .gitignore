@@ -1,0 +1,40 @@
+# large artifacts / data
+*.npy
+*.npz
+*.pt
+*.pth
+*.ckpt
+*.bin
+*.safetensors
+*.onnx
+*.h5
+*.hdf5
+*.pkl
+*.zip
+*.tar
+*.tar.gz
+data/
+outputs/
+cache/
+checkpoints/
+logs/
+results/
+wandb/
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.mp4
+*.wav
+
+# environments
+.venv/
+.venv*/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+node_modules/
+
+# nfs junk
+.nfs*

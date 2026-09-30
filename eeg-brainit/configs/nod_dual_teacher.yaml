@@ -1,0 +1,22 @@
+# NOD Dual-Teacher CLIP Bridge (sub-01 default)
+project_root: /project/peilab/why/eeg-brainit
+pairs_root: data/nod/processed/classmean
+clip_dir: data/nod/processed/clip_vit_h14_all
+subject: sub-01
+fmri_teacher_ckpt: outputs/eval/nod_phase2_gt_fmri2image/sub-01_classmean/fmri2clip.pt
+output_dir: outputs/nod_dual_teacher/sub-01_dual
+
+mode: dual  # dual | eeg_only | fake_teacher
+epochs: 40
+batch_size: 128
+lr: 3.0e-4
+val_frac: 0.1
+seed: 42
+lambda_nce: 1.0
+lambda_mse_img: 1.0
+lambda_mse_fmri: 0.25
+temp: 0.07
+d_model: 512
+train_frac: 1.0
+skip_gen: false
+max_images: 8

@@ -1,0 +1,30 @@
+# Short CLIP-align debug run (few steps).
+output_dir: outputs/clip_align_debug
+
+data:
+  teacher_dir: data/processed/teachers/clip_ViT-L-14_openai
+
+clip_align:
+  enabled: true
+  in_dim: 1664
+  out_dim: 768
+
+train:
+  stage: 2
+  epochs: 1
+  batch_size: 4
+  grad_accum_steps: 1
+  learning_rate: 1.0e-5
+  num_workers: 2
+  max_steps: 30
+  max_val_batches: 2
+  early_stopping_patience: 99
+
+loss:
+  lambda_clip: 1.0
+  lambda_nce: 0.5
+  temperature: 0.07
+  lambda_vgg: 0.0
+  lambda_pixel: 0.0
+  lambda_reg: 1.0e-4
+  use_proxy_fallback: false

@@ -1,0 +1,9 @@
+# Stage 3: unfreeze full Brain-IT path (BIT + virtual fMRI branch)
+output_dir: outputs/stage3_brainit
+train:
+  stage: 3
+  epochs: 20
+  learning_rate: 1.0e-5
+  batch_size: 4
+  grad_accum_steps: 4
+  resume: outputs/stage2_cross/checkpoints/stage2_best_e20.pt

@@ -1,0 +1,33 @@
+# NOD Region-Bridge (EEG spatiotemporal ↔ fMRI EVC/Ventral CLIP teachers)
+
+subject: sub-01
+pairs_root: data/nod/processed/region_pairs
+roi_dir: data/nod/processed/visual_rois
+clip_dir: data/nod/processed/clip_vit_h14_all
+global_teacher_ckpt: outputs/eval/nod_phase2_gt_fmri2image/sub-01_classmean/fmri2clip.pt
+
+epochs: 40
+teacher_epochs: 25
+batch_size: 128
+lr: 3.0e-4
+val_frac: 0.1
+seed: 42
+
+lambda_nce: 1.0
+lambda_mse_img: 1.0
+lambda_evc: 0.25
+lambda_vent: 0.35
+lambda_global: 0.25
+
+early_win: "0.06,0.15"
+late_win: "0.15,0.35"
+num_rois_per_region: 64
+use_classmean: true
+roi_method: stimvar_partition
+max_images: 8
+
+modes:
+  - region
+  - eeg_only
+  - global
+  - fake

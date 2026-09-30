@@ -1,0 +1,17 @@
+# Subject-Context EEG + K-shot (v2)
+# Fix vs v1: no full projector FT on tiny K (overfit); use SC recenter + ridge offset.
+
+protocol: leave_one_subject_out
+dataset: THINGS-EEG2
+version: loso_v2
+encoders: [atm_style]
+epochs: 8
+max_per_sub: 2500
+null_profile_p: 0.1
+sc_mode: recenter
+kshot_mode: ridge
+m_list: [0, 50, 100]
+k_list: [0, 1, 5, 10, 20]
+alpha_grid: [0.25, 0.5, 1.0, 1.5, 2.0]
+use_film_profile: true
+seed: 42

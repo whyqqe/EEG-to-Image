@@ -1,0 +1,12 @@
+# Short Stage-3 smoke: resume stage2 + unfreeze virtual fMRI branch
+output_dir: outputs/debug_stage3
+train:
+  stage: 3
+  epochs: 1
+  max_steps: 30
+  max_val_batches: 5
+  learning_rate: 1.0e-5
+  batch_size: 4
+  grad_accum_steps: 4
+  num_workers: 4
+  early_stopping_patience: 100

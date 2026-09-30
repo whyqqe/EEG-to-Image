@@ -1,0 +1,14 @@
+# Short Stage-4 smoke: full e2e unfreeze
+output_dir: outputs/debug_stage4
+train:
+  stage: 4
+  epochs: 1
+  max_steps: 24
+  max_val_batches: 4
+  learning_rate: 5.0e-6
+  batch_size: 2
+  grad_accum_steps: 8
+  num_workers: 4
+  early_stopping_patience: 100
+loss:
+  lambda_reg: 5.0e-4

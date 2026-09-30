@@ -1,0 +1,97 @@
+# EEG-Brain-IT experiment base config
+# Cache and outputs stay under /project/peilab/why (shared project storage).
+
+seed: 42
+project_root: /project/peilab/why/eeg-brainit
+output_dir: outputs/base
+cache_root: /project/peilab/why/cache/eeg-brainit
+
+data:
+  # Prefer shared THINGS-EEG2 if already present; otherwise download into data/raw.
+  root: /project/peilab/why/eeg-brainit
+  manifest: data/processed/manifest.jsonl
+  things_eeg2_dir: /project/peilab/why/data
+  eeg_dir: /project/peilab/why/data/Preprocessed_data_250Hz
+  images_dir: /project/peilab/why/data/images_set
+  num_channels: 63
+  sample_rate_hz: 250
+  image_size: 224
+  spectrogram:
+    n_fft: 64
+    hop_length: 16
+    target_time: 64
+  # Use smoke dataset when manifest is missing.
+  use_smoke_if_missing: true
+  smoke_samples: 32
+
+encoder:
+  in_channels: 63
+  hidden_dim: 256
+  d_eeg: 512
+  num_heads: 8
+  grid_size: 8
+  # Spec2VolCAMU-Net does not publish public weights.
+  checkpoint: checkpoints/spec2vol/md_tf_cae.pt
+
+projector:
+  d_eeg: 512
+  brain_dim: 1024
+  num_tokens: 4
+  hidden_mult: 2
+  dropout: 0.1
+  # multiscale | global
+  mode: multiscale
+
+virtual_fmri:
+  in_channels: 256
+  volume_depth: 32
+  num_clusters: 128
+  brain_dim: 1024
+  # Set true only after third_party/Spec2VolCAMU-Net + mamba kernels are ready.
+  prefer_official_decoder: false
+  v2c_path: checkpoints/brain_it/v2c_128_mapping_gmm_v2.npy
+
+bit:
+  brain_dim: 1024
+  num_brain_tokens: 128
+  num_query_tokens: 256
+  num_blocks: 2
+  num_heads: 8
+  # OpenCLIP ViT-bigG/14 token dim used by Brain-IT
+  clip_dim: 1664
+  vgg_dim: 512
+  dropout: 0.0
+  # kv | query | none  (ablations)
+  inject_eeg_as: kv
+  # Prefer the converted pure state_dict (avoids unpickling Brain-IT's `models.*`).
+  checkpoint: checkpoints/brain_it/decoder_clipg_state_dict.pt
+
+diffusion:
+  # Optional second-stage generation; feature-alignment training does not require it.
+  enabled: false
+  model_id: stabilityai/stable-diffusion-2-1
+  num_inference_steps: 50
+  guidance_scale: 7.5
+
+train:
+  stage: 1
+  epochs: 20
+  batch_size: 8
+  grad_accum_steps: 2
+  learning_rate: 1.0e-4
+  weight_decay: 0.01
+  grad_clip: 1.0
+  num_workers: 4
+  mixed_precision: true
+  early_stopping_patience: 10
+  save_every_epochs: 5
+
+loss:
+  lambda_clip: 1.0
+  lambda_vgg: 0.5
+  lambda_pixel: 0.0
+  lambda_reg: 1.0e-4
+
+evaluation:
+  metrics: [ssim, pixcorr, clip_score]
+  num_samples: 200

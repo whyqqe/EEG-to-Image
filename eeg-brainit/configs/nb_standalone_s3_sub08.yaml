@@ -1,0 +1,58 @@
+# Standalone S3: +BIT on S1, no ATM residual skip.
+output_dir: outputs/nb_standalone_s3_sub08
+
+neurobolt:
+  subject: sub-08
+  bridge_dir: outputs/atm_bridge
+  neurobolt_dir: /project/peilab/why/cache/things_eeg2_b2/neurobolt
+  clip_dim: 1024
+  use_bit: true
+  residual_mode: none
+  direct:
+    enabled: false
+  bridge:
+    fmri_dim: 512
+    brain_dim: 1024
+    num_brain_tokens: 128
+    num_eeg_tokens: 8
+    num_heads: 8
+    hidden: 1024
+    dropout: 0.1
+
+bit:
+  brain_dim: 1024
+  num_brain_tokens: 128
+  num_query_tokens: 256
+  num_blocks: 2
+  num_heads: 8
+  clip_dim: 1664
+  vgg_dim: 512
+  inject_eeg_as: kv
+  checkpoint: checkpoints/brain_it/decoder_clipg_state_dict.pt
+
+teacher_bank:
+  size: 1024
+
+train:
+  stage: 3
+  loss_on: bit_clip
+  early_stop_metric: test_top1_bit_clip
+  min_distill_cos: 0.0
+  early_stopping_patience: 0
+  init_checkpoint: outputs/nb_standalone_s1_sub08/checkpoints/nb_stage1_best.pt
+  epochs: 40
+  batch_size: 128
+  learning_rate: 1.0e-4
+  weight_decay: 0.01
+  grad_clip: 1.0
+  num_workers: 4
+  eval_every: 1
+
+loss:
+  lambda_clip: 0.25
+  lambda_nce: 1.0
+  lambda_distill: 0.5
+  lambda_siglip: 0.0
+  temperature: 0.07
+  lambda_reg: 1.0e-4
+  use_proxy_fallback: false

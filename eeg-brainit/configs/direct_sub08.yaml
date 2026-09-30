@@ -1,0 +1,52 @@
+# NICE/ATM-style subject-dependent direct EEG->CLIP (literature recipe).
+# Key differences from prior failed runs:
+# - train ONE subject (not 10 mixed)
+# - bypass BIT/virtual-fMRI; map z_eeg -> CLIP directly
+# - large-batch InfoNCE only (no 8k softmax bank)
+# - high LR ~1e-3 as in ViEEG/ATM setups
+output_dir: outputs/direct_sub08
+
+data:
+  subjects: [sub-08]
+  teacher_dir: data/processed/teachers/clip_ViT-L-14_openai
+
+direct_clip:
+  enabled: true
+  in_dim: 512
+  out_dim: 768
+  hidden: 1024
+
+clip_align:
+  enabled: false
+
+teacher_bank:
+  size: 0
+
+# Skip broken/unused BIT weight load for this path.
+bit:
+  checkpoint: ""
+
+train:
+  stage: 0
+  epochs: 50
+  batch_size: 512
+  grad_accum_steps: 1
+  learning_rate: 2.0e-3
+  head_lr_mult: 1.0
+  weight_decay: 0.01
+  grad_clip: 1.0
+  num_workers: 4
+  early_stopping_patience: 10
+  max_val_batches: 0
+  select_by_cos_gap: false
+  select_by_batch_top1: true
+
+loss:
+  lambda_clip: 0.25
+  lambda_nce: 1.0
+  lambda_siglip: 0.0
+  lambda_vf: 0.0
+  temperature: 0.07
+  learnable_logit_scale: false
+  lambda_reg: 0.0
+  use_proxy_fallback: false

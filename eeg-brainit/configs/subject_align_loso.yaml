@@ -1,0 +1,11 @@
+# ENIGMA-style subject latent alignment LOSO (primary path)
+protocol: leave_one_subject_out
+architecture: shared_spatiotemporal_cnn + per_subject_linear_Ws + mlp_projector
+loss: MSE(CLIP) + 0.5 * InfoNCE
+calib_list: [0, 100, 500, 2000, 5000, all]
+adapt: freeze_shared_finetune_Ws_only
+init_mode: identity
+epochs: 12
+max_per_sub: 4000
+batch_size: 256
+seed: 42

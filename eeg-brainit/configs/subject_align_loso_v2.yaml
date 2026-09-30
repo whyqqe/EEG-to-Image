@@ -1,0 +1,9 @@
+# Subject-align LOSO v2
+backbone: atm_style + Nz=256 bottleneck + per-subject W_s
+loss: MSE + 0.5*InfoNCE + 0.2*ATM_distill
+pretrain: epochs=25, max_per_sub=0 (full), cosine LR
+adapt: mean-init W_new; freeze backbone; FT W_s; also FT projector if N>=2000
+adapt_epochs: 12 (large-N cap 12000 steps)
+calib_list: [0, 100, 500, 2000, 5000, all]
+seed: 42
+output: outputs/subject_align_loso/loso_v2

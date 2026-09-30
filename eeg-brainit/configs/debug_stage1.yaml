@@ -1,0 +1,12 @@
+# Short GPU smoke run before full stage-1 training
+output_dir: outputs/debug_stage1
+train:
+  stage: 1
+  epochs: 1
+  max_steps: 50
+  max_val_batches: 5
+  learning_rate: 1.0e-4
+  batch_size: 8
+  grad_accum_steps: 1
+  num_workers: 4
+  early_stopping_patience: 100

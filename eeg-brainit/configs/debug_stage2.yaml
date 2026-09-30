@@ -1,0 +1,14 @@
+# Short Stage-2 smoke: resume stage1 + unfreeze BIT
+output_dir: outputs/debug_stage2
+train:
+  stage: 2
+  epochs: 1
+  max_steps: 40
+  max_val_batches: 5
+  learning_rate: 5.0e-5
+  batch_size: 8
+  grad_accum_steps: 2
+  num_workers: 4
+  early_stopping_patience: 100
+bit:
+  inject_eeg_as: kv

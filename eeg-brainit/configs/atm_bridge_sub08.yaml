@@ -1,0 +1,51 @@
+# ATM pretrained embedding -> Brain-IT bridge (subject-dependent).
+output_dir: outputs/atm_bridge_sub08
+
+atm:
+  subject: sub-08
+  bridge_dir: outputs/atm_bridge
+  dim: 1024
+  use_bit: true
+  refiner:
+    enabled: true
+    hidden: 1024
+    dropout: 0.1
+  bridge:
+    in_dim: 1024
+    brain_dim: 1024
+    num_brain_tokens: 128
+    num_eeg_tokens: 8
+    hidden: 2048
+    dropout: 0.1
+
+bit:
+  brain_dim: 1024
+  num_brain_tokens: 128
+  num_query_tokens: 256
+  num_blocks: 2
+  num_heads: 8
+  clip_dim: 1664
+  vgg_dim: 512
+  inject_eeg_as: kv
+  checkpoint: checkpoints/brain_it/decoder_clipg_state_dict.pt
+
+teacher_bank:
+  size: 1024
+
+train:
+  stage: 1
+  epochs: 30
+  batch_size: 512
+  learning_rate: 1.0e-3
+  weight_decay: 0.01
+  grad_clip: 1.0
+  num_workers: 4
+  early_stopping_patience: 8
+
+loss:
+  lambda_clip: 0.25
+  lambda_nce: 1.0
+  lambda_siglip: 0.0
+  temperature: 0.07
+  lambda_reg: 1.0e-4
+  use_proxy_fallback: false

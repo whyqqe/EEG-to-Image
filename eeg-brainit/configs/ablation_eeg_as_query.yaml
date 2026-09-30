@@ -1,0 +1,8 @@
+# Ablation: inject EEG tokens as extra Query instead of Key/Value
+output_dir: outputs/ablation_eeg_as_query
+bit:
+  inject_eeg_as: query
+train:
+  stage: 2
+  epochs: 20
+  learning_rate: 5.0e-5

@@ -1,0 +1,52 @@
+# Phase-1 image-level: NeuroBOLT → stimvar visual ROIs (harder; often near chance).
+output_dir: outputs/nod_eeg2fmri/neurobolt_stimvar_v3
+
+eeg2fmri:
+  backbone: neurobolt
+  glb_ckpt: checkpoints/neurobolt/glb.pth
+  patch_size: 200
+  win_level: 1
+  use_mss: false
+  train_mss: false
+  unfreeze_last_n_blocks: 2
+  train_patch_embed: false
+  in_dim: 26
+  num_rois: 64
+  clip_dim: 1024
+  hidden: 512
+  head_depth: 1
+  dropout: 0.35
+  use_clip_head: false
+
+data:
+  nod_root: data/nod
+  manifest: data/nod/manifests/nod_pairs_stimvar.json
+  max_subjects: 0
+  val_frac: 0.1
+  split: image_id
+  target_mode: stimvar
+  num_rois: 64
+  stimvar_top_frac: 0.12
+
+train:
+  epochs: 60
+  warmup_epochs: 5
+  heads_only_epochs: 12
+  min_epochs: 20
+  early_stop_patience: 12
+  select_ema: 0.8
+  batch_size: 32
+  learning_rate: 5.0e-5
+  backbone_lr: 5.0e-6
+  weight_decay: 0.1
+  grad_clip: 1.0
+  num_workers: 0
+  seed: 42
+
+loss:
+  lambda_mse: 1.0
+  lambda_corr: 1.5
+  lambda_cosine: 0.3
+  lambda_nce: 0.1
+  lambda_clip: 0.0
+  nce_temp: 0.1

@@ -1,0 +1,26 @@
+# Abs-only qualification (Stage-1 of Path A)
+# Goal: shared encoder absolute LOSO Top-1 >= 8% (target: match Align n0 ~10%)
+# Do NOT enable RSA/relative/GRL until this gate passes.
+
+mode: abs_only
+output: outputs/aria/abs_only_v1
+
+train:
+  epochs: 40
+  batch_size: 128
+  lr: 2.0e-4
+  max_per_sub: 0
+  lambda_abs: 1.0
+  lambda_nce: 0.5
+  lambda_atm: 0.3
+  lambda_rsa: 0.0
+  lambda_rel: 0.0
+  lambda_id: 0.0
+
+eval:
+  absolute: primary
+  procrustes_n100_n500_n_all: secondary (vs Subject-Align W_s)
+  relative: reported but not decision-critical
+
+gate: absolute top1_mean >= 0.08
+compare_to: subject_align_loso_v3 n0 (~10.6%)

@@ -1,0 +1,24 @@
+# Subject-Context EEG (SC-EEG) + K-shot personalization
+# THINGS-EEG2 leave-one-subject-out, 200-way CLIP retrieval
+#
+# M = unlabeled same-subject background EEG (train split, labels unused)
+# K = labeled EEG–image pairs for adapter fine-tuning (disjoint from M)
+# Test labels never used for adaptation.
+
+protocol: leave_one_subject_out
+dataset: THINGS-EEG2
+gallery: outputs/atm_bridge/clip_img_test_1024.npy
+encoders: [atm_style]
+epochs: 8
+max_per_sub: 2500
+batch_size: 128
+lr: 3.0e-4
+lambda_atm: 0.15
+ctx_m: 32
+null_profile_p: 0.25
+profile_dim: 256
+m_list: [0, 50, 100]
+k_list: [0, 1, 5, 10, 20]
+adapt_lr: 1.0e-3
+adapt_steps: 50
+seed: 42

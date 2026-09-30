@@ -1,0 +1,11 @@
+# Stage 2: unfreeze BIT Cross-Transformer
+output_dir: outputs/stage2_cross
+train:
+  stage: 2
+  epochs: 20
+  learning_rate: 5.0e-5
+  batch_size: 8
+  grad_accum_steps: 2
+  resume: outputs/stage1_warmup/checkpoints/stage1_best_e15.pt
+bit:
+  inject_eeg_as: kv

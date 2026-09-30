@@ -1,0 +1,37 @@
+output_dir: outputs/atm_bridge_sub08_debug
+
+atm:
+  subject: sub-08
+  bridge_dir: outputs/atm_bridge
+  dim: 1024
+  use_bit: true
+  refiner:
+    enabled: true
+  bridge:
+    in_dim: 1024
+    brain_dim: 1024
+    num_brain_tokens: 128
+    num_eeg_tokens: 8
+    hidden: 2048
+
+bit:
+  checkpoint: checkpoints/brain_it/decoder_clipg_state_dict.pt
+
+teacher_bank:
+  size: 256
+
+train:
+  stage: 1
+  epochs: 1
+  batch_size: 256
+  learning_rate: 1.0e-3
+  num_workers: 2
+  max_steps: 40
+  early_stopping_patience: 99
+
+loss:
+  lambda_clip: 0.25
+  lambda_nce: 1.0
+  temperature: 0.07
+  lambda_reg: 1.0e-4
+  use_proxy_fallback: false

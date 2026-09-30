@@ -1,0 +1,21 @@
+# Physics residual adapter v2 (ATM-frozen + adapter pretrain + K-shot)
+#
+# Changes vs v1 (failed ~3%):
+#   - Do NOT retrain weak ATM-style backbone
+#   - Freeze official ATM embeddings as f_θ (~34.5% ceiling)
+#   - Physical prior on RAW EEG channel×band features → residual Δ in CLIP space
+#   - Adapter is multi-subject pretrained, then K-shot personalized
+#   - Softmax gates + entropy penalty for subspace selection
+#   - Ablation: unstructured residual MLP with same protocol
+
+protocol: atm_frozen_physics_residual
+meta_train_subjects: "sub-01,sub-02,sub-03,sub-04,sub-05,sub-06,sub-07,sub-09"
+meta_test_subject: sub-08
+pretrain_epochs: 20
+max_per_sub: 4000
+k_shot: 50
+inner_steps: 30
+rank: 8
+lambda_nce: 1.0
+lambda_res: 1.0e-3
+lambda_gate: 1.0e-3

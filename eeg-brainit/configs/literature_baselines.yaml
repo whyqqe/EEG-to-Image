@@ -1,0 +1,73 @@
+# Local measured baselines (sub-08 unless noted) + literature references.
+# Freeze date: 2026-08-08 (Phase 0 of NOD EEG→fMRI→Image plan).
+
+local_measured:
+  atm_raw_retrieval:
+    top1: 0.345
+    top5: 0.715
+    notes: "THINGS-EEG2 sub-08, 200-way, ATM ViT-H/14 features."
+  atm_distill_s3_bit_clip:
+    top1: 0.365
+    top5: 0.640
+    checkpoint: outputs/atm_distill_s3_sub08/checkpoints/atm_stage3_best.pt
+  atm_pipeline_generation_ipadapter:
+    prior_pixcorr: 0.077
+    atm_pixcorr: 0.073
+    bit_clip_pixcorr: 0.092
+    notes: "Local SDXL+IP-Adapter protocol; not paper 2-way metrics."
+  atm_official_generation:
+    pixcorr: 0.159
+    ssim: 0.038
+    clip_cosine: 0.370
+    notes: "Official ATM gens vs GT; SSIM protocol differs from paper."
+  neurobolt_residual:
+    direct_top1: 0.360
+    bit_top1: 0.350
+    notes: "ATM residual skip; fMRI path barely adds signal."
+  neurobolt_standalone:
+    top1_approx: 0.005
+    notes: "No ATM residual → chance. Do NOT use frozen NeuroBOLT on THINGS as mainline."
+
+literature:
+  atm_things_eeg2:
+    paper: "Li et al., NeurIPS 2024"
+    generation:
+      pixcorr: 0.160
+      ssim: 0.345
+      clip_2way: 0.786
+  brain_it_nsd:
+    paper: "Brain-IT"
+    pixcorr: 0.386
+    notes: "fMRI→Image ceiling; needs NSD-compatible features."
+  mindeye2_nsd:
+    paper: "MindEye2, ICML 2024"
+    pixcorr: 0.322
+  spec2vol_eeg2fmri:
+    paper: "Spec2VolCAMU-Net, 2025"
+    ssim:
+      noddi: 0.693
+      oddball: 0.725
+      cn_epfl: 0.788
+    notes: "No public weights; volume SSIM ≠ image reconstruction."
+  neurobolt:
+    paper: "NeuroBOLT, NeurIPS 2024"
+    notes: "Resting-state ROI; use only as encoder init on visual paired data (NOD)."
+  nod_dataset:
+    paper: "NOD, Scientific Data 2025"
+    eeg_openneuro: "ds005811"
+    meg_openneuro: "ds005810"
+    notes: "Same subjects + same naturalistic images: fMRI/MEG/EEG. Primary Phase-1 data."
+  unifiedneurogen:
+    paper: "UnifiedNeuroGen, 2025"
+    hf_demo: "xkoo115/UnifiedNeuroGen-Demo"
+    notes: "DiT EEG→fMRI on simultaneous naturalistic viewing; optional Phase-1 reference."
+
+chance_things_eeg2_200way:
+  top1: 0.005
+
+plan_status:
+  abandoned_mainline:
+    - "THINGS + frozen NeuroBOLT residual/standalone"
+    - "Spec2Vol volume → NSD Brain-IT without paired visual fMRI"
+  active_mainline: "NOD supervised EEG→fMRI → CLIP/SDXL (Brain-IT optional)"
+  active_aux: "THINGS-EEG/fMRI CLIP alignment (Phase 4)"

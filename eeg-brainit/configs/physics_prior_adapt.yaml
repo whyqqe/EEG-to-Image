@@ -1,0 +1,48 @@
+# Physics-Prior Hierarchical LoRA + gated MAML (THINGS-EEG2 subject adaptation)
+#
+# Authoritative base: ATM-style EEG encoder (NeurIPS 2024 EEG_Image_decode)
+# Teacher signal: official ATM embeddings in outputs/atm_bridge/*_1024.npy
+# Image space: OpenCLIP ViT-H/14 laion2b (same as ATM)
+
+experiment: physics_prior_adapt
+eeg_root: data/processed/things-eeg2
+atm_bridge_dir: outputs/atm_bridge
+
+# leave-one-subject-out style
+meta_train_subjects: "sub-01,sub-02,sub-03,sub-04,sub-05,sub-06,sub-07,sub-09"
+meta_test_subject: sub-08
+
+clip_dim: 1024
+rank: 8
+k_shot: 20
+q_size: 64
+
+# smoke defaults (full paper run overrides in sbatch)
+pretrain_epochs: 5
+pretrain_max_per_sub: 2000
+meta_epochs: 20
+meta_max_per_sub: 4000
+tasks_per_epoch: 8
+inner_steps: 5
+inner_lr: 1.0e-2
+meta_lr: 3.0e-4
+backbone_lr: 3.0e-4
+batch_size: 64
+temp: 0.07
+
+lambda_mid: 1.0
+lambda_low: 0.2
+lambda_high: 0.1
+lambda_atm: 0.25
+
+seed: 42
+
+regions: [occipital, parietal, temporal, frontal]
+bands: [theta, alpha, beta, gamma]
+
+baselines:
+  - zeroshot_backbone
+  - vanilla_lora
+  - physics_lora_kshot
+  - atm_teacher_ceiling
+  - physics_gated_maml

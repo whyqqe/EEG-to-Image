@@ -1,0 +1,32 @@
+# Cross-subject LOSO + label-free test-time calibration (THINGS-EEG2)
+#
+# Literature backbone:
+#   - CSLS hubness correction (cross-modal retrieval)
+#   - SATTC (CVPR 2026): SAW + Ada-CSLS + structural PoE on frozen encoders
+# Our addition:
+#   - Physiology-aware query prior from channel×band energies (Phys-PoE)
+#
+# Public stack: CLIP ViT-H/14 targets (atm_bridge) + ATM-distill optional;
+# multi-encoder: atm_style + temporal CNN.
+
+protocol: leave_one_subject_out
+dataset: THINGS-EEG2
+gallery: outputs/atm_bridge/clip_img_test_1024.npy
+encoders: [atm_style, temporal]
+epochs: 8
+max_per_sub: 2500
+batch_size: 128
+lr: 3.0e-4
+lambda_atm: 0.15
+csls_k: 10
+poe_beta: 0.5
+seed: 42
+
+methods:
+  - cosine
+  - cosine_cw
+  - saw_cw
+  - saw_cw_csls
+  - saw_cw_adacsls
+  - sattc_like_poe
+  - phys_poe

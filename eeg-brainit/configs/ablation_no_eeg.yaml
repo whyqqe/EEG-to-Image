@@ -1,0 +1,8 @@
+# Ablation: virtual fMRI only (no EEG KV injection)
+output_dir: outputs/ablation_no_eeg_inject
+bit:
+  inject_eeg_as: none
+train:
+  stage: 2
+  epochs: 20
+  learning_rate: 5.0e-5

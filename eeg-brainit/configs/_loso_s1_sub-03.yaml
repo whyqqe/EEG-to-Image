@@ -1,0 +1,51 @@
+atm:
+  bridge:
+    brain_dim: 1024
+    dropout: 0.1
+    hidden: 2048
+    in_dim: 1024
+    num_brain_tokens: 128
+    num_eeg_tokens: 8
+  bridge_dir: outputs/atm_bridge
+  dim: 1024
+  freeze_atm_semantics: true
+  refiner:
+    enabled: false
+  subject: sub-03
+  use_bit: false
+bit:
+  brain_dim: 1024
+  checkpoint: checkpoints/brain_it/decoder_clipg_state_dict.pt
+  clip_dim: 1664
+  inject_eeg_as: kv
+  num_blocks: 2
+  num_brain_tokens: 128
+  num_heads: 8
+  num_query_tokens: 256
+  vgg_dim: 512
+loss:
+  lambda_clip: 0.05
+  lambda_distill: 3.0
+  lambda_nce: 0.1
+  lambda_reg: 0.0001
+  lambda_siglip: 0.0
+  temperature: 0.07
+  use_proxy_fallback: false
+output_dir: outputs/atm_distill_s1_sub-03
+teacher_bank:
+  size: 512
+train:
+  batch_size: 512
+  early_stop_metric: test_top1_bridge_clip
+  early_stopping_patience: 0
+  epochs: 30
+  eval_every: 1
+  grad_clip: 1.0
+  init_checkpoint: ''
+  learning_rate: 0.0003
+  loss_on: bridge_clip
+  min_atm_top1_for_ckpt: 0.25
+  min_distill_cos: 0.95
+  num_workers: 4
+  stage: 1
+  weight_decay: 0.01

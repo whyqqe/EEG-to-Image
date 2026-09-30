@@ -1,0 +1,43 @@
+# SigLIP + hard negatives; freeze encoder/vf; higher LR on align head.
+# Resume from clip_align_e2e (nce_bank regressed).
+output_dir: outputs/siglip_hard
+
+data:
+  teacher_dir: data/processed/teachers/clip_ViT-L-14_openai
+
+clip_align:
+  enabled: true
+  in_dim: 1664
+  out_dim: 768
+
+teacher_bank:
+  size: 256
+  pool: 2048
+  hard_negatives: true
+
+train:
+  stage: 2
+  epochs: 12
+  batch_size: 32
+  grad_accum_steps: 2
+  learning_rate: 5.0e-5
+  head_lr_mult: 5.0
+  weight_decay: 0.01
+  grad_clip: 1.0
+  num_workers: 4
+  early_stopping_patience: 5
+  max_val_batches: 40
+  select_by_cos_gap: true
+
+loss:
+  lambda_clip: 0.1
+  lambda_nce: 0.0
+  lambda_siglip: 1.0
+  lambda_vf: 0.0
+  temperature: 0.07
+  learnable_logit_scale: true
+  init_logit_scale: 2.6592
+  lambda_vgg: 0.0
+  lambda_pixel: 0.0
+  lambda_reg: 1.0e-4
+  use_proxy_fallback: false

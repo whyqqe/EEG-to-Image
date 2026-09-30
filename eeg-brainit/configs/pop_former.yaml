@@ -1,0 +1,46 @@
+# POP-Former + Cross-Brain Orthogonal Attention (CBOA)
+# Scaled LOSO configuration for THINGS-EEG2 visual retrieval
+
+protocol: leave_one_subject_out
+dataset: THINGS-EEG2
+gallery: outputs/atm_bridge/clip_img_test_1024.npy
+method: POP-Former / CBOA
+
+model:
+  d_model: 512
+  n_layers: 8
+  n_heads: 8
+  mem_tokens: 64
+  id_rank: 8
+  dropout: 0.1
+  # ~35–45M trainable parameters (EEG-scale Transformer, not toy)
+
+train:
+  epochs: 50
+  warmup_epochs: 3
+  max_per_sub: 0          # full 16540 trials / subject
+  batch_size: 64
+  lr: 2.0e-4
+  weight_decay: 0.05
+  grad_clip: 1.0
+  amp: true
+  temp: 0.07
+  lambda_nce: 0.5
+  lambda_atm: 0.2
+  lambda_id_ap: 0.2       # encourage identity in aperiodic
+  lambda_id_per: 0.1      # GRL: remove identity from periodic
+  grl_max: 1.0
+  mem_dropout: 0.15
+  mem_momentum: 0.05
+  mem_refresh_every: 1
+  mem_refresh_batches: 40
+  mem_topk: 8             # test-time CLIP-neighbor memory aggregation
+
+eval:
+  settings: [no_memory, cboa_twopass]
+  compare_to: [subject_align_loso_v3/v4, atm_ceiling]
+
+notes:
+  - Does not delete or overwrite subject_align / st_gate outputs
+  - Identity basis updated from aperiodic pools (FOOOF/Identity-Trap aligned)
+  - CBOA uses joint softmax over self + orthogonalized cross-brain KV

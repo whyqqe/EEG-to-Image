@@ -1,0 +1,31 @@
+# 大型 checkpoint 路径（保留在主项目，未复制到本包）
+
+## 必需（复现 sub-08 主结果）
+
+| 描述 | 路径 | 约大小 |
+|------|------|--------|
+| Distill S3 bit_clip head | `/project/peilab/why/eeg-brainit/outputs/atm_distill_s3_sub08/checkpoints/atm_stage3_best.pt` | 1.7 GB |
+| Distill S1 bridge (可选) | `/project/peilab/why/eeg-brainit/outputs/atm_distill_s1_sub08/checkpoints/atm_stage1_best.pt` | 1.7 GB |
+| Diffusion prior sub-08 | `/project/peilab/why/eeg-brainit/checkpoints/atm_diffusion_prior/sub-08/diffusion_prior.pt` | 43 MB |
+| ↑ 已复制到本包 | `artifacts/checkpoints/atm_diffusion_prior/sub-08/diffusion_prior.pt` | 43 MB |
+
+## 10 被试 prior（W14 用）
+
+```
+/project/peilab/why/eeg-brainit/checkpoints/atm_diffusion_prior/sub-{01..10}/diffusion_prior.pt
+```
+
+## 不推荐复制
+
+| 描述 | 路径 | 约大小 |
+|------|------|--------|
+| Brain-IT 权重 | `checkpoints/brain_it/` | ~50 GB |
+| HF SDXL/Turbo | `cache/eeg-brainit/hf/hub/` | ~10+ GB |
+
+## 导出 bit_clip（10 被试，W14 已生成）
+
+```
+/project/peilab/why/eeg-brainit/outputs/eval/atm_pipeline_all/sub-XX_bit_clip_1024.npy
+```
+
+本包仅含 test EEG + sub-08 bit_clip + train CLIP gallery（fuse 结构项所需）。

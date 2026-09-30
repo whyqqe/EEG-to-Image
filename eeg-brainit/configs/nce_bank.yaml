@@ -1,0 +1,36 @@
+# NCE + large teacher memory bank (resume from clip_align_e2e).
+output_dir: outputs/nce_bank
+
+data:
+  teacher_dir: data/processed/teachers/clip_ViT-L-14_openai
+
+clip_align:
+  enabled: true
+  in_dim: 1664
+  out_dim: 768
+
+teacher_bank:
+  size: 8192
+
+train:
+  stage: 4
+  epochs: 15
+  batch_size: 16
+  grad_accum_steps: 4
+  learning_rate: 5.0e-6
+  weight_decay: 0.01
+  grad_clip: 1.0
+  num_workers: 4
+  early_stopping_patience: 6
+  max_val_batches: 40
+  select_by_cos_gap: true
+
+loss:
+  lambda_clip: 0.0
+  lambda_nce: 1.0
+  lambda_vf: 0.05
+  temperature: 0.1
+  lambda_vgg: 0.0
+  lambda_pixel: 0.0
+  lambda_reg: 1.0e-4
+  use_proxy_fallback: false

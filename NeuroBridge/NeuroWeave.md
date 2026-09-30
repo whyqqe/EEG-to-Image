@@ -1,0 +1,513 @@
+# EEG-to-Image SOTA/顶会级研究方案
+
+## 1. 核心判断
+
+当前 EEG-to-Image 的主要问题不是图像生成得不够漂亮，而是生成模型容易依赖强大的视觉先验，导致图像看起来合理，却没有严格保留 EEG 中真正可解码的信息。
+
+真正有竞争力的工作应同时解决：
+
+1. EEG 的低信噪比和跨被试差异；
+2. EEG 中“类别/语义”和“局部视觉细节”的时间尺度差异；
+3. 生成图像的语义正确性、视觉质量和神经一致性之间的冲突；
+4. 训练集检索、扩散模型先验和测试集信息泄漏问题；
+5. 多个合理图像之间的不确定性表达。
+
+建议架构名称：
+
+> **NeuroWeave: Hierarchical Causal Retrieval-Augmented EEG-to-Image Diffusion**
+
+核心思想：用 EEG 编码器提取分层神经表征，用因果时间建模区分语义和细节，用检索增强获得稳定的视觉先验，再用受控潜空间扩散生成图像，并通过 EEG-Image cycle consistency 约束生成结果确实符合脑信号。
+
+---
+
+## 2. 相关研究脉络
+
+### 2.1 早期 EEG 视觉解码
+
+代表性方向包括 Spampinato 等人的 EEG visual decoding、Kavasidis 等人的 EEG-to-image reconstruction、Palazzo 等人的 EEG 图像检索，以及基于 CNN、RNN、GAN、VAE 的图像类别重建。
+
+优点：直接验证 EEG 是否包含视觉类别信息，评价和实现较简单。
+
+局限：表征能力有限、输出分辨率低、对被试/会话/刺激类别敏感，并且常将图像重建简化为分类或检索。
+
+### 2.2 CLIP/多模态对齐
+
+后续工作将 EEG 映射到 CLIP image embedding、CLIP text embedding、DINO/视觉语义空间和图像检索空间。相比像素回归，这更符合 EEG 能恢复高级视觉概念、但难以恢复精确像素的事实。
+
+风险是：CLIP 对齐可能只保留类别语义，丢失空间布局、形状和局部属性。
+
+### 2.3 EEG + Latent Diffusion
+
+DreamDiffusion、EEG-CLIP + diffusion 以及其他 EEG-to-image latent diffusion 方法显著提高了图像质量，但需要警惕：质量提升部分可能来自扩散模型本身，而不一定来自 EEG 解码能力。
+
+因此不能只报告 FID、CLIP score 和主观偏好，还需要独立的神经一致性与信息来源控制实验。
+
+### 2.4 邻近方向的启示
+
+Brain-Diffuser、MindEye、NICE、fMRI-to-image、MEG visual decoding 和 neural representation alignment 等工作提示：视觉基础模型先验有用；EEG 更适合建模为概率后验；跨被试泛化需要显式 subject adaptation；语义空间和生成空间不应完全混为一谈；神经一致性评价必须独立于生成模型的视觉质量。
+
+> 文献名称、年份和最新版本应在正式投稿前重新核验。
+
+---
+
+## 3. 数据集与实验基准
+
+| 数据集 | 用途 | 建议协议 |
+|---|---|---|
+| EEG2Image/ImageNet EEG 类数据 | 快速原型、类别重建 | image-disjoint split |
+| THINGS-EEG | 跨类别、跨被试泛化 | leave-one-subject-out |
+| THINGS-EEG2 | 大规模视觉语义解码 | cross-session / unseen image |
+| 自建重复刺激数据 | 时间锁定、精细评价 | 多次重复呈现同一图像 |
+
+### 必须避免的数据切分错误
+
+不能把同一图像的不同重复 trial 分到训练集和测试集。应至少建立：
+
+- image-disjoint split；
+- subject-disjoint split；
+- session-disjoint split；
+- unseen-category split；
+- repeated-trial consistency test。
+
+---
+
+## 4. NeuroWeave 总体架构
+
+```text
+EEG
+ │
+ ▼
+Signal Canonicalizer
+ │
+ ▼
+Hierarchical EEG Tokenizer
+ │
+ ├── Semantic Stream
+ │       └── CLIP/DINO/Concept Alignment
+ │
+ ├── Perceptual Stream
+ │       └── Layout/Color/Shape Representation
+ │
+ └── Temporal Causal Stream
+         └── Early-to-late neural dynamics
+
+Semantic + Perceptual + Temporal Tokens
+ │
+ ▼
+Retrieval Memory Bank
+ │
+ ▼
+Conditioned Latent Diffusion
+ │
+ ▼
+Multi-sample Image Posterior
+ │
+ ▼
+EEG-Image Cycle Consistency
+```
+
+---
+
+## 5. 模块设计
+
+### 5.1 Signal Canonicalizer
+
+输入：
+
+\[
+X \in \mathbb{R}^{C \times T}
+\]
+
+建议统一采样率为 256 Hz，使用刺激 onset 后 0--1000 ms 或 0--1500 ms 窗口。
+
+预处理：
+
+- notch filter：50/60 Hz；
+- band-pass：0.5--45 Hz；
+- ICA 或 ASR 去除眼电、肌电伪迹；
+- robust z-score；
+- 通道缺失和设备差异处理。
+
+根据 10-20 电极坐标建立通道图：
+
+\[
+A_{ij} = \exp\left(-\frac{\lVert p_i-p_j\rVert^2}{\sigma^2}\right)
+\]
+
+使用 Graph Convolution 或 Graph Attention 建模电极空间拓扑。
+
+### 5.2 Hierarchical EEG Tokenizer
+
+使用三个时间尺度：
+
+- short：20--40 ms；
+- mid：80--160 ms；
+- long：320--640 ms。
+
+每个尺度使用 depthwise temporal convolution、dilated temporal convolution 和轻量 Transformer 或 SSM，得到：
+
+\[
+Z_s, Z_m, Z_l
+\]
+
+同时加入 cross-frequency coupling，建模不同频带的相位-振幅关系。
+
+### 5.3 Semantic Stream 与 Perceptual Stream
+
+将 EEG 表征分成：
+
+\[
+Z_{EEG}=\{Z_{sem},Z_{perc}\}
+\]
+
+**Semantic Stream** 学习物体类别、场景、文本概念以及 CLIP/DINO 全局 embedding，输出 (h_{sem}\)。
+
+**Perceptual Stream** 学习空间布局、颜色分布、轮廓、局部纹理和 coarse image latent，输出 (h_{perc}\)。
+
+解耦损失：
+
+\[
+\mathcal{L}_{disentangle}=
+\operatorname{HSIC}(h_{sem},h_{perc})+
+\lambda\mathcal{L}_{cross}
+\]
+
+目标不是让两者完全独立，而是减少无意义冗余，同时保留视觉语义与属性之间的真实关联。
+
+### 5.4 Causal Temporal Encoder
+
+让不同时间段的 EEG 影响不同层级的生成条件：
+
+```text
+0-150 ms       → early visual structure
+150-350 ms     → object/category semantics
+350-700 ms     → attributes and details
+700 ms+        → confidence / decision-related information
+```
+
+使用单向时间注意力：
+
+\[
+A_{ij}=0 \quad \text{if } t_j>t_i
+\]
+
+并通过门控融合多尺度 token：
+
+\[
+g_k=\operatorname{softmax}(W_g[Z_s,Z_m,Z_l])
+\]
+
+### 5.5 Subject-Invariant / Subject-Specific Adapter
+
+将特征拆为：
+
+\[
+h=h_{shared}+h_{subject}
+\]
+
+共享编码器学习跨被试稳定的视觉神经表征；被试适配器使用低秩 LoRA 或 FiLM：
+
+\[
+\tilde h=\gamma_s\odot h+\beta_s
+\]
+
+训练中加入 subject adversarial loss、subject contrastive loss 和 shared/private orthogonality loss，使 shared 表征尽量不包含被试身份，同时保留个体差异。
+
+### 5.6 Retrieval Memory Bank
+
+建立只包含训练集图像的视觉记忆库：
+
+\[
+\mathcal{M}=\{(v_i,l_i,c_i)\}
+\]
+
+其中 (v_i\) 为 CLIP/DINO embedding，(l_i\) 为 latent diffusion latent，(c_i\) 为类别或概念标签。
+
+根据 EEG 语义 embedding 检索 top-k 图像，作为类别、场景、颜色和构图先验，而不是最终答案。
+
+为降低训练集复制风险，使用 anti-copy loss：
+
+\[
+\mathcal{L}_{copy}=\max\left(0,m-D_{DINO}(\hat I,I_{retrieved})\right)
+\]
+
+对真正重复刺激可关闭该项；对普通测试图像则避免直接复制最近邻样本。
+
+### 5.7 Conditioned Latent Diffusion
+
+基于 SDXL 或同等开放模型，冻结大部分 backbone，只训练 EEG 条件模块：
+
+\[
+z_t\sim p_\theta(z_t\mid h_{sem},h_{perc},h_{time},r_{memory})
+\]
+
+低分辨率层注入 semantic cross-attention、scene/layout tokens 和 retrieved global embedding；高分辨率层注入 perceptual tokens、颜色条件、edge/layout latent 以及后期 EEG temporal tokens。
+
+建议采用两阶段生成：
+
+1. 256×256 base diffusion：负责物体、场景、构图和主色调；
+2. 512×512 refinement：负责局部形状、纹理和细节一致性。
+
+### 5.8 概率图像后验与不确定性
+
+EEG 不应被视为唯一决定一张图像的确定性输入。令：
+
+\[
+p(I\mid X)
+\]
+
+由条件扩散近似，并为每个 trial 生成多个样本。报告 best-of-(M)、mean-of-(M)、样本多样性以及 uncertainty 与真实解码难度的相关性。
+
+可增加 uncertainty head：
+
+\[
+u=f_{uncertainty}(h_{sem},h_{perc})
+\]
+
+### 5.9 EEG-Image Cycle Consistency
+
+训练独立或弱训练的图像到 EEG 解码器 (F_{EEG}\)，约束：
+
+\[
+F_{EEG}(\hat I)\approx h_{EEG}
+\]
+
+例如：
+
+\[
+\mathcal{L}_{cycle}=1-
+\operatorname{cos}(E_{EEG}(X),E_{EEG}(\hat I))
+\]
+
+这可以抑制只追求视觉逼真度、却偏离原始神经表征的生成结果。
+
+---
+
+## 6. 训练目标
+
+\[
+\begin{aligned}
+\mathcal{L}=&\lambda_1\mathcal{L}_{MAE}
++\lambda_2\mathcal{L}_{temporal}
++\lambda_3\mathcal{L}_{CLIP}
++\lambda_4\mathcal{L}_{DINO}\\
+&+\lambda_5\mathcal{L}_{OT}
++\lambda_6\mathcal{L}_{diff}
++\lambda_7\mathcal{L}_{cycle}
++\lambda_8\mathcal{L}_{subject}\\
+&+\lambda_9\mathcal{L}_{copy}
++\lambda_{10}\mathcal{L}_{cal}
+\end{aligned}
+\]
+
+### 主要损失
+
+- **EEG masked reconstruction**：随机 mask 时间片段、通道、频带和空间区域；
+- **Temporal order loss**：恢复打乱的时间片段顺序；
+- **Cross-modal contrastive loss**：将 EEG 与对应图像 embedding 拉近；
+- **Optimal Transport loss**：进行 EEG token 与视觉 token 的细粒度对齐；
+- **Diffusion loss**：标准噪声预测损失；
+- **Cycle consistency**：保证图像回到正确的神经表征区域；
+- **Calibration loss**：使模型的置信度与实际准确性匹配。
+
+---
+
+## 7. 分阶段训练方案
+
+### Stage 0：严格数据协议
+
+建立 random image、image-disjoint、leave-one-subject-out、unseen-category 四类实验。所有检索库只允许使用训练集。
+
+### Stage 1：EEG 自监督预训练
+
+使用 masked signal reconstruction、temporal order prediction、frequency-band consistency、channel dropout 和 trial-level contrastive learning。
+
+### Stage 2：跨模态表示对齐
+
+训练 EEG→CLIP、EEG→DINO、EEG→image concept 和 EEG token→image token，不训练扩散模型。
+
+### Stage 3：扩散条件模块训练
+
+冻结 SDXL backbone，仅训练 EEG projector、cross-attention、retrieval adapter、layout adapter 和 subject adapter。
+
+### Stage 4：联合微调
+
+使用小学习率联合优化 diffusion condition、解耦损失、cycle consistency 和 anti-copy regularization。
+
+### Stage 5：少样本新被试适配
+
+新被试只更新 FiLM、LoRA、channel normalization 和 subject prototype，并测试 1/5/10/20 个 calibration trials 的性能曲线。
+
+---
+
+## 8. 评价指标
+
+### 8.1 语义指标
+
+- CLIP cosine similarity；
+- DINOv2 cosine similarity；
+- image-to-image retrieval top-1/top-5；
+- object/category accuracy；
+- scene classification accuracy；
+- attribute accuracy。
+
+### 8.2 视觉质量
+
+- FID、KID；
+- LPIPS、SSIM、PSNR；
+- human preference；
+- object detector consistency。
+
+### 8.3 神经一致性
+
+训练独立图像到 EEG 解码器，计算：
+
+\[
+\operatorname{sim}(E_{EEG}(X),E_{EEG}(\hat I))
+\]
+
+同时报告 RSA、CKA、neural decoding accuracy 和 repeated-trial consistency。
+
+### 8.4 不确定性
+
+- calibration error；
+- expected calibration error；
+- negative log-likelihood；
+- uncertainty 与重建难度的相关性；
+- sample diversity。
+
+### 8.5 泛化
+
+测试新被试、新会话、新图像、新类别、通道缺失和不同噪声水平。
+
+---
+
+## 9. 必做 Baseline
+
+1. EEG-only VAE；
+2. EEG-to-CLIP + nearest neighbor；
+3. EEG-to-CLIP + text-to-image；
+4. DreamDiffusion；
+5. EEG-CLIP diffusion；
+6. retrieval-only；
+7. diffusion-only with random EEG；
+8. image-label-conditioned diffusion；
+9. no-EEG oracle；
+10. shuffled-EEG control。
+
+尤其必须包含 random EEG 和 label-conditioned control，证明性能不是主要来自视觉先验或类别标签。
+
+---
+
+## 10. 必做消融实验
+
+| 消融项 | 证明目标 |
+|---|---|
+| 去掉 causal temporal encoder | 时间结构的贡献 |
+| 去掉 semantic/perceptual disentanglement | 双流表征的贡献 |
+| 去掉 retrieval memory | 检索先验的贡献 |
+| 去掉 anti-copy loss | 训练集复制风险 |
+| 去掉 cycle consistency | 神经一致性约束的贡献 |
+| 去掉 subject adapter | 跨被试适配的贡献 |
+| 去掉 EEG MAE | 自监督预训练的贡献 |
+| 只使用 CLIP | DINO/低级视觉特征是否必要 |
+| 单样本输出 | 概率后验和多样本生成的价值 |
+| 替换时间窗 | 不同神经阶段的贡献 |
+
+---
+
+## 11. 建议模型规模
+
+| 部分 | 配置 |
+|---|---|
+| EEG tokenizer | 20M--40M 参数 |
+| Temporal encoder | 10M--30M |
+| Semantic/perceptual bridge | 20M--50M |
+| Retrieval adapter | 5M--15M |
+| Diffusion backbone | 冻结 SDXL |
+| 可训练扩散模块 | 30M--80M |
+| 每个 subject adapter | 0.1M--1M |
+
+第一版不建议全量微调扩散模型，EEG 数据量通常不足以支撑稳定的全参数训练。
+
+---
+
+## 12. 论文贡献组织
+
+建议只强调三项主贡献：
+
+### Contribution 1
+
+提出分层、因果的 EEG visual representation，显式分离语义和感知细节，并建模 EEG 的时间演化。
+
+### Contribution 2
+
+提出 retrieval-augmented latent diffusion，将 EEG 神经信号与视觉基础模型先验结合，并使用 anti-copy 机制避免记忆训练图像。
+
+### Contribution 3
+
+提出 EEG-image cycle consistency 和概率后验评价，使生成结果不仅视觉上合理，而且在独立神经空间中与原始 EEG 一致，并能量化不确定性。
+
+---
+
+## 13. 审稿人最可能质疑的问题
+
+### “这是图像先验生成，不是 EEG 解码”
+
+使用 shuffled EEG、random EEG、label-conditioned control、EEG-only retrieval、cross-subject 和 unseen-image 实验回应。
+
+### “模型是否复制了训练图像”
+
+报告 DINO 最近邻距离、像素/感知最近邻距离、训练集与测试集相似度分布，并进行 anti-copy ablation。
+
+### “CLIP score 不等于神经信息增加”
+
+增加 DINO、object detector、independent EEG encoder、RSA 和 neural consistency 评价。
+
+### “模型只适用于固定被试”
+
+报告 leave-one-subject-out 和少样本 adaptation curve。
+
+### “细节是幻觉”
+
+区分 EEG-supported content、prior-supported content 和 uncertain content，并同时展示多样本结果与 uncertainty map。
+
+---
+
+## 14. 最小可行版本
+
+资源有限时，先实现：
+
+1. EEG graph + multi-scale temporal encoder；
+2. semantic/perceptual 双流；
+3. EEG-to-CLIP/DINO alignment；
+4. SDXL latent diffusion + EEG cross-attention；
+5. shuffled EEG 和 retrieval-only baseline；
+6. cross-subject adapter；
+7. cycle consistency。
+
+暂不加入 1024×1024 生成、全量 diffusion fine-tuning、过大的语言模型和过多手工视觉属性标签。
+
+---
+
+## 15. 可能的论文标题
+
+- **NeuroWeave: Causal Hierarchical EEG-to-Image Reconstruction with Retrieval-Augmented Diffusion**
+- **From Neural Dynamics to Visual Posteriors: Subject-General EEG-to-Image Generation**
+- **Decoding What the Brain Sees: Neural-Cycle-Constrained Diffusion for EEG Image Reconstruction**
+- **Beyond Plausible Images: Neural-Consistent and Uncertainty-Aware EEG-to-Image Generation**
+
+---
+
+## 16. 最终研究主线
+
+最有价值的主线不是单纯生成更高清的图，而是：
+
+> **从确定性 EEG-to-image 映射，转向具有时间层次、跨被试泛化、神经一致性约束和不确定性建模的视觉后验生成。**
+
+顶会竞争力主要取决于三点：
+
+1. 严格证明图像信息来自 EEG，而非扩散模型先验；
+2. 在跨被试、跨图像、跨会话设置下稳定泛化；
+3. 提供比 CLIP score 更可信的神经一致性评价。
+
