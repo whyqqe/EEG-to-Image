@@ -1,0 +1,47 @@
+[s3r] sub01 seed2025  headline row: deployed= 53.0  s3r_tau0.01= 54.5  s3r_tau0.02= 54.0  s3r_tau0.05= 53.5  s3r_tau0.1= 52.0
+[s3r] sub01 seed2026  headline row: deployed= 51.0  s3r_tau0.01= 57.0  s3r_tau0.02= 57.5  s3r_tau0.05= 58.0  s3r_tau0.1= 54.5
+[s3r] sub01 seed2027  headline row: deployed= 53.0  s3r_tau0.01= 56.0  s3r_tau0.02= 56.5  s3r_tau0.05= 54.5  s3r_tau0.1= 54.5
+[s3r] sub02 seed2025  headline row: deployed= 52.0  s3r_tau0.01= 54.0  s3r_tau0.02= 54.5  s3r_tau0.05= 54.0  s3r_tau0.1= 52.5
+[s3r] sub02 seed2026  headline row: deployed= 42.0  s3r_tau0.01= 46.5  s3r_tau0.02= 46.0  s3r_tau0.05= 44.0  s3r_tau0.1= 43.5
+[s3r] sub02 seed2027  headline row: deployed= 49.0  s3r_tau0.01= 51.5  s3r_tau0.02= 49.5  s3r_tau0.05= 50.5  s3r_tau0.1= 48.5
+[s3r] sub03 seed2025  headline row: deployed= 46.0  s3r_tau0.01= 50.0  s3r_tau0.02= 50.5  s3r_tau0.05= 48.5  s3r_tau0.1= 47.0
+[s3r] sub03 seed2026  headline row: deployed= 41.5  s3r_tau0.01= 47.5  s3r_tau0.02= 47.0  s3r_tau0.05= 45.0  s3r_tau0.1= 44.0
+[s3r] sub03 seed2027  headline row: deployed= 49.0  s3r_tau0.01= 47.5  s3r_tau0.02= 48.0  s3r_tau0.05= 47.0  s3r_tau0.1= 45.0
+[s3r] sub04 seed2025  headline row: deployed= 28.0  s3r_tau0.01= 32.0  s3r_tau0.02= 31.0  s3r_tau0.05= 29.0  s3r_tau0.1= 28.0
+[s3r] sub04 seed2026  headline row: deployed= 35.0  s3r_tau0.01= 38.0  s3r_tau0.02= 35.5  s3r_tau0.05= 38.5  s3r_tau0.1= 38.0
+[s3r] sub04 seed2027  headline row: deployed= 30.5  s3r_tau0.01= 33.5  s3r_tau0.02= 33.0  s3r_tau0.05= 33.5  s3r_tau0.1= 35.0
+[s3r] sub05 seed2025  headline row: deployed= 41.0  s3r_tau0.01= 43.5  s3r_tau0.02= 43.0  s3r_tau0.05= 43.0  s3r_tau0.1= 42.5
+[s3r] sub05 seed2026  headline row: deployed= 40.5  s3r_tau0.01= 42.5  s3r_tau0.02= 42.0  s3r_tau0.05= 40.0  s3r_tau0.1= 38.0
+[s3r] sub05 seed2027  headline row: deployed= 45.5  s3r_tau0.01= 47.5  s3r_tau0.02= 46.0  s3r_tau0.05= 46.5  s3r_tau0.1= 46.0
+[s3r] sub06 seed2025  headline row: deployed= 53.0  s3r_tau0.01= 57.0  s3r_tau0.02= 55.5  s3r_tau0.05= 56.5  s3r_tau0.1= 52.5
+[s3r] sub06 seed2026  headline row: deployed= 52.0  s3r_tau0.01= 55.5  s3r_tau0.02= 54.5  s3r_tau0.05= 57.0  s3r_tau0.1= 53.0
+[s3r] sub06 seed2027  headline row: deployed= 54.0  s3r_tau0.01= 56.5  s3r_tau0.02= 57.0  s3r_tau0.05= 55.5  s3r_tau0.1= 54.5
+[s3r] sub07 seed2025  headline row: deployed= 42.5  s3r_tau0.01= 41.5  s3r_tau0.02= 41.5  s3r_tau0.05= 41.5  s3r_tau0.1= 41.0
+[s3r] sub07 seed2026  headline row: deployed= 42.0  s3r_tau0.01= 42.5  s3r_tau0.02= 41.5  s3r_tau0.05= 43.0  s3r_tau0.1= 41.0
+[s3r] sub07 seed2027  headline row: deployed= 37.5  s3r_tau0.01= 38.0  s3r_tau0.02= 38.5  s3r_tau0.05= 38.5  s3r_tau0.1= 38.5
+[s3r] sub08 seed2025  headline row: deployed= 35.0  s3r_tau0.01= 37.5  s3r_tau0.02= 38.0  s3r_tau0.05= 37.5  s3r_tau0.1= 37.0
+[s3r] sub08 seed2026  headline row: deployed= 37.0  s3r_tau0.01= 40.5  s3r_tau0.02= 41.0  s3r_tau0.05= 40.5  s3r_tau0.1= 40.5
+[s3r] sub08 seed2027  headline row: deployed= 33.0  s3r_tau0.01= 39.0  s3r_tau0.02= 39.0  s3r_tau0.05= 39.0  s3r_tau0.1= 39.5
+[s3r] sub09 seed2025  headline row: deployed= 44.5  s3r_tau0.01= 49.0  s3r_tau0.02= 48.0  s3r_tau0.05= 48.0  s3r_tau0.1= 48.5
+[s3r] sub09 seed2026  headline row: deployed= 39.0  s3r_tau0.01= 45.0  s3r_tau0.02= 44.0  s3r_tau0.05= 45.0  s3r_tau0.1= 41.5
+[s3r] sub09 seed2027  headline row: deployed= 44.0  s3r_tau0.01= 50.5  s3r_tau0.02= 50.0  s3r_tau0.05= 49.5  s3r_tau0.1= 49.5
+[s3r] sub10 seed2025  headline row: deployed= 60.0  s3r_tau0.01= 65.0  s3r_tau0.02= 65.0  s3r_tau0.05= 65.5  s3r_tau0.1= 63.5
+[s3r] sub10 seed2026  headline row: deployed= 66.5  s3r_tau0.01= 72.0  s3r_tau0.02= 71.0  s3r_tau0.05= 70.5  s3r_tau0.1= 67.5
+[s3r] sub10 seed2027  headline row: deployed= 59.5  s3r_tau0.01= 61.5  s3r_tau0.02= 63.0  s3r_tau0.05= 61.5  s3r_tau0.1= 59.0
+
+==============================================================================
+variant               +CSLS+rec   +T2 reps + T1(CSLS + recovery) + T2 reps
+------------------------------------------------------------------------------
+deployed                  42.82      45.53                      45.22
+s3r_tau0.01               46.37      48.23                      48.42
+s3r_tau0.02               46.53      48.50                      48.05
+s3r_tau0.05               46.15      48.10                      47.82
+s3r_tau0.1                45.20      47.23                      46.53
+------------------------------------------------------------------------------
+  s3r_tau0.01        headline delta vs deployed: +3.20 pp
+  s3r_tau0.02        headline delta vs deployed: +2.83 pp
+  s3r_tau0.05        headline delta vs deployed: +2.60 pp
+  s3r_tau0.1         headline delta vs deployed: +1.32 pp
+
+n = 30 runs (fold x seed).  G3 banked headline (10-fold x 3-seed mean): 45.53.  SCORE: 53.23.
+wrote outputs/probe/s3r_full.json

@@ -1,0 +1,17 @@
+# v4 fold config for the sub-08 LOSO cell. Everything architecture/objective/schedule
+# related comes from `v4.yaml`; this file states only the fold identity and where the
+# artefacts go. Same fold, same 9 source subjects and same protocol as
+# `loso_sub08.yaml`, so a v3-vs-v4 comparison is fold-identical by construction.
+#
+# Submit:
+#   python scripts/submit_pipeline.py --target-subject 8 \
+#       --config configs/loso_sub08_v4.yaml --out-tag v4-sub-08 \
+#       --seeds 2025 2026 2027
+base: v4.yaml
+target_subject: 8
+source_subjects: [1, 2, 3, 4, 5, 6, 7, 9, 10]
+out_dir: outputs/stage1/v5-sub-08
+seed: 2025
+epochs: 50
+channel_set: all63
+mvnn: train

@@ -1,0 +1,10 @@
+{
+  "last": {
+    "top1": 14.000000000000002,
+    "top5": 41.0,
+    "mean_rank": 17.705,
+    "n": 200
+  },
+  "best_seen": 15.5,
+  "out_dir": "/project/peilab/why/CLIP/outputs/stage1/v3-sub-08"
+}

@@ -1,0 +1,31 @@
+# ABLATION ARM: v4 with the spectral-concentration term REMOVED.
+#
+# Why this arm exists. The shipped v4 run collapsed the EEG representation to an
+# EFFECTIVE RANK of 6.0-6.3 (measured on all three seeds, `z_eeg`), against 13.3-16.3
+# for the v3.2 baseline on the same fold. The measured concept manifold is ~16
+# dimensions, so the redesign gave up roughly 60% of the representation's capacity, and
+# it was the one v4 model that scored BELOW the v3 it was meant to replace.
+#
+# The suspect is `L_spec`. Its docstring calls it "the attainable version" of the VICReg
+# variance request, but it is `sum_{j>r0} lam_j / sum_j lam_j`, which is ~0 for EVERY
+# rank <= r0 -- measured 6.5e-08 at rank 1 and 2.1e-07 at rank 16. It therefore cannot
+# tell rank-1 from rank-16: it only penalises rank > r0, so its minimum is total
+# collapse and NOTHING in the objective pushes back toward r0. The v4 log confirms the
+# behaviour -- `spec_top` reaches 0.999 by epoch 8 and never moves again.
+#
+# This arm differs from `loso_sub08_v4.yaml` in exactly one value (`spec: 0`), so the
+# comparison isolates that term.
+base: loso_sub08_v4.yaml
+# PINNED so this arm still means what it meant when it was RUN. It was trained on top of
+# the pre-v5 `v4.yaml`, whose defaults were `share_head_hidden: 128` (nonlinear head) and
+# `lr: 1e-4`. v5 changed those defaults, and because this config inherits them, without
+# this line the arm would silently switch to `share_head_hidden: 0` -- a different
+# architecture under the same name and the same `out_dir`. Same reasoning as
+# `loso_sub08_v4_shipped.yaml`; see docs/eeg2image_v5_plan.md §3.4-D3.
+share_head_hidden: 128
+lr: 0.0001
+schedule:
+  freeze_encoder_stage2: true
+loss_weights:
+  spec: 0.0
+out_dir: outputs/stage1/v4-nospec-sub-08

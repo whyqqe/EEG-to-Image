@@ -1,0 +1,12 @@
+{
+  "last": {
+    "top1": 17.0,
+    "top5": 48.0,
+    "mean_rank": 11.22,
+    "n": 200,
+    "offset_ratio": 0.6818504929542542,
+    "spec_top_frac": 0.9946686029434204
+  },
+  "best_seen": 22.0,
+  "out_dir": "/project/peilab/why/CLIP/outputs/stage1/v4-nospec-nofreeze-lr3_seed2025"
+}

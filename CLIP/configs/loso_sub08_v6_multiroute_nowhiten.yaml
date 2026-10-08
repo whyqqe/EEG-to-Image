@@ -1,0 +1,15 @@
+# ATTRIBUTION ARM A3 -- the multi-route model with the episode's whitening removed.
+#
+# WHY IT IS WORTH THREE MORE MINUTES OF GPU. The V1 result (fused 23.50) cannot be read as
+# "score fusion does not work" while its encoder is trained under the same suspect switch
+# that cost V0 9.00pp. Both of V1's extra routes came back near chance (gamma 7.00, beta
+# 3.00 against alpha's 24.00), but a route is only as good as the frame it was trained to
+# live in, and that frame is produced by the episode. So this arm re-asks the fusion
+# question on an encoder that is not being damaged in the same way -- one switch, `A3 - V1`.
+base: loso_sub08_v6_multiroute.yaml
+
+recovery_aware:
+  in_loop_full: true
+  episode_whiten: false      # <-- the single change
+
+out_dir: outputs/stage1/v6-multiroute-nowhiten

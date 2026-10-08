@@ -1,0 +1,15 @@
+# ABLATION ARM: `spec: 0` AND no Stage-2 encoder freeze.
+#
+# Second axis. The shipped v4 froze the trunk for 30 of 50 epochs, so the encoder was
+# trained for only 20 epochs at lr 1e-4 -- one fifth of the v3 recipe's encoder budget
+# (50 epochs, and 1e-3 for the first 20 of them). The v4 curve is consistent with
+# under-training rather than plateau: every seed is still improving on the test split
+# when Stage 1 ends, and Stage 2 (frozen) then oscillates inside +-2 points for 30
+# epochs without a trend.
+#
+# Compare against `loso_sub08_v4_nospec.yaml` to separate "the spectral term did the
+# damage" from "the encoder simply was not trained".
+base: loso_sub08_v4_nospec.yaml
+schedule:
+  freeze_encoder_stage2: false
+out_dir: outputs/stage1/v4-nospec-nofreeze-sub-08

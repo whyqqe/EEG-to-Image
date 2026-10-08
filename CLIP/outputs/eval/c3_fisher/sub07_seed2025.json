@@ -1,0 +1,83 @@
+{
+  "ckpt": "/project/peilab/why/CLIP/outputs/stage1/g3/sub07_k20_seed2025/last.pt",
+  "target_subject": 7,
+  "channel_set": "all63",
+  "mvnn": "test",
+  "R": 80,
+  "d": 64,
+  "n_queries": 200,
+  "rows": {
+    "point cosine + CSLS": {
+      "top1": 33.0,
+      "top5": 65.0,
+      "mean_rank": 6.725,
+      "n": 200
+    },
+    "point + centre + CSLS": {
+      "top1": 32.5,
+      "top5": 66.0,
+      "mean_rank": 6.805,
+      "n": 200
+    },
+    "cloud (shipped T2)": {
+      "top1": 40.0,
+      "top5": 76.0,
+      "mean_rank": 4.75,
+      "n": 200
+    },
+    "fisher l=0.5": {
+      "top1": 4.0,
+      "top5": 12.0,
+      "mean_rank": 56.18,
+      "n": 200
+    },
+    "fisher diag l=0.5": {
+      "top1": 31.5,
+      "top5": 62.0,
+      "mean_rank": 7.33,
+      "n": 200
+    },
+    "fisher l=0.7": {
+      "top1": 4.0,
+      "top5": 13.0,
+      "mean_rank": 53.305,
+      "n": 200
+    },
+    "fisher diag l=0.7": {
+      "top1": 32.5,
+      "top5": 64.5,
+      "mean_rank": 7.11,
+      "n": 200
+    },
+    "fisher l=0.9": {
+      "top1": 2.5,
+      "top5": 16.0,
+      "mean_rank": 49.445,
+      "n": 200
+    },
+    "fisher diag l=0.9": {
+      "top1": 33.0,
+      "top5": 64.5,
+      "mean_rank": 6.98,
+      "n": 200
+    },
+    "identity metric + CSLS": {
+      "top1": 32.5,
+      "top5": 66.0,
+      "mean_rank": 6.805,
+      "n": 200
+    },
+    "pooled mahalanobis": {
+      "top1": 3.0,
+      "top5": 17.5,
+      "mean_rank": 47.93,
+      "n": 200
+    },
+    "fisher (concept-shuffled)": {
+      "top1": 5.0,
+      "top5": 14.000000000000002,
+      "mean_rank": 52.14,
+      "n": 200
+    }
+  }
+}

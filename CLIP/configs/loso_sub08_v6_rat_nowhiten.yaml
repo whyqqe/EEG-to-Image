@@ -1,0 +1,33 @@
+# ATTRIBUTION ARM A1 -- V0 with the episode's WHITENING step removed.
+#
+# WHY. The chained pipeline's V0 (`loso_sub08_v6_rat.yaml`) landed at 21.50 (+CSLS) against
+# 34.00 for the recorded best `v5-a1-k20`, i.e. -12.5pp. Charging the two measurable
+# differences to the ledger leaves -9.00pp unexplained:
+#
+#     v5-a1-k20   (k=20, no episode)              34.00
+#     episode = CSLS + recovery only (v5-ep2)     -0.50pp
+#     k 20 -> 10, no episode (v5-rat-csls)        -3.00pp
+#     ------------------------------------------------------------------
+#     additive prediction                          30.50
+#     V0 actual                                    21.50
+#     residual                                     -9.00pp
+#
+# The only other change is `in_loop_full: true` + `episode_whiten: true`, and of the two
+# newly-activated steps (whitening the query block, then fitting the Procrustes rotation)
+# whitening is the one with a plausible destructive mechanism: it forces the EEG block to
+# identity covariance BEFORE the rotation is fitted, so the fit sees a cloud whose
+# covariance no longer carries the structure the rotation was supposed to align, and the
+# fine objective is then scored in a frame that exists only inside the episode --
+# deployment whitens the TEST query cloud, not the training batch, and the encoder is
+# never told which frame it will be read in. The falsifiable prediction: removing it
+# restores the raw cosine (the encoder's own quality, independent of any ladder rung).
+#
+# THIS ARM IS V0 WITH EXACTLY ONE SWITCH FLIPPED. Same seed, same epochs, same k, same
+# schedule, same episode in every other respect -- so `A1 - V0` is that switch.
+base: loso_sub08_v6_rat.yaml
+
+recovery_aware:
+  in_loop_full: true
+  episode_whiten: false      # <-- the single change
+
+out_dir: outputs/stage1/v6-rat-nowhiten

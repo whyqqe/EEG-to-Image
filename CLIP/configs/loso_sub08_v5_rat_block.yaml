@@ -1,0 +1,18 @@
+# G1b / v5 pillar A, arm 1 of 3: PER-SUBJECT BLOCKING ONLY, no hubness correction.
+#
+# The factorisation exists so that "score the image contrast one subject at a time" and
+# "correct the logits for hubness" can be attributed independently. Turning both on at once
+# is how the v4 regression became unattributable and needed a 2x2 to localise.
+#
+# Blocking alone is the cheaper of the two claims: it changes WHICH rows share a softmax
+# (a n_s-way task instead of a 3*n_s-way one, i.e. the difficulty class deployment actually
+# has), but it leaves the logits as raw cosine.
+base: loso_sub08_v4.yaml
+
+recovery_aware:
+  enabled: true
+  block_per_subject: true
+  csls_k: null          # <- the arm's defining value: no CSLS
+  terms: [img, cross]
+
+out_dir: outputs/stage1/v5-rat-block-sub-08

@@ -1,0 +1,74 @@
+{
+  "rank": 16,
+  "tau": 0.05,
+  "rho": 0.1,
+  "csls_k": 10,
+  "per_fold": {
+    "1_2025": {
+      "deployed": {
+        "+ CSLS + recovery": 50.0,
+        "+ T2 reps": 51.0,
+        "+ T1(CSLS + recovery) + T2 reps": 53.0
+      },
+      "soft_only": {
+        "+ CSLS + recovery": 51.0,
+        "+ T2 reps": 56.49999999999999,
+        "+ T1(CSLS + recovery) + T2 reps": 53.5
+      },
+      "subspace_only": {
+        "+ CSLS + recovery": 50.5,
+        "+ T2 reps": 54.0,
+        "+ T1(CSLS + recovery) + T2 reps": 53.0
+      },
+      "s3r": {
+        "+ CSLS + recovery": 50.0,
+        "+ T2 reps": 52.5,
+        "+ T1(CSLS + recovery) + T2 reps": 50.5
+      }
+    },
+    "5_2025": {
+      "deployed": {
+        "+ CSLS + recovery": 37.5,
+        "+ T2 reps": 40.5,
+        "+ T1(CSLS + recovery) + T2 reps": 41.0
+      },
+      "soft_only": {
+        "+ CSLS + recovery": 43.5,
+        "+ T2 reps": 42.0,
+        "+ T1(CSLS + recovery) + T2 reps": 43.0
+      },
+      "subspace_only": {
+        "+ CSLS + recovery": 39.5,
+        "+ T2 reps": 42.5,
+        "+ T1(CSLS + recovery) + T2 reps": 42.5
+      },
+      "s3r": {
+        "+ CSLS + recovery": 43.5,
+        "+ T2 reps": 46.5,
+        "+ T1(CSLS + recovery) + T2 reps": 46.0
+      }
+    },
+    "8_2025": {
+      "deployed": {
+        "+ CSLS + recovery": 33.0,
+        "+ T2 reps": 34.5,
+        "+ T1(CSLS + recovery) + T2 reps": 35.0
+      },
+      "soft_only": {
+        "+ CSLS + recovery": 35.0,
+        "+ T2 reps": 39.5,
+        "+ T1(CSLS + recovery) + T2 reps": 37.5
+      },
+      "subspace_only": {
+        "+ CSLS + recovery": 30.0,
+        "+ T2 reps": 32.5,
+        "+ T1(CSLS + recovery) + T2 reps": 32.0
+      },
+      "s3r": {
+        "+ CSLS + recovery": 33.0,
+        "+ T2 reps": 36.0,
+        "+ T1(CSLS + recovery) + T2 reps": 37.0
+      }
+    }
+  }
+}

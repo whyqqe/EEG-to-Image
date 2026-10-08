@@ -1,0 +1,12 @@
+# SQA twin -- the SAME recipe as `configs/sqa_loso_k20.yaml` with the group-action
+# augmentation OFF. This is the paired control: identical base, fold keys, seed and data
+# order, so `sqa - sqa_noaug` on a fold is the effect of the GL(C) group augmentation and
+# nothing else. With `enabled: false`, `build_augment` returns `None`, the dataset's worker
+# rng path is not entered, and the random stream is drawn exactly as the pre-augmentation
+# runs drew it -- which is what keeps this comparable to `g3_loso_k20.yaml` too.
+base: g3_loso_k20.yaml
+
+augment:
+  enabled: false
+
+out_dir: null               # MUST come from --out-dir (per fold / per arm)

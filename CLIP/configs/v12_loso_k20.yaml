@@ -1,0 +1,81 @@
+# v12 -- the TRAINING-side instantiation of the locked claim (docs/eeg2image_v12_core_claim.md).
+#
+# WHAT IS ADDED OVER THE BANKED v8 RECIPE. v8 = G3 + the Sinkhorn soft-plan term, and it is the
+# best thing on the project (54.25 +- 10.97 Top-1 over 10 folds under the deployed FGW operator).
+# v12 adds the metric terms and NOTHING ELSE, because a single added mechanism against a banked
+# baseline is the only form of this experiment that reads as one number.
+#
+# WHY THE METRIC, AND NOT ANOTHER CONTRASTIVE TERM. The R-curve (job 645719, subjects 1/5/8) refits
+# the deployed T2 operator on the first R repetitions: Top-1 runs 4.0 -> 54.5 from R=1 to R=80 and
+# is STILL climbing by +3.33pp in the last doubling. So the query metric is estimation-limited at
+# the deployed R and no existing term targets that quantity -- the four earlier training attempts
+# (T2', T2'', the SCORE episode, G-a) all pushed the hard mutual-NN landmark rate, which the
+# operator does not consume. This config attacks the metric itself.
+#
+# `concept` LOADS THE REPETITIONS, THE v12 BLOCK CONSUMES THEM. `concept.enabled: true` is what
+# makes the loader hand over `batch['reps']`; `reps_weight: 0.0` keeps the T2' term itself OFF, so
+# the v12 twin differs from its base in exactly the v12 weights and nothing else. (The row-grouped
+# T2' arm is the measured anti-T1 failure, sub-08 42.0 -> 30.0; `reps_group: stimulus` is the
+# documented fix and is exercised only by the third arm, passed on the command line.)
+base: v8_loso_k20.yaml
+
+# Fold keys stay null exactly as in G3/v8: they MUST come from the command line, or a forgotten
+# `--target-subject` dies on `None` instead of silently training fold 8.
+target_subject: null
+source_subjects: null
+seed: null
+out_dir: null
+
+concept:
+  enabled: true
+  # OFF here on purpose: see the header. The third arm raises it via `--reps-weight`.
+  reps_weight: 0.0
+  reps_group: stimulus
+  reps_detach_gate: true
+  reps_n_stim: 32
+  reps_subj_sel: 3
+  reps_r_use: 2
+
+v12:
+  enabled: true
+
+  # (a) METRIC SELF-DISTILLATION. The teacher is the v11 reliability-fused consensus metric over
+  # `teacher_blocks` independent repetition blocks -- the estimator `probe_fusion.py` measured to
+  # carry shared structure monotonically in the number of views, with a correspondence-destroying
+  # control pinned at ~0.000 (job 645697). The student is the metric from `student_reps`
+  # repetition(s); the teacher excludes them, so the target cannot be met by copying its input.
+  #
+  # Weight 1.0: the loss is `1 - corr` with range [0, 2], so it is on the same scale as a
+  # correlation and needs no re-scaling against InfoNCE. It starts near 0.4-0.5 on a real encoder
+  # (measured on synthetic structure, smoke §17) and should fall toward 0 if the mechanism is real.
+  metric_distill: 1.0
+
+  # (c) METRIC-LEVEL SUBJECT CONSISTENCY. Constrains the CONCEPT METRIC (the measured 0.565
+  # quantity), not the raw embedding -- Part A's surviving signal. Kept modest: Part A says the
+  # inter-subject EMBEDDING map is noise, so this term must only sharpen the shared metric, not
+  # force an alignment the measurements say does not exist. Its own non-degeneracy guard is in
+  # smoke §17 (a rank-1 student cannot win).
+  metric_consistency: 0.5
+
+  # Repetitions consumed per selected row. THE TRAIN-SIDE CLOUD IS ONLY R=4 DEEP
+  # (`train_subNN_all63_trainreps_mvnntrain_std.npy` is (1654, 10, 4, 63, 250)); the TEST side is
+  # R=80. So `r_use: 4` is the whole cloud: 1 student rep + 3 reps in 3 disjoint teacher blocks of
+  # 1. This is the honest limit of the trainable form of Part C -- the teacher can only be as good
+  # as the 4 train repetitions allow, and the R-curve's R=4 point is 12.3 Top-1, not 54.5. The
+  # claim is that the SINGLE-trial student is pulled toward the 4-rep consensus, and that this
+  # generalises to the 80-rep test cloud because the structure is the same object.
+  r_use: 4
+  student_reps: 1
+  teacher_blocks: 3
+
+  # 24 stimuli x 3 subjects = 72 selected rows x 4 reps = 288 extra encoder passes per step. The
+  # main batch is `batch_stimuli` x `subjects_per_stimulus` = 128 x 3 = 384 rows, so this is ~0.75x
+  # the per-step encoder cost -- stated here because a term whose cost is hidden makes a slower run
+  # look free.
+  n_stim: 24
+  subj_sel: 3
+
+  # The SMN scale gate is excluded from this term's gradient for the same measured reason as the
+  # concept term: the two are substitutes, and the concept term already took the gate to 0.000
+  # once (0.498 -> 0.203 -> 0.000 for weight 0 -> 0.1 -> 0.5) before the gate was detached.
+  detach_gate: true

@@ -1,0 +1,23 @@
+# =====================================================================================
+# v14 / arm OFF (the baseline twin): the term disabled, everything else identical.
+#
+# `enabled: false` is the ONLY key that differs from `configs/v14_anchor_whit.yaml` -- `frame` and
+# `whiten_shrink` are inherited and equal, and they are inert because `Trainer` reads them only
+# inside the `bias_anchor_enabled` branch. That keeps the primary comparison a ONE-key diff, which
+# the sbatch gate asserts BEFORE training and `summarize_v13.py` re-asserts afterwards.
+#
+# `weight` is deliberately NOT zeroed. An earlier version of the v13 OFF arm also set `weight: 0.0`,
+# which made the pair differ in TWO keys and the job's own gate refused to run it -- correctly,
+# because a two-key difference cannot attribute a result to either key. `enabled` is the switch that
+# takes the branch, so an inherited weight is fully inert.
+#
+# `concept.enabled` STAYS TRUE, exactly as in the `raw`/`whit` arms. It is what makes the loader
+# pass per-repetition EEG, so leaving it on in every arm keeps the DATA PATH identical -- sampler,
+# augmentation stream, per-step encoder passes -- and the only difference between an arm pair is the
+# loss, not the plumbing. Turning it off here would make OFF a v8-on-a-different-data-path.
+base: v13_bias_loso_k20.yaml
+
+bias_anchor:
+  enabled: false
+  frame: whitened
+  whiten_shrink: 0.0

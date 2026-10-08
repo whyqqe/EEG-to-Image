@@ -1,0 +1,19 @@
+# G1b / v5 pillar A, arm 2 of 3: CSLS CORRECTION ONLY, on the whole batch.
+#
+# The complement of arm 1. Isolates the hubness correction with the batch layout unchanged,
+# so `arm2 - base` is the CSLS term and `arm1 - base` is the blocking term, and
+# `arm3 - base` is their combination. Nothing here is a "no-op baseline" -- that is the
+# point of splitting them.
+#
+# NOTE the batch layout genuinely differs from deployment here (3 subjects share one softmax
+# matrix rather than one subject's 200-way retrieval). Whether that mismatch matters is
+# exactly what comparing this arm to arm 3 answers, which is why both exist.
+base: loso_sub08_v4.yaml
+
+recovery_aware:
+  enabled: true
+  block_per_subject: false
+  csls_k: 10
+  terms: [img, cross]
+
+out_dir: outputs/stage1/v5-rat-csls-sub-08

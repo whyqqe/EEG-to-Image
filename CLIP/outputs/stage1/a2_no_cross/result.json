@@ -1,0 +1,10 @@
+{
+  "last": {
+    "top1": 12.0,
+    "top5": 31.0,
+    "mean_rank": 21.96,
+    "n": 200
+  },
+  "best_seen": 16.0,
+  "out_dir": "/project/peilab/why/CLIP/outputs/stage1/a2_no_cross"
+}

@@ -1,0 +1,14 @@
+# SQA ATTRIBUTION, arm `diag` -- the DIAGONAL subgroup of GL(C).
+#
+# `X -> diag(1 + mixing*g) X` with `g ~ N(0,1)^C` perturbs each channel by the same
+# magnitude as the group arm, but it can only RESCALE channels: no channel ever mixes into
+# another. This is the direction `gain` already spans, so if this arm reproduces the group
+# arm's gain, the win was generic per-channel perturbation and NOT the group action.
+#
+# Read against `configs/sqa_loso_k20.yaml` (dense) and `..._orth.yaml`.
+base: sqa_loso_k20.yaml
+
+augment:
+  enabled: true
+  mixing: 3.15              # same ||M - I||_F as the dense arm -- the arms are matched
+  mixing_mode: diag

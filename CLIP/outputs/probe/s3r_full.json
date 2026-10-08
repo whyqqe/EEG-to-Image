@@ -1,0 +1,818 @@
+{
+  "rank": 64,
+  "tau": 0.05,
+  "rho": 0.1,
+  "csls_k": 10,
+  "per_fold": {
+    "1_2025": {
+      "deployed": {
+        "+ CSLS + recovery": 50.0,
+        "+ T2 reps": 51.0,
+        "+ T1(CSLS + recovery) + T2 reps": 53.0
+      },
+      "s3r_tau0.01": {
+        "+ CSLS + recovery": 51.5,
+        "+ T2 reps": 56.49999999999999,
+        "+ T1(CSLS + recovery) + T2 reps": 54.50000000000001
+      },
+      "s3r_tau0.02": {
+        "+ CSLS + recovery": 51.5,
+        "+ T2 reps": 56.49999999999999,
+        "+ T1(CSLS + recovery) + T2 reps": 54.0
+      },
+      "s3r_tau0.05": {
+        "+ CSLS + recovery": 51.0,
+        "+ T2 reps": 56.49999999999999,
+        "+ T1(CSLS + recovery) + T2 reps": 53.5
+      },
+      "s3r_tau0.1": {
+        "+ CSLS + recovery": 51.0,
+        "+ T2 reps": 54.50000000000001,
+        "+ T1(CSLS + recovery) + T2 reps": 52.0
+      }
+    },
+    "1_2026": {
+      "deployed": {
+        "+ CSLS + recovery": 51.0,
+        "+ T2 reps": 51.5,
+        "+ T1(CSLS + recovery) + T2 reps": 51.0
+      },
+      "s3r_tau0.01": {
+        "+ CSLS + recovery": 53.5,
+        "+ T2 reps": 56.99999999999999,
+        "+ T1(CSLS + recovery) + T2 reps": 56.99999999999999
+      },
+      "s3r_tau0.02": {
+        "+ CSLS + recovery": 54.0,
+        "+ T2 reps": 57.99999999999999,
+        "+ T1(CSLS + recovery) + T2 reps": 57.49999999999999
+      },
+      "s3r_tau0.05": {
+        "+ CSLS + recovery": 53.5,
+        "+ T2 reps": 57.99999999999999,
+        "+ T1(CSLS + recovery) + T2 reps": 57.99999999999999
+      },
+      "s3r_tau0.1": {
+        "+ CSLS + recovery": 53.5,
+        "+ T2 reps": 56.00000000000001,
+        "+ T1(CSLS + recovery) + T2 reps": 54.50000000000001
+      }
+    },
+    "1_2027": {
+      "deployed": {
+        "+ CSLS + recovery": 50.0,
+        "+ T2 reps": 51.0,
+        "+ T1(CSLS + recovery) + T2 reps": 53.0
+      },
+      "s3r_tau0.01": {
+        "+ CSLS + recovery": 55.00000000000001,
+        "+ T2 reps": 56.49999999999999,
+        "+ T1(CSLS + recovery) + T2 reps": 56.00000000000001
+      },
+      "s3r_tau0.02": {
+        "+ CSLS + recovery": 54.50000000000001,
+        "+ T2 reps": 58.5,
+        "+ T1(CSLS + recovery) + T2 reps": 56.49999999999999
+      },
+      "s3r_tau0.05": {
+        "+ CSLS + recovery": 55.00000000000001,
+        "+ T2 reps": 56.99999999999999,
+        "+ T1(CSLS + recovery) + T2 reps": 54.50000000000001
+      },
+      "s3r_tau0.1": {
+        "+ CSLS + recovery": 54.0,
+        "+ T2 reps": 53.5,
+        "+ T1(CSLS + recovery) + T2 reps": 54.50000000000001
+      }
+    },
+    "2_2025": {
+      "deployed": {
+        "+ CSLS + recovery": 48.0,
+        "+ T2 reps": 53.5,
+        "+ T1(CSLS + recovery) + T2 reps": 52.0
+      },
+      "s3r_tau0.01": {
+        "+ CSLS + recovery": 50.5,
+        "+ T2 reps": 56.00000000000001,
+        "+ T1(CSLS + recovery) + T2 reps": 54.0
+      },
+      "s3r_tau0.02": {
+        "+ CSLS + recovery": 51.5,
+        "+ T2 reps": 54.50000000000001,
+        "+ T1(CSLS + recovery) + T2 reps": 54.50000000000001
+      },
+      "s3r_tau0.05": {
+        "+ CSLS + recovery": 51.0,
+        "+ T2 reps": 55.00000000000001,
+        "+ T1(CSLS + recovery) + T2 reps": 54.0
+      },
+      "s3r_tau0.1": {
+        "+ CSLS + recovery": 50.5,
+        "+ T2 reps": 55.50000000000001,
+        "+ T1(CSLS + recovery) + T2 reps": 52.5
+      }
+    },
+    "2_2026": {
+      "deployed": {
+        "+ CSLS + recovery": 39.5,
+        "+ T2 reps": 42.5,
+        "+ T1(CSLS + recovery) + T2 reps": 42.0
+      },
+      "s3r_tau0.01": {
+        "+ CSLS + recovery": 44.5,
+        "+ T2 reps": 45.5,
+        "+ T1(CSLS + recovery) + T2 reps": 46.5
+      },
+      "s3r_tau0.02": {
+        "+ CSLS + recovery": 44.5,
+        "+ T2 reps": 45.0,
+        "+ T1(CSLS + recovery) + T2 reps": 46.0
+      },
+      "s3r_tau0.05": {
+        "+ CSLS + recovery": 43.0,
+        "+ T2 reps": 46.0,
+        "+ T1(CSLS + recovery) + T2 reps": 44.0
+      },
+      "s3r_tau0.1": {
+        "+ CSLS + recovery": 41.5,
+        "+ T2 reps": 45.5,
+        "+ T1(CSLS + recovery) + T2 reps": 43.5
+      }
+    },
+    "2_2027": {
+      "deployed": {
+        "+ CSLS + recovery": 49.0,
+        "+ T2 reps": 48.5,
+        "+ T1(CSLS + recovery) + T2 reps": 49.0
+      },
+      "s3r_tau0.01": {
+        "+ CSLS + recovery": 51.5,
+        "+ T2 reps": 49.0,
+        "+ T1(CSLS + recovery) + T2 reps": 51.5
+      },
+      "s3r_tau0.02": {
+        "+ CSLS + recovery": 51.0,
+        "+ T2 reps": 48.5,
+        "+ T1(CSLS + recovery) + T2 reps": 49.5
+      },
+      "s3r_tau0.05": {
+        "+ CSLS + recovery": 51.5,
+        "+ T2 reps": 50.5,
+        "+ T1(CSLS + recovery) + T2 reps": 50.5
+      },
+      "s3r_tau0.1": {
+        "+ CSLS + recovery": 50.0,
+        "+ T2 reps": 49.5,
+        "+ T1(CSLS + recovery) + T2 reps": 48.5
+      }
+    },
+    "3_2025": {
+      "deployed": {
+        "+ CSLS + recovery": 43.0,
+        "+ T2 reps": 49.0,
+        "+ T1(CSLS + recovery) + T2 reps": 46.0
+      },
+      "s3r_tau0.01": {
+        "+ CSLS + recovery": 44.5,
+        "+ T2 reps": 53.0,
+        "+ T1(CSLS + recovery) + T2 reps": 50.0
+      },
+      "s3r_tau0.02": {
+        "+ CSLS + recovery": 46.5,
+        "+ T2 reps": 52.0,
+        "+ T1(CSLS + recovery) + T2 reps": 50.5
+      },
+      "s3r_tau0.05": {
+        "+ CSLS + recovery": 45.0,
+        "+ T2 reps": 50.5,
+        "+ T1(CSLS + recovery) + T2 reps": 48.5
+      },
+      "s3r_tau0.1": {
+        "+ CSLS + recovery": 45.0,
+        "+ T2 reps": 46.5,
+        "+ T1(CSLS + recovery) + T2 reps": 47.0
+      }
+    },
+    "3_2026": {
+      "deployed": {
+        "+ CSLS + recovery": 41.0,
+        "+ T2 reps": 42.5,
+        "+ T1(CSLS + recovery) + T2 reps": 41.5
+      },
+      "s3r_tau0.01": {
+        "+ CSLS + recovery": 44.0,
+        "+ T2 reps": 45.0,
+        "+ T1(CSLS + recovery) + T2 reps": 47.5
+      },
+      "s3r_tau0.02": {
+        "+ CSLS + recovery": 45.0,
+        "+ T2 reps": 44.0,
+        "+ T1(CSLS + recovery) + T2 reps": 47.0
+      },
+      "s3r_tau0.05": {
+        "+ CSLS + recovery": 45.0,
+        "+ T2 reps": 45.0,
+        "+ T1(CSLS + recovery) + T2 reps": 45.0
+      },
+      "s3r_tau0.1": {
+        "+ CSLS + recovery": 44.0,
+        "+ T2 reps": 44.5,
+        "+ T1(CSLS + recovery) + T2 reps": 44.0
+      }
+    },
+    "3_2027": {
+      "deployed": {
+        "+ CSLS + recovery": 47.5,
+        "+ T2 reps": 47.5,
+        "+ T1(CSLS + recovery) + T2 reps": 49.0
+      },
+      "s3r_tau0.01": {
+        "+ CSLS + recovery": 47.5,
+        "+ T2 reps": 46.5,
+        "+ T1(CSLS + recovery) + T2 reps": 47.5
+      },
+      "s3r_tau0.02": {
+        "+ CSLS + recovery": 49.0,
+        "+ T2 reps": 47.5,
+        "+ T1(CSLS + recovery) + T2 reps": 48.0
+      },
+      "s3r_tau0.05": {
+        "+ CSLS + recovery": 47.5,
+        "+ T2 reps": 48.0,
+        "+ T1(CSLS + recovery) + T2 reps": 47.0
+      },
+      "s3r_tau0.1": {
+        "+ CSLS + recovery": 46.0,
+        "+ T2 reps": 49.0,
+        "+ T1(CSLS + recovery) + T2 reps": 45.0
+      }
+    },
+    "4_2025": {
+      "deployed": {
+        "+ CSLS + recovery": 28.999999999999996,
+        "+ T2 reps": 31.5,
+        "+ T1(CSLS + recovery) + T2 reps": 28.000000000000004
+      },
+      "s3r_tau0.01": {
+        "+ CSLS + recovery": 33.0,
+        "+ T2 reps": 31.5,
+        "+ T1(CSLS + recovery) + T2 reps": 32.0
+      },
+      "s3r_tau0.02": {
+        "+ CSLS + recovery": 32.5,
+        "+ T2 reps": 32.0,
+        "+ T1(CSLS + recovery) + T2 reps": 31.0
+      },
+      "s3r_tau0.05": {
+        "+ CSLS + recovery": 32.0,
+        "+ T2 reps": 31.0,
+        "+ T1(CSLS + recovery) + T2 reps": 28.999999999999996
+      },
+      "s3r_tau0.1": {
+        "+ CSLS + recovery": 31.0,
+        "+ T2 reps": 29.5,
+        "+ T1(CSLS + recovery) + T2 reps": 28.000000000000004
+      }
+    },
+    "4_2026": {
+      "deployed": {
+        "+ CSLS + recovery": 31.5,
+        "+ T2 reps": 35.0,
+        "+ T1(CSLS + recovery) + T2 reps": 35.0
+      },
+      "s3r_tau0.01": {
+        "+ CSLS + recovery": 34.0,
+        "+ T2 reps": 38.5,
+        "+ T1(CSLS + recovery) + T2 reps": 38.0
+      },
+      "s3r_tau0.02": {
+        "+ CSLS + recovery": 35.0,
+        "+ T2 reps": 38.5,
+        "+ T1(CSLS + recovery) + T2 reps": 35.5
+      },
+      "s3r_tau0.05": {
+        "+ CSLS + recovery": 35.0,
+        "+ T2 reps": 36.5,
+        "+ T1(CSLS + recovery) + T2 reps": 38.5
+      },
+      "s3r_tau0.1": {
+        "+ CSLS + recovery": 34.5,
+        "+ T2 reps": 35.5,
+        "+ T1(CSLS + recovery) + T2 reps": 38.0
+      }
+    },
+    "4_2027": {
+      "deployed": {
+        "+ CSLS + recovery": 31.5,
+        "+ T2 reps": 30.0,
+        "+ T1(CSLS + recovery) + T2 reps": 30.5
+      },
+      "s3r_tau0.01": {
+        "+ CSLS + recovery": 34.0,
+        "+ T2 reps": 31.0,
+        "+ T1(CSLS + recovery) + T2 reps": 33.5
+      },
+      "s3r_tau0.02": {
+        "+ CSLS + recovery": 35.0,
+        "+ T2 reps": 33.0,
+        "+ T1(CSLS + recovery) + T2 reps": 33.0
+      },
+      "s3r_tau0.05": {
+        "+ CSLS + recovery": 36.0,
+        "+ T2 reps": 34.0,
+        "+ T1(CSLS + recovery) + T2 reps": 33.5
+      },
+      "s3r_tau0.1": {
+        "+ CSLS + recovery": 34.5,
+        "+ T2 reps": 33.5,
+        "+ T1(CSLS + recovery) + T2 reps": 35.0
+      }
+    },
+    "5_2025": {
+      "deployed": {
+        "+ CSLS + recovery": 37.5,
+        "+ T2 reps": 40.5,
+        "+ T1(CSLS + recovery) + T2 reps": 41.0
+      },
+      "s3r_tau0.01": {
+        "+ CSLS + recovery": 41.5,
+        "+ T2 reps": 40.0,
+        "+ T1(CSLS + recovery) + T2 reps": 43.5
+      },
+      "s3r_tau0.02": {
+        "+ CSLS + recovery": 43.0,
+        "+ T2 reps": 42.5,
+        "+ T1(CSLS + recovery) + T2 reps": 43.0
+      },
+      "s3r_tau0.05": {
+        "+ CSLS + recovery": 43.5,
+        "+ T2 reps": 42.0,
+        "+ T1(CSLS + recovery) + T2 reps": 43.0
+      },
+      "s3r_tau0.1": {
+        "+ CSLS + recovery": 42.5,
+        "+ T2 reps": 43.0,
+        "+ T1(CSLS + recovery) + T2 reps": 42.5
+      }
+    },
+    "5_2026": {
+      "deployed": {
+        "+ CSLS + recovery": 38.0,
+        "+ T2 reps": 39.5,
+        "+ T1(CSLS + recovery) + T2 reps": 40.5
+      },
+      "s3r_tau0.01": {
+        "+ CSLS + recovery": 38.5,
+        "+ T2 reps": 44.0,
+        "+ T1(CSLS + recovery) + T2 reps": 42.5
+      },
+      "s3r_tau0.02": {
+        "+ CSLS + recovery": 41.5,
+        "+ T2 reps": 42.0,
+        "+ T1(CSLS + recovery) + T2 reps": 42.0
+      },
+      "s3r_tau0.05": {
+        "+ CSLS + recovery": 40.5,
+        "+ T2 reps": 39.5,
+        "+ T1(CSLS + recovery) + T2 reps": 40.0
+      },
+      "s3r_tau0.1": {
+        "+ CSLS + recovery": 38.5,
+        "+ T2 reps": 40.5,
+        "+ T1(CSLS + recovery) + T2 reps": 38.0
+      }
+    },
+    "5_2027": {
+      "deployed": {
+        "+ CSLS + recovery": 44.0,
+        "+ T2 reps": 44.5,
+        "+ T1(CSLS + recovery) + T2 reps": 45.5
+      },
+      "s3r_tau0.01": {
+        "+ CSLS + recovery": 48.0,
+        "+ T2 reps": 47.5,
+        "+ T1(CSLS + recovery) + T2 reps": 47.5
+      },
+      "s3r_tau0.02": {
+        "+ CSLS + recovery": 51.0,
+        "+ T2 reps": 49.0,
+        "+ T1(CSLS + recovery) + T2 reps": 46.0
+      },
+      "s3r_tau0.05": {
+        "+ CSLS + recovery": 48.5,
+        "+ T2 reps": 47.5,
+        "+ T1(CSLS + recovery) + T2 reps": 46.5
+      },
+      "s3r_tau0.1": {
+        "+ CSLS + recovery": 46.5,
+        "+ T2 reps": 46.0,
+        "+ T1(CSLS + recovery) + T2 reps": 46.0
+      }
+    },
+    "6_2025": {
+      "deployed": {
+        "+ CSLS + recovery": 44.5,
+        "+ T2 reps": 57.49999999999999,
+        "+ T1(CSLS + recovery) + T2 reps": 53.0
+      },
+      "s3r_tau0.01": {
+        "+ CSLS + recovery": 53.0,
+        "+ T2 reps": 54.50000000000001,
+        "+ T1(CSLS + recovery) + T2 reps": 56.99999999999999
+      },
+      "s3r_tau0.02": {
+        "+ CSLS + recovery": 51.5,
+        "+ T2 reps": 55.50000000000001,
+        "+ T1(CSLS + recovery) + T2 reps": 55.50000000000001
+      },
+      "s3r_tau0.05": {
+        "+ CSLS + recovery": 51.0,
+        "+ T2 reps": 56.00000000000001,
+        "+ T1(CSLS + recovery) + T2 reps": 56.49999999999999
+      },
+      "s3r_tau0.1": {
+        "+ CSLS + recovery": 51.0,
+        "+ T2 reps": 55.50000000000001,
+        "+ T1(CSLS + recovery) + T2 reps": 52.5
+      }
+    },
+    "6_2026": {
+      "deployed": {
+        "+ CSLS + recovery": 47.5,
+        "+ T2 reps": 50.5,
+        "+ T1(CSLS + recovery) + T2 reps": 52.0
+      },
+      "s3r_tau0.01": {
+        "+ CSLS + recovery": 54.0,
+        "+ T2 reps": 54.50000000000001,
+        "+ T1(CSLS + recovery) + T2 reps": 55.50000000000001
+      },
+      "s3r_tau0.02": {
+        "+ CSLS + recovery": 53.5,
+        "+ T2 reps": 54.50000000000001,
+        "+ T1(CSLS + recovery) + T2 reps": 54.50000000000001
+      },
+      "s3r_tau0.05": {
+        "+ CSLS + recovery": 51.5,
+        "+ T2 reps": 53.0,
+        "+ T1(CSLS + recovery) + T2 reps": 56.99999999999999
+      },
+      "s3r_tau0.1": {
+        "+ CSLS + recovery": 47.5,
+        "+ T2 reps": 53.0,
+        "+ T1(CSLS + recovery) + T2 reps": 53.0
+      }
+    },
+    "6_2027": {
+      "deployed": {
+        "+ CSLS + recovery": 54.0,
+        "+ T2 reps": 56.49999999999999,
+        "+ T1(CSLS + recovery) + T2 reps": 54.0
+      },
+      "s3r_tau0.01": {
+        "+ CSLS + recovery": 55.50000000000001,
+        "+ T2 reps": 57.99999999999999,
+        "+ T1(CSLS + recovery) + T2 reps": 56.49999999999999
+      },
+      "s3r_tau0.02": {
+        "+ CSLS + recovery": 53.5,
+        "+ T2 reps": 55.50000000000001,
+        "+ T1(CSLS + recovery) + T2 reps": 56.99999999999999
+      },
+      "s3r_tau0.05": {
+        "+ CSLS + recovery": 53.0,
+        "+ T2 reps": 55.00000000000001,
+        "+ T1(CSLS + recovery) + T2 reps": 55.50000000000001
+      },
+      "s3r_tau0.1": {
+        "+ CSLS + recovery": 52.5,
+        "+ T2 reps": 55.00000000000001,
+        "+ T1(CSLS + recovery) + T2 reps": 54.50000000000001
+      }
+    },
+    "7_2025": {
+      "deployed": {
+        "+ CSLS + recovery": 41.0,
+        "+ T2 reps": 40.0,
+        "+ T1(CSLS + recovery) + T2 reps": 42.5
+      },
+      "s3r_tau0.01": {
+        "+ CSLS + recovery": 42.5,
+        "+ T2 reps": 38.0,
+        "+ T1(CSLS + recovery) + T2 reps": 41.5
+      },
+      "s3r_tau0.02": {
+        "+ CSLS + recovery": 42.0,
+        "+ T2 reps": 38.5,
+        "+ T1(CSLS + recovery) + T2 reps": 41.5
+      },
+      "s3r_tau0.05": {
+        "+ CSLS + recovery": 43.0,
+        "+ T2 reps": 39.5,
+        "+ T1(CSLS + recovery) + T2 reps": 41.5
+      },
+      "s3r_tau0.1": {
+        "+ CSLS + recovery": 45.0,
+        "+ T2 reps": 37.0,
+        "+ T1(CSLS + recovery) + T2 reps": 41.0
+      }
+    },
+    "7_2026": {
+      "deployed": {
+        "+ CSLS + recovery": 41.5,
+        "+ T2 reps": 42.5,
+        "+ T1(CSLS + recovery) + T2 reps": 42.0
+      },
+      "s3r_tau0.01": {
+        "+ CSLS + recovery": 39.5,
+        "+ T2 reps": 41.0,
+        "+ T1(CSLS + recovery) + T2 reps": 42.5
+      },
+      "s3r_tau0.02": {
+        "+ CSLS + recovery": 39.5,
+        "+ T2 reps": 42.5,
+        "+ T1(CSLS + recovery) + T2 reps": 41.5
+      },
+      "s3r_tau0.05": {
+        "+ CSLS + recovery": 39.5,
+        "+ T2 reps": 43.0,
+        "+ T1(CSLS + recovery) + T2 reps": 43.0
+      },
+      "s3r_tau0.1": {
+        "+ CSLS + recovery": 38.5,
+        "+ T2 reps": 41.5,
+        "+ T1(CSLS + recovery) + T2 reps": 41.0
+      }
+    },
+    "7_2027": {
+      "deployed": {
+        "+ CSLS + recovery": 37.5,
+        "+ T2 reps": 38.0,
+        "+ T1(CSLS + recovery) + T2 reps": 37.5
+      },
+      "s3r_tau0.01": {
+        "+ CSLS + recovery": 39.5,
+        "+ T2 reps": 38.0,
+        "+ T1(CSLS + recovery) + T2 reps": 38.0
+      },
+      "s3r_tau0.02": {
+        "+ CSLS + recovery": 40.0,
+        "+ T2 reps": 38.0,
+        "+ T1(CSLS + recovery) + T2 reps": 38.5
+      },
+      "s3r_tau0.05": {
+        "+ CSLS + recovery": 40.0,
+        "+ T2 reps": 37.5,
+        "+ T1(CSLS + recovery) + T2 reps": 38.5
+      },
+      "s3r_tau0.1": {
+        "+ CSLS + recovery": 40.5,
+        "+ T2 reps": 37.5,
+        "+ T1(CSLS + recovery) + T2 reps": 38.5
+      }
+    },
+    "8_2025": {
+      "deployed": {
+        "+ CSLS + recovery": 33.0,
+        "+ T2 reps": 34.5,
+        "+ T1(CSLS + recovery) + T2 reps": 35.0
+      },
+      "s3r_tau0.01": {
+        "+ CSLS + recovery": 35.5,
+        "+ T2 reps": 39.5,
+        "+ T1(CSLS + recovery) + T2 reps": 37.5
+      },
+      "s3r_tau0.02": {
+        "+ CSLS + recovery": 34.5,
+        "+ T2 reps": 39.0,
+        "+ T1(CSLS + recovery) + T2 reps": 38.0
+      },
+      "s3r_tau0.05": {
+        "+ CSLS + recovery": 35.0,
+        "+ T2 reps": 39.5,
+        "+ T1(CSLS + recovery) + T2 reps": 37.5
+      },
+      "s3r_tau0.1": {
+        "+ CSLS + recovery": 36.0,
+        "+ T2 reps": 39.0,
+        "+ T1(CSLS + recovery) + T2 reps": 37.0
+      }
+    },
+    "8_2026": {
+      "deployed": {
+        "+ CSLS + recovery": 32.5,
+        "+ T2 reps": 31.0,
+        "+ T1(CSLS + recovery) + T2 reps": 37.0
+      },
+      "s3r_tau0.01": {
+        "+ CSLS + recovery": 41.0,
+        "+ T2 reps": 37.0,
+        "+ T1(CSLS + recovery) + T2 reps": 40.5
+      },
+      "s3r_tau0.02": {
+        "+ CSLS + recovery": 39.0,
+        "+ T2 reps": 37.0,
+        "+ T1(CSLS + recovery) + T2 reps": 41.0
+      },
+      "s3r_tau0.05": {
+        "+ CSLS + recovery": 38.0,
+        "+ T2 reps": 38.0,
+        "+ T1(CSLS + recovery) + T2 reps": 40.5
+      },
+      "s3r_tau0.1": {
+        "+ CSLS + recovery": 36.5,
+        "+ T2 reps": 38.0,
+        "+ T1(CSLS + recovery) + T2 reps": 40.5
+      }
+    },
+    "8_2027": {
+      "deployed": {
+        "+ CSLS + recovery": 34.0,
+        "+ T2 reps": 31.0,
+        "+ T1(CSLS + recovery) + T2 reps": 33.0
+      },
+      "s3r_tau0.01": {
+        "+ CSLS + recovery": 36.5,
+        "+ T2 reps": 39.0,
+        "+ T1(CSLS + recovery) + T2 reps": 39.0
+      },
+      "s3r_tau0.02": {
+        "+ CSLS + recovery": 38.0,
+        "+ T2 reps": 39.0,
+        "+ T1(CSLS + recovery) + T2 reps": 39.0
+      },
+      "s3r_tau0.05": {
+        "+ CSLS + recovery": 38.0,
+        "+ T2 reps": 38.5,
+        "+ T1(CSLS + recovery) + T2 reps": 39.0
+      },
+      "s3r_tau0.1": {
+        "+ CSLS + recovery": 37.0,
+        "+ T2 reps": 37.5,
+        "+ T1(CSLS + recovery) + T2 reps": 39.5
+      }
+    },
+    "9_2025": {
+      "deployed": {
+        "+ CSLS + recovery": 41.0,
+        "+ T2 reps": 45.5,
+        "+ T1(CSLS + recovery) + T2 reps": 44.5
+      },
+      "s3r_tau0.01": {
+        "+ CSLS + recovery": 48.5,
+        "+ T2 reps": 50.5,
+        "+ T1(CSLS + recovery) + T2 reps": 49.0
+      },
+      "s3r_tau0.02": {
+        "+ CSLS + recovery": 47.0,
+        "+ T2 reps": 50.5,
+        "+ T1(CSLS + recovery) + T2 reps": 48.0
+      },
+      "s3r_tau0.05": {
+        "+ CSLS + recovery": 46.5,
+        "+ T2 reps": 49.5,
+        "+ T1(CSLS + recovery) + T2 reps": 48.0
+      },
+      "s3r_tau0.1": {
+        "+ CSLS + recovery": 45.0,
+        "+ T2 reps": 49.5,
+        "+ T1(CSLS + recovery) + T2 reps": 48.5
+      }
+    },
+    "9_2026": {
+      "deployed": {
+        "+ CSLS + recovery": 38.0,
+        "+ T2 reps": 43.0,
+        "+ T1(CSLS + recovery) + T2 reps": 39.0
+      },
+      "s3r_tau0.01": {
+        "+ CSLS + recovery": 43.0,
+        "+ T2 reps": 46.0,
+        "+ T1(CSLS + recovery) + T2 reps": 45.0
+      },
+      "s3r_tau0.02": {
+        "+ CSLS + recovery": 42.0,
+        "+ T2 reps": 47.5,
+        "+ T1(CSLS + recovery) + T2 reps": 44.0
+      },
+      "s3r_tau0.05": {
+        "+ CSLS + recovery": 44.0,
+        "+ T2 reps": 45.5,
+        "+ T1(CSLS + recovery) + T2 reps": 45.0
+      },
+      "s3r_tau0.1": {
+        "+ CSLS + recovery": 40.5,
+        "+ T2 reps": 43.5,
+        "+ T1(CSLS + recovery) + T2 reps": 41.5
+      }
+    },
+    "9_2027": {
+      "deployed": {
+        "+ CSLS + recovery": 42.5,
+        "+ T2 reps": 47.0,
+        "+ T1(CSLS + recovery) + T2 reps": 44.0
+      },
+      "s3r_tau0.01": {
+        "+ CSLS + recovery": 49.0,
+        "+ T2 reps": 54.50000000000001,
+        "+ T1(CSLS + recovery) + T2 reps": 50.5
+      },
+      "s3r_tau0.02": {
+        "+ CSLS + recovery": 49.5,
+        "+ T2 reps": 55.00000000000001,
+        "+ T1(CSLS + recovery) + T2 reps": 50.0
+      },
+      "s3r_tau0.05": {
+        "+ CSLS + recovery": 49.0,
+        "+ T2 reps": 53.0,
+        "+ T1(CSLS + recovery) + T2 reps": 49.5
+      },
+      "s3r_tau0.1": {
+        "+ CSLS + recovery": 47.5,
+        "+ T2 reps": 51.5,
+        "+ T1(CSLS + recovery) + T2 reps": 49.5
+      }
+    },
+    "10_2025": {
+      "deployed": {
+        "+ CSLS + recovery": 57.49999999999999,
+        "+ T2 reps": 62.5,
+        "+ T1(CSLS + recovery) + T2 reps": 60.0
+      },
+      "s3r_tau0.01": {
+        "+ CSLS + recovery": 60.5,
+        "+ T2 reps": 64.5,
+        "+ T1(CSLS + recovery) + T2 reps": 65.0
+      },
+      "s3r_tau0.02": {
+        "+ CSLS + recovery": 60.0,
+        "+ T2 reps": 65.5,
+        "+ T1(CSLS + recovery) + T2 reps": 65.0
+      },
+      "s3r_tau0.05": {
+        "+ CSLS + recovery": 59.5,
+        "+ T2 reps": 64.5,
+        "+ T1(CSLS + recovery) + T2 reps": 65.5
+      },
+      "s3r_tau0.1": {
+        "+ CSLS + recovery": 61.0,
+        "+ T2 reps": 64.0,
+        "+ T1(CSLS + recovery) + T2 reps": 63.5
+      }
+    },
+    "10_2026": {
+      "deployed": {
+        "+ CSLS + recovery": 57.49999999999999,
+        "+ T2 reps": 68.5,
+        "+ T1(CSLS + recovery) + T2 reps": 66.5
+      },
+      "s3r_tau0.01": {
+        "+ CSLS + recovery": 65.0,
+        "+ T2 reps": 71.0,
+        "+ T1(CSLS + recovery) + T2 reps": 72.0
+      },
+      "s3r_tau0.02": {
+        "+ CSLS + recovery": 65.0,
+        "+ T2 reps": 71.5,
+        "+ T1(CSLS + recovery) + T2 reps": 71.0
+      },
+      "s3r_tau0.05": {
+        "+ CSLS + recovery": 64.5,
+        "+ T2 reps": 69.5,
+        "+ T1(CSLS + recovery) + T2 reps": 70.5
+      },
+      "s3r_tau0.1": {
+        "+ CSLS + recovery": 62.5,
+        "+ T2 reps": 70.0,
+        "+ T1(CSLS + recovery) + T2 reps": 67.5
+      }
+    },
+    "10_2027": {
+      "deployed": {
+        "+ CSLS + recovery": 52.0,
+        "+ T2 reps": 60.0,
+        "+ T1(CSLS + recovery) + T2 reps": 59.5
+      },
+      "s3r_tau0.01": {
+        "+ CSLS + recovery": 56.49999999999999,
+        "+ T2 reps": 63.5,
+        "+ T1(CSLS + recovery) + T2 reps": 61.5
+      },
+      "s3r_tau0.02": {
+        "+ CSLS + recovery": 55.50000000000001,
+        "+ T2 reps": 64.0,
+        "+ T1(CSLS + recovery) + T2 reps": 63.0
+      },
+      "s3r_tau0.05": {
+        "+ CSLS + recovery": 54.0,
+        "+ T2 reps": 64.0,
+        "+ T1(CSLS + recovery) + T2 reps": 61.5
+      },
+      "s3r_tau0.1": {
+        "+ CSLS + recovery": 52.0,
+        "+ T2 reps": 62.0,
+        "+ T1(CSLS + recovery) + T2 reps": 59.0
+      }
+    }
+  }
+}

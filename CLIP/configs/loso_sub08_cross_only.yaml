@@ -1,0 +1,11 @@
+# A1 归因消融（master plan §8）：效果是否只来自 `cross` 项？
+# 与 img_only 互补；若某一项单独就能复现大部分 +5.50pp，A2 只需沿那一项扩展。
+base: loso_sub08_v5_rat_csls.yaml
+
+recovery_aware:
+  enabled: true
+  block_per_subject: false
+  csls_k: 10
+  terms: [cross]
+
+out_dir: outputs/stage1/v5-a1-cross

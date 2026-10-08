@@ -1,0 +1,12 @@
+{
+  "last": {
+    "top1": 17.5,
+    "top5": 46.0,
+    "mean_rank": 12.27,
+    "n": 200,
+    "offset_ratio": 0.5839589238166809,
+    "spec_top_frac": 0.945844829082489
+  },
+  "best_seen": 21.0,
+  "out_dir": "/project/peilab/why/CLIP/outputs/stage1/v7_t2b/sub08_stimulus_gatefree"
+}

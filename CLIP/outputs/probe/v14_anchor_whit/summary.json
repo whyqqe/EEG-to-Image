@@ -1,0 +1,223 @@
+{
+  "config": {
+    "stage1_root": "/project/peilab/why/CLIP/outputs/stage1/v14_anchor_whit",
+    "src_metric_root": "/project/peilab/why/CLIP/outputs/src_metric/v8",
+    "src_tag_fmt": "sub{:02d}_seed{seed}",
+    "tag_fmt": "sub06_k20_seed2025",
+    "folds": [
+      6
+    ],
+    "seed": 2025,
+    "outdir": "/project/peilab/why/CLIP/outputs/probe/v14_anchor_whit",
+    "rep_shrink": 0.1,
+    "fuse": 16,
+    "n_split": 20,
+    "embed_batch": 64,
+    "mvnn": null
+  },
+  "per_fold": {
+    "sub06": {
+      "C": 200,
+      "R": 80,
+      "d": 64,
+      "whiten": {
+        "cond": 447.261025194609,
+        "rank_deficient": false
+      },
+      "bias_curve": {
+        "R_for_average": [
+          1,
+          2,
+          4,
+          8,
+          16,
+          32,
+          64,
+          80
+        ],
+        "corr_with_gallery": [
+          0.00517617726671197,
+          0.006757089332828995,
+          0.007089729684942782,
+          -0.007055238464039171,
+          0.013938017264674656,
+          0.010646030579804318,
+          -0.0017525513888972343,
+          -0.0015633974005312898
+        ],
+        "corr_shuffled_control": [
+          -0.005668366480514816,
+          0.004636461309966674,
+          -0.006234513653652586,
+          0.006518596701848027,
+          -0.00614731946761298,
+          0.0016843529238348195,
+          -0.0035074938328566035,
+          0.006310822728428084
+        ],
+        "corr_with_gallery_raw_frame": [
+          0.01469352374850779,
+          0.004952304182175049,
+          0.00027577361962333045,
+          -0.004208440051048788,
+          -0.004230436037836168,
+          0.0004619360677252789,
+          -0.018334896519548356,
+          -0.021016287588750182
+        ],
+        "corr_shuffled_control_raw_frame": [
+          0.0096010243806577,
+          0.009935287883468551,
+          -0.006967398336331228,
+          0.0016071536025501147,
+          0.003093048881459723,
+          0.008827732605400786,
+          -0.010637285538294619,
+          0.0061982864046841845
+        ]
+      },
+      "bias_headroom_R80_minus_R1": -0.00673957466724326,
+      "bias_headroom_R80_minus_R1_raw_frame": -0.03570981133725797,
+      "fusion_corr_with_gallery": 0.005649973262562855,
+      "single_mean_corr_with_gallery": -0.0015633974005312898,
+      "fusion_minus_mean": 0.007213370663094145,
+      "fusion_diag": {
+        "weights": [
+          0.06250460455523242,
+          0.06251853535697743,
+          0.06253646148677652,
+          0.062489821706147544,
+          0.062493593382609645,
+          0.06251424701512741,
+          0.062483494530318914,
+          0.06251338090944215,
+          0.06251512395249567,
+          0.06250294346215009,
+          0.06249792528742351,
+          0.06249354659137392,
+          0.062478639145997855,
+          0.06246676242723158,
+          0.06248268616168493,
+          0.06250823402901039
+        ],
+        "resid": [
+          3.6792049146446693,
+          3.6783850891659795,
+          3.677330676669368,
+          3.6800752827190752,
+          3.679853179038634,
+          3.678637418479055,
+          3.6804479329666098,
+          3.6786883850017715,
+          3.678585815998094,
+          3.6793026940956,
+          3.6795981181232644,
+          3.6798559342819153,
+          3.6807339506246097,
+          3.6814337636477785,
+          3.6804955487088122,
+          3.678991285486873
+        ],
+        "weight_range": 6.969905954494482e-05,
+        "is_flat": true
+      },
+      "rho": 0.0,
+      "rho_raw": 1.0000000000000002,
+      "rho_model_ok": false,
+      "rho_fit": {
+        "alpha": 999.0000000000001,
+        "beta": -1.9876853494707913e-13,
+        "r2": 0.9999999999999225,
+        "rho_raw": 1.0000000000000002,
+        "model_ok": false,
+        "spearman_brown_pred": [
+          0.001,
+          0.0019980019980019984,
+          0.0039880358923230315,
+          0.00794438927507448,
+          0.01576354679802956,
+          0.031037827352085358,
+          0.0384985563041386
+        ],
+        "observed_over_SB": [
+          1.0,
+          0.5005,
+          0.25075,
+          0.125875,
+          0.0634375,
+          0.03221875,
+          0.025974999999999998
+        ]
+      },
+      "k_eff_at_R": 80.0,
+      "gallery_reliability_raw_layers": {
+        "n_views": 5,
+        "split_half_m1": 0.7695259851746927,
+        "split_half_m2": 0.7219998567896043
+      },
+      "source_vs_target": {
+        "corr_target80_with_gallery": 0.00040690674106757917,
+        "corr_source9pool_with_gallery": 0.2620202648255467,
+        "corr_source9pool_shuffled_control": 0.005079876392805359,
+        "source_minus_target": 0.2616133580844791,
+        "n_source_subjects": 9
+      },
+      "split_half_curve": {
+        "m": [
+          1,
+          2,
+          4,
+          8,
+          16,
+          32,
+          40
+        ],
+        "corr": [
+          0.0009863061702786507,
+          0.0009533584010081725,
+          0.0009642149781633215,
+          -0.0013951386010423522,
+          -0.0015624453566598676,
+          -0.0029282310130840485,
+          0.00013480623305128398
+        ]
+      },
+      "effrank_single": 9.288428483687483,
+      "effrank_pooled": 14.982770028092075,
+      "target_subject": 6
+    }
+  },
+  "verdict": {
+    "n_folds": 1,
+    "bias_R1_mean": 0.00517617726671197,
+    "bias_R80_mean": -0.0015633974005312898,
+    "bias_headroom_mean": -0.00673957466724326,
+    "bias_headroom_folds_positive": 0,
+    "shuffled_control_max_abs": 0.006310822728428084,
+    "bias_R1_mean_raw_frame": 0.01469352374850779,
+    "bias_R80_mean_raw_frame": -0.021016287588750182,
+    "bias_headroom_mean_raw_frame": -0.03570981133725797,
+    "bias_headroom_folds_positive_raw_frame": 0,
+    "shuffled_control_max_abs_raw_frame": 0.0061982864046841845,
+    "rho_mean": 0.0,
+    "rho_raw_mean": 1.0000000000000002,
+    "rho_exchangeable_model_folds_ok": 0,
+    "k_eff_at_R_mean": 80.0,
+    "fusion_minus_mean_mean": 0.007213370663094145,
+    "fusion_minus_mean_folds_positive": 1,
+    "effrank_single_mean": 9.288428483687483,
+    "effrank_pooled_mean": 14.982770028092075,
+    "control_separates": true,
+    "GO_bias_channel": false,
+    "GO_bias_channel_raw_frame": false,
+    "GO_variance_channel": false,
+    "bottleneck_corr_target80": 0.00040690674106757917,
+    "bottleneck_corr_source9pool": 0.2620202648255467,
+    "bottleneck_source9pool_shuffled_control": 0.005079876392805359,
+    "bottleneck_source_minus_target": 0.2616133580844791,
+    "bottleneck_paired_t": NaN,
+    "bottleneck_folds_positive": 1,
+    "EEG_side_saturated": false,
+    "reading": "KILL: no bias headroom (or the control does not separate) -> the order-2 training term has nothing to move; keep the shipped 54.83 and record the falsification."
+  }
+}

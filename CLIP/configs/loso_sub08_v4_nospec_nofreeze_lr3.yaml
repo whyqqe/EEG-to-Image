@@ -1,0 +1,13 @@
+# ABLATION ARM: `spec: 0`, no Stage-2 freeze, AND the v3 learning rate (1e-3).
+#
+# Third axis. The redesign dropped lr from the v3 recipe's 1e-3 to the reference's 1e-4
+# (10x). That was justified by "adopt the reference's setting", but the reference also
+# trains for a different epoch count on a different backbone; a 10x drop combined with a
+# 20-epoch encoder budget is the most obvious way to end up under-trained, which is one
+# of the two live explanations for the v4 regression.
+#
+# With the freeze off, Stage 2 runs at `stage2_lr` (5e-5) regardless, so this arm's
+# difference from `loso_sub08_v4_nospec_nofreeze.yaml` is confined to Stage 1.
+base: loso_sub08_v4_nospec_nofreeze.yaml
+lr: 0.001
+out_dir: outputs/stage1/v4-nospec-nofreeze-lr3-sub-08

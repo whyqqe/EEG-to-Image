@@ -1,0 +1,12 @@
+{
+  "last": {
+    "top1": 16.0,
+    "top5": 42.0,
+    "mean_rank": 16.635,
+    "n": 200,
+    "offset_ratio": 0.6231831312179565,
+    "spec_top_frac": 0.9722245931625366
+  },
+  "best_seen": 17.5,
+  "out_dir": "/project/peilab/why/CLIP/outputs/stage1/v14_anchor_raw/sub07_k20_seed2025"
+}

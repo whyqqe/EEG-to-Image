@@ -1,0 +1,37 @@
+# LOSO fold sub-08 + the aggregator widened. Arm `cap` of the v3.2 three-seed comparison.
+#
+# `EEGTrunk` ends in `TemporalSpatialAggregator`, whose `out_dim = agg_width * agg_pool` and
+# is INDEPENDENT of `d_model`. At the defaults that is 16 x 8 = 128, and the head then maps
+# it to `d_embed` 512, so the EEG embedding's rank ceiling has always been 128: whatever
+# capacity the trunk and heads have, only 128 directions survive the pooled vector.
+#
+# This arm raises that to 64 x 8 = 512, i.e. the ceiling stops binding anywhere short of
+# `d_embed` itself. It is included because it was the first hypothesis for the plateau and
+# a hypothesis is cheap to falsify with three seeds.
+#
+# The falsifying measurement, made BEFORE this arm was queued
+# (`scripts/probe_embedding_rank.py`, `v31-sub-08/last.pt`):
+#
+#   agg out_dim (RANK CEILING) = 128   trunk out_dim = 200   d_embed = 512
+#   eeg  eff_rank 9.51   dims@99% 24   sv1 0.204   nnz_sv 199
+#   img  eff_rank 10.92  dims@99% 20   sv1 0.175   nnz_sv 199
+#   -> aggregator cap usage: 24/128 = 18.8%   cap is slack
+#
+# The embedding occupies 24 of its 128 available directions, and its effective rank (9.5)
+# is essentially the IMAGE TARGET's (10.9) -- the representation is not poorer than the
+# thing it is being matched to, so widening it adds rank the model never asks for. Expect
+# this arm to land within seed noise of `base`; it is here to make that expectation a
+# measurement rather than a claim, not because a gain is predicted.
+base: loso_sub08.yaml
+
+target_subject: 8
+source_subjects: [1, 2, 3, 4, 5, 6, 7, 9, 10]
+out_dir: outputs/stage1/v32-cap-sub-08
+
+agg_width: 64   # was 16; 64 x agg_pool 8 = 512 pooled width (was 128)
+agg_pool: 8
+
+seed: 2025
+epochs: 50
+channel_set: all63
+mvnn: train

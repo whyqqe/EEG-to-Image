@@ -1,0 +1,29 @@
+# LOSO fold sub-08 + EEG augmentation. Arm `aug` of the v3.2 three-seed comparison.
+#
+# Everything except the `augment:` block is `configs/loso_sub08.yaml`, so this arm differs
+# from `base` by exactly one thing. The block is what `LosoTrainDataset.augment` has always
+# accepted and no run ever supplied; see `src/samclip/data/augment.py` for the measurement
+# that says the remaining error is a generalisation gap rather than a capacity one, and the
+# cross-validation trace in `outputs/slurm/samclip-s1-637907.out` for the `img`-loss
+# arithmetic (3.69 against a 3.87 "classes separated, no within-class sharpening" point).
+#
+# Magnitudes are the module's defaults, chosen mild on purpose: the transforms have to
+# manufacture held-out-subject nuisance WITHOUT making the source contrast unfittable,
+# because the source contrast is currently the one thing this pipeline does well.
+augment:
+  enabled: true
+  noise: 0.15             # additive Gaussian, per-channel z units
+  gain: 0.20              # per-channel log-normal sigma (impedance / amplitude drift)
+  shift: 8                # circular time shift, +/- points (latency jitter, 3.2% of T)
+  channel_dropout: 0.10   # fraction of channels blanked per row (dead electrodes)
+
+base: loso_sub08.yaml
+
+target_subject: 8
+source_subjects: [1, 2, 3, 4, 5, 6, 7, 9, 10]
+out_dir: outputs/stage1/v32-aug-sub-08
+
+seed: 2025
+epochs: 50
+channel_set: all63
+mvnn: train

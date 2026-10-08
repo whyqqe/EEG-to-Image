@@ -1,0 +1,37 @@
+# TQA Arm B -- Arm A plus the GROUP-QUOTIENT FRONT-END (GQF). THE ARCHITECTURE ARM.
+#
+# `gqf: whiten` prepends one closed-form, zero-parameter operation to the encoder:
+#
+#     W = (x x^T + eps I)^{-1/2} x,   shape (B, C, T)  -- unchanged
+#
+# WHY. Volume conduction is `x -> M x` with `M in GL(C)` invertible, and `GL(C)` factors by
+# the polar decomposition into a re-referencing ROTATION `O(C)` and a positive-definite
+# STRETCH `PD(C)` (per-channel gain plus channel-correlation reshaping). `W` quotients the
+# `PD(C)` factor EXACTLY: for any `M`, `W(Mx) = O W(x)` with `O` orthogonal (verified:
+# row norms = 1 to 7e-6, and the column Gram `W^T W` -- the only `O(C)`-invariant of `W` --
+# agrees to 4e-5 across a dense `M` at `||M - I||_F = 3.15`).
+#
+# TRUTH IN LABELLING, because the claim must not be overstated. The residual `O(C)` is NOT
+# quotiented. An exactly-`GL(C)`-invariant, `(C, T)`-shaped tensor does not exist: the
+# invariant of the action is the ROW SPACE, whose only canonical representative is the
+# `(T, T)` projector `x^T (x x^T)^{-1} x`, which cannot be fed to a `(C, T)` trunk. The
+# `rowspace` mode (right-singular subspace) is the shape-compatible approximation and is
+# measurably NOT invariant on this data (0.41 max-diff at the same `M`), because singular
+# values of EEG are near-degenerate; it is kept as an option for that ablation.
+#
+# WHY THIS IS THEORETICALLY THE RIGHT AXIS ANYWAY. `probe_sba_anchor.py` measured the
+# temporal (row-space) subspace at 0.6247 affinity vs chance 0.02, while spatial
+# topographies sit AT chance (0.0794). So the concept signal is in the factor this
+# front-end preserves and the nuisance is in the factor it rescales away.
+#
+# WHY IT CANNOT COLLAPSE (the difference from every explicit invariance loss this project
+# falsified). Those were penalties INSIDE the objective, trading invariance against
+# discrimination and degenerating because the Reynolds projection of a non-compact group
+# has no finite-range projection. Here the quotient is an OPERATION on the input: all
+# trainable capacity is spent on discrimination, and there is no term to trade off.
+#
+# PAIRED BOUND. Arm B differs from Arm A by one config key. If GQF loses, Arm A is
+# untouched and still carries the SOTA claim -- which is why both arms ship together.
+base: tqa_v8_loso_k20.yaml
+
+gqf: whiten

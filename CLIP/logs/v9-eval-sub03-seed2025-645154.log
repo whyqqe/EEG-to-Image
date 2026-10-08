@@ -1,0 +1,28 @@
+/project/peilab/why/CLIP/src/samclip/evaluate.py:184: UserWarning: The given NumPy array is not writable, and PyTorch does not support non-writable tensors. This means writing to this tensor will result in undefined behavior. You may want to copy the array to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at ../torch/csrc/utils/tensor_numpy.cpp:206.)
+  x = torch.as_tensor(flat[i:i + batch], dtype=torch.float32, device=device)
+[eval] reference: NOT MEASURED for sub-03; deltas will print as n/a. Compare the 10-fold MEAN to 26.22/53.23.
+[eval] device=cuda target=sub-03
+[eval] v9/sub03_k20_seed2025: /project/peilab/why/CLIP/outputs/stage1/v9/sub03_k20_seed2025/last.pt
+
+============================================================================================
+LOSO retrieval | target sub-03 | 200-way | reference: NOT MEASURED for this fold (NOT MEASURED for this fold -- the SAMGA official baseline was only run on sub-08. No per-fold reference exists, so no delta is printed; compare the 10-fold MEAN against 26.22 (SAMGA encoder, final epoch) and 53.23 (SCORE).)
+============================================================================================
+
+[v9/sub03_k20_seed2025]  /project/peilab/why/CLIP/outputs/stage1/v9/sub03_k20_seed2025/last.pt  (epoch 49)
+  arch=v4  objective=v4  d_align=64  smn_gate=1.0  offset_ratio=0.841
+  fusion=routed  layer weights=[0.167, 0.166, 0.179, 0.231, 0.257]
+  row                             Top-1    Top-5  mean rank  ΔTop-1 vs ref
+  raw cosine                       5.00    26.00       25.2            n/a
+  + CSLS                           7.50    28.00       22.3            n/a
+  + centre                         6.00    25.00       25.9            n/a
+  + centre + CSLS                  6.50    26.50       22.8            n/a
+  + SAW whiten                     7.50    26.50       22.9            n/a
+  + whiten + CSLS                  8.00    31.00       21.4            n/a
+  + whiten + CSLS + recovery       6.50    32.50       21.0            n/a
+  + CSLS + recovery                7.50    31.50       21.1            n/a
+  + T2 reps                        9.50    32.50       20.8            n/a
+  + T1(whiten + CSLS + recovery) + T2 reps     8.50    37.50       19.4            n/a
+  + T1(CSLS + recovery) + T2 reps     8.00    34.50       19.4            n/a
+
+============================================================================================
+[eval] wrote /project/peilab/why/CLIP/outputs/eval/v9/sub03_seed2025.json

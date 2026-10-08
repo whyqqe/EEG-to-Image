@@ -1,0 +1,11 @@
+# Probe arm: a quarter of the shipped T2' weight. Placed between `0.1` and the `0.5` that
+# regressed fold 8 by 10.5pp at the deployment rung, so the probe spans an order of
+# magnitude rather than sampling a single point and calling the trend monotone.
+base: v7_loso_k20.yaml
+
+concept:
+  enabled: true
+  reps_weight: 0.25
+  reps_n_rows: 64
+  reps_r_use: 2
+  reps_csls_k: null

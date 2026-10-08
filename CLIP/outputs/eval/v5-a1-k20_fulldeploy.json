@@ -1,0 +1,84 @@
+{
+  "ckpt": "outputs/stage1/v5-a1-k20/last.pt",
+  "target_subject": 8,
+  "mvnn": "test",
+  "rows": {
+    "raw cosine": {
+      "top1": 27.0,
+      "top5": 60.0,
+      "mean_rank": 8.655,
+      "n": 200
+    },
+    "+ CSLS": {
+      "top1": 34.0,
+      "top5": 67.5,
+      "mean_rank": 7.415,
+      "n": 200
+    },
+    "+ centre + CSLS": {
+      "top1": 32.5,
+      "top5": 67.0,
+      "mean_rank": 7.585,
+      "n": 200
+    },
+    "+ whiten + CSLS": {
+      "top1": 31.5,
+      "top5": 63.5,
+      "mean_rank": 9.595,
+      "n": 200
+    },
+    "+ whiten + CSLS + recovery": {
+      "top1": 35.5,
+      "top5": 66.0,
+      "mean_rank": 7.695,
+      "n": 200
+    },
+    "+ whiten + CSLS + structural": {
+      "top1": 15.0,
+      "top5": 60.5,
+      "mean_rank": 10.21,
+      "n": 200
+    },
+    "+ whiten + CSLS + recovery + structural": {
+      "top1": 18.0,
+      "top5": 62.5,
+      "mean_rank": 8.365,
+      "n": 200
+    }
+  },
+  "structural_diag": {
+    "applied": true,
+    "k": 10,
+    "hub_alpha": 1.0,
+    "temp": 0.05,
+    "geo_temp": 0.05,
+    "max_degree_over_k_nq": 0.009,
+    "mean_degree": 10.0,
+    "mutual_topk_rate": 0.020375
+  },
+  "structural_diag_recovery": {
+    "applied": true,
+    "k": 10,
+    "hub_alpha": 1.0,
+    "temp": 0.05,
+    "geo_temp": 0.05,
+    "max_degree_over_k_nq": 0.009,
+    "mean_degree": 10.0,
+    "mutual_topk_rate": 0.020175
+  },
+  "recovery_diag": {
+    "n_queries": 200,
+    "n_gallery": 200,
+    "n_mutual_pairs": 110,
+    "landmark_rate": 0.55,
+    "k_csls": 10,
+    "rho": 0.1,
+    "moment_match": true,
+    "orientation": true,
+    "min_landmark_rate": 0.0,
+    "abstained": false,
+    "weight_share_top1": 0.03461863845586777,
+    "weight_entropy": 4.359266757965088,
+    "r_minus_i_frobenius": 2.12365460395813
+  }
+}

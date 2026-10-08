@@ -1,0 +1,75 @@
+{
+  "target_subject": 9,
+  "ckpt": "/project/peilab/why/CLIP/outputs/stage1/v8/sub09_k20_seed2025/last.pt",
+  "n_sources": 9,
+  "fit_reps": 20,
+  "gamma": 0.01,
+  "lda_k": 16,
+  "fuse": 16,
+  "rows": {
+    "identity": {
+      "top1": 53.5,
+      "top5": 81.5,
+      "mean_rank": 4.685,
+      "metric_agreement": 0.33516696887364383,
+      "out_dim": 64,
+      "gallery_mapped": false,
+      "n_landmarks": 40000,
+      "plan_acc": 0.4559674131029798
+    },
+    "within": {
+      "top1": 52.5,
+      "top5": 78.5,
+      "mean_rank": 5.175,
+      "metric_agreement": 0.28922835018767273,
+      "out_dim": 64,
+      "gallery_mapped": false,
+      "n_landmarks": 40000,
+      "plan_acc": 0.44124847427514985
+    },
+    "total": {
+      "top1": 53.0,
+      "top5": 79.0,
+      "mean_rank": 5.1,
+      "metric_agreement": 0.21592412030426364,
+      "out_dim": 64,
+      "gallery_mapped": false,
+      "n_landmarks": 40000,
+      "plan_acc": 0.44413550079773845
+    },
+    "shuffled": {
+      "top1": 53.0,
+      "top5": 79.0,
+      "mean_rank": 5.1,
+      "metric_agreement": 0.21608934353243653,
+      "out_dim": 64,
+      "gallery_mapped": false,
+      "n_landmarks": 40000,
+      "plan_acc": 0.4440980696845403
+    },
+    "lda_k": {
+      "top1": 34.5,
+      "top5": 71.5,
+      "mean_rank": 7.425,
+      "metric_agreement": 0.3475925818658066,
+      "out_dim": 16,
+      "gallery_mapped": true,
+      "n_landmarks": 40000,
+      "plan_acc": 0.2923344693181763
+    }
+  },
+  "delta_top1": {
+    "identity": 0.0,
+    "within": -1.0,
+    "total": -0.5,
+    "shuffled": -0.5,
+    "lda_k": -19.0
+  },
+  "delta_agree": {
+    "identity": 0.0,
+    "within": -0.0459386186859711,
+    "total": -0.1192428485693802,
+    "shuffled": -0.1190776253412073,
+    "lda_k": 0.012425612992162771
+  }
+}

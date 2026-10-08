@@ -1,0 +1,166 @@
+{
+  "target_subject": 8,
+  "reference": {
+    "top1": 22.0,
+    "top5": 50.0,
+    "note": "SAMGA encoder re-measured by SCORE, final epoch"
+  },
+  "checkpoints": {
+    "stage1/v5-ep2": {
+      "ckpt": "/project/peilab/why/CLIP/outputs/stage1/v5-ep2/last.pt",
+      "epoch": 49,
+      "channel_set": "all63",
+      "feature_set": "internvit_multilevel",
+      "target_layers": [
+        20,
+        24,
+        28,
+        32,
+        36
+      ],
+      "target_fusion": "routed",
+      "arch": "v4",
+      "objective": "v4",
+      "d_align": 64,
+      "smn_gate": 0.5358631014823914,
+      "target_layer_weights": [
+        0.17413850128650665,
+        0.178479865193367,
+        0.1935010701417923,
+        0.23231102526187897,
+        0.22156956791877747
+      ],
+      "mvnn": "test",
+      "n_queries": 200,
+      "rows": {
+        "raw cosine": {
+          "top1": 30.0,
+          "top5": 62.0,
+          "mean_rank": 8.87,
+          "n": 200
+        },
+        "+ CSLS": {
+          "top1": 33.5,
+          "top5": 69.0,
+          "mean_rank": 7.625,
+          "n": 200,
+          "diag": {
+            "center": false,
+            "whiten": false,
+            "csls": true,
+            "recovery": false
+          }
+        },
+        "+ centre": {
+          "top1": 29.5,
+          "top5": 61.0,
+          "mean_rank": 8.995,
+          "n": 200,
+          "diag": {
+            "center": true,
+            "whiten": false,
+            "csls": false,
+            "recovery": false,
+            "center_diag": {
+              "offset_ratio": 0.058281330967253124,
+              "n_samples": 200
+            }
+          }
+        },
+        "+ centre + CSLS": {
+          "top1": 33.5,
+          "top5": 68.5,
+          "mean_rank": 7.695,
+          "n": 200,
+          "diag": {
+            "center": true,
+            "whiten": false,
+            "csls": true,
+            "recovery": false,
+            "center_diag": {
+              "offset_ratio": 0.058281330967253124,
+              "n_samples": 200
+            }
+          }
+        },
+        "+ SAW whiten": {
+          "top1": 31.5,
+          "top5": 64.0,
+          "mean_rank": 10.335,
+          "n": 200,
+          "diag": {
+            "center": false,
+            "whiten": true,
+            "csls": false,
+            "recovery": false,
+            "whiten_diag": {
+              "eig_max": 0.19214175336691933,
+              "eig_min": 0.0015664526379337007,
+              "cond": 122.6604295041901,
+              "n_samples": 200,
+              "d_embed": 64,
+              "rank_deficient": false
+            }
+          }
+        },
+        "+ whiten + CSLS": {
+          "top1": 30.0,
+          "top5": 65.0,
+          "mean_rank": 10.125,
+          "n": 200,
+          "diag": {
+            "center": false,
+            "whiten": true,
+            "csls": true,
+            "recovery": false,
+            "whiten_diag": {
+              "eig_max": 0.19214175336691933,
+              "eig_min": 0.0015664526379337007,
+              "cond": 122.6604295041901,
+              "n_samples": 200,
+              "d_embed": 64,
+              "rank_deficient": false
+            }
+          }
+        },
+        "+ whiten + CSLS + recovery": {
+          "top1": 32.0,
+          "top5": 67.0,
+          "mean_rank": 8.105,
+          "n": 200,
+          "diag": {
+            "center": false,
+            "whiten": true,
+            "csls": true,
+            "recovery": true,
+            "whiten_diag": {
+              "eig_max": 0.19214175336691933,
+              "eig_min": 0.0015664526379337007,
+              "cond": 122.6604295041901,
+              "n_samples": 200,
+              "d_embed": 64,
+              "rank_deficient": false
+            }
+          },
+          "recovery_diag": {
+            "n_queries": 200,
+            "n_gallery": 200,
+            "n_mutual_pairs": 120,
+            "landmark_rate": 0.6,
+            "k_csls": 10,
+            "rho": 0.1,
+            "moment_match": true,
+            "orientation": true,
+            "min_landmark_rate": 0.0,
+            "abstained": false,
+            "weight_share_top1": 0.027899127453565598,
+            "weight_entropy": 4.5046186447143555,
+            "r_minus_i_frobenius": 1.7093857526779175
+          }
+        }
+      },
+      "offset_ratio": 0.4796414077281952
+    }
+  },
+  "n_queries": 200
+}

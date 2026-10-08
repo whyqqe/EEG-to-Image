@@ -1,0 +1,20 @@
+# =====================================================================================
+# v14 / arm R (the CONTROL): the v13 arm reproduced under the v14 harness.
+#
+# `frame: raw` is v13's setting, so this arm is the v13 experiment run on the full 10 folds -- the
+# v13 twin was EARLY-STOPPED at n=2 (job 650254, see docs/eeg2image_v13_croma.md §6) and this is
+# the run that gives it its pre-registered sample size.
+#
+# WHY IT IS IN THE SAME JOB RATHER THAN QUOTED FROM DISK. `whit` vs `raw` differs in EXACTLY ONE
+# key (`bias_anchor.frame`), so it is the single-variable test of the v14 hypothesis. Quoting v13's
+# two folds instead would compare a 10-fold mean against a 2-fold mean, which is not a paired test
+# and would let a fold-selection artefact read as a frame effect.
+#
+# `whiten_shrink: 0.0` matches the `whit` arm so the key does NOT appear in the diff: `raw` does not
+# use a whitener at all, but leaving it inherited and equal keeps `whit` vs `raw` a ONE-key diff,
+# which is what the sbatch gate and `summarize_v13.py` both assert.
+base: v13_bias_loso_k20.yaml
+
+bias_anchor:
+  frame: raw
+  whiten_shrink: 0.0

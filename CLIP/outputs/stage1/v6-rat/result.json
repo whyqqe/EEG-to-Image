@@ -1,0 +1,12 @@
+{
+  "last": {
+    "top1": 18.5,
+    "top5": 46.5,
+    "mean_rank": 11.17,
+    "n": 200,
+    "offset_ratio": 0.5725784301757812,
+    "spec_top_frac": 0.99949711561203
+  },
+  "best_seen": 23.0,
+  "out_dir": "/project/peilab/why/CLIP/outputs/stage1/v6-rat"
+}

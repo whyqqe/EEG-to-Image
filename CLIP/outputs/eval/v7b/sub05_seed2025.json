@@ -1,0 +1,234 @@
+{
+  "target_subject": 5,
+  "reference": {
+    "top1": null,
+    "top5": null,
+    "note": "NOT MEASURED for this fold -- the SAMGA official baseline was only run on sub-08. No per-fold reference exists, so no delta is printed; compare the 10-fold MEAN against 26.22 (SAMGA encoder, final epoch) and 53.23 (SCORE)."
+  },
+  "checkpoints": {
+    "v7b/sub05_k20_seed2025": {
+      "ckpt": "/project/peilab/why/CLIP/outputs/stage1/v7b/sub05_k20_seed2025/last.pt",
+      "epoch": 49,
+      "channel_set": "all63",
+      "feature_set": "internvit_multilevel",
+      "target_layers": [
+        20,
+        24,
+        28,
+        32,
+        36
+      ],
+      "target_fusion": "routed",
+      "arch": "v4",
+      "objective": "v4",
+      "d_align": 64,
+      "smn_gate": 0.5307802557945251,
+      "target_layer_weights": [
+        0.17359045147895813,
+        0.1774606704711914,
+        0.19242775440216064,
+        0.23211458325386047,
+        0.2244066447019577
+      ],
+      "mvnn": "test",
+      "n_queries": 200,
+      "rows": {
+        "raw cosine": {
+          "top1": 18.0,
+          "top5": 53.0,
+          "mean_rank": 12.075,
+          "n": 200
+        },
+        "+ CSLS": {
+          "top1": 20.5,
+          "top5": 57.49999999999999,
+          "mean_rank": 10.395,
+          "n": 200,
+          "diag": {
+            "center": false,
+            "whiten": false,
+            "csls": true,
+            "recovery": false
+          }
+        },
+        "+ centre": {
+          "top1": 17.5,
+          "top5": 52.5,
+          "mean_rank": 12.23,
+          "n": 200,
+          "diag": {
+            "center": true,
+            "whiten": false,
+            "csls": false,
+            "recovery": false,
+            "center_diag": {
+              "offset_ratio": 0.059550446133530936,
+              "n_samples": 200
+            }
+          }
+        },
+        "+ centre + CSLS": {
+          "top1": 20.0,
+          "top5": 56.00000000000001,
+          "mean_rank": 10.505,
+          "n": 200,
+          "diag": {
+            "center": true,
+            "whiten": false,
+            "csls": true,
+            "recovery": false,
+            "center_diag": {
+              "offset_ratio": 0.059550446133530936,
+              "n_samples": 200
+            }
+          }
+        },
+        "+ SAW whiten": {
+          "top1": 18.5,
+          "top5": 56.00000000000001,
+          "mean_rank": 11.28,
+          "n": 200,
+          "diag": {
+            "center": false,
+            "whiten": true,
+            "csls": false,
+            "recovery": false,
+            "whiten_diag": {
+              "eig_max": 0.2394659869919874,
+              "eig_min": 0.0015664894859202592,
+              "cond": 152.8679184535409,
+              "n_samples": 200,
+              "d_embed": 64,
+              "rank_deficient": false
+            }
+          }
+        },
+        "+ whiten + CSLS": {
+          "top1": 20.5,
+          "top5": 55.00000000000001,
+          "mean_rank": 11.15,
+          "n": 200,
+          "diag": {
+            "center": false,
+            "whiten": true,
+            "csls": true,
+            "recovery": false,
+            "whiten_diag": {
+              "eig_max": 0.2394659869919874,
+              "eig_min": 0.0015664894859202592,
+              "cond": 152.8679184535409,
+              "n_samples": 200,
+              "d_embed": 64,
+              "rank_deficient": false
+            }
+          }
+        },
+        "+ whiten + CSLS + recovery": {
+          "top1": 22.5,
+          "top5": 55.50000000000001,
+          "mean_rank": 10.07,
+          "n": 200,
+          "diag": {
+            "center": false,
+            "whiten": true,
+            "csls": true,
+            "recovery": true,
+            "whiten_diag": {
+              "eig_max": 0.2394659869919874,
+              "eig_min": 0.0015664894859202592,
+              "cond": 152.8679184535409,
+              "n_samples": 200,
+              "d_embed": 64,
+              "rank_deficient": false
+            }
+          },
+          "recovery_diag": {
+            "n_queries": 200,
+            "n_gallery": 200,
+            "n_mutual_pairs": 105,
+            "landmark_rate": 0.525,
+            "k_csls": 10,
+            "rho": 0.1,
+            "moment_match": true,
+            "orientation": true,
+            "min_landmark_rate": 0.0,
+            "abstained": false,
+            "weight_share_top1": 0.040273550897836685,
+            "weight_entropy": 4.317572116851807,
+            "r_minus_i_frobenius": 1.8567746877670288
+          }
+        },
+        "+ CSLS + recovery": {
+          "top1": 26.5,
+          "top5": 61.5,
+          "mean_rank": 9.175,
+          "n": 200,
+          "diag": {
+            "center": false,
+            "whiten": false,
+            "csls": true,
+            "recovery": true
+          },
+          "recovery_diag": {
+            "n_queries": 200,
+            "n_gallery": 200,
+            "n_mutual_pairs": 107,
+            "landmark_rate": 0.535,
+            "k_csls": 10,
+            "rho": 0.1,
+            "moment_match": true,
+            "orientation": true,
+            "min_landmark_rate": 0.0,
+            "abstained": false,
+            "weight_share_top1": 0.0304893609136343,
+            "weight_entropy": 4.398248672485352,
+            "r_minus_i_frobenius": 1.0580165386199951
+          }
+        },
+        "+ T2 reps": {
+          "top1": 43.0,
+          "top5": 75.0,
+          "mean_rank": 5.635,
+          "n": 200,
+          "diag": {
+            "n_queries": 200,
+            "n_gallery": 200,
+            "n_mutual_pairs": 112,
+            "landmark_rate": 0.56,
+            "k_csls": 10,
+            "rho": 0.1,
+            "moment_match": true,
+            "orientation": true,
+            "min_landmark_rate": 0.0,
+            "abstained": false,
+            "weight_share_top1": 0.03253226354718208,
+            "weight_entropy": 4.397906303405762,
+            "r_minus_i_frobenius": 1.375799298286438
+          }
+        },
+        "+ T1(whiten + CSLS + recovery) + T2 reps": {
+          "top1": 39.0,
+          "top5": 77.0,
+          "mean_rank": 6.015,
+          "n": 200,
+          "diag": {
+            "fused": true,
+            "t1_rung": "+ whiten + CSLS + recovery"
+          }
+        },
+        "+ T1(CSLS + recovery) + T2 reps": {
+          "top1": 40.0,
+          "top5": 74.0,
+          "mean_rank": 5.79,
+          "n": 200,
+          "diag": {
+            "fused": true,
+            "t1_rung": "+ CSLS + recovery"
+          }
+        }
+      },
+      "offset_ratio": 0.7072275280952454
+    }
+  },
+  "n_queries": 200
+}

@@ -1,0 +1,7 @@
+whiteness max|WW^T-I|      = 2.42e-04  (want ~0)
+Gram invariance max|d|     = 5.67e-05  (want ~0)
+
+== per-training-step cost ==
+  identity (baseline)      216.8 ms/step (fwd+bwd, B=128, CPU)
+  gqf whiten (cholesky)  43546.7 ms/step (fwd+bwd, B=128, CPU)
+  old eigh (reference)   156846.1 ms/step (fwd+bwd, B=128, CPU)

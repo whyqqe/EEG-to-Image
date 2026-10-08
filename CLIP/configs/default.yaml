@@ -1,0 +1,368 @@
+# SAM-CLIP v3 default configuration -- shared cross-subject encoder, single stage.
+#
+# Every other config inherits this via `base: default.yaml`; do NOT duplicate the model
+# section in a fold config. A duplicated architecture is how a run silently reloads a
+# checkpoint at the wrong width, and there is no longer a second stage to catch the
+# mismatch.
+#
+# Reasoning, benchmarks and the ablation matrix: docs/eeg2image_v2_plan.md
+#
+# THERE IS NO SUBJECT-CONDITIONING SECTION. v1 had one (FiLM + LoRA + a support-set
+# hypernetwork). It was removed because the learned subject vector collapsed to a
+# constant -- cosine 0.9999 between DIFFERENT subjects, separation -0.00000 -- and
+# because nothing in the objective rewarded it carrying subject information, so a
+# constant was the optimum of the sub-problem as written. The full evidence is in
+# src/samclip/models/subject_conditioning.py. If you are looking for a config key to
+# turn conditioning back on: there is not one, and adding one is a new hypothesis, not
+# a restore.
+#
+# -------------------------------------------------------------------- v3 CHANGES
+# v3 is the SOTA push. Four changes, each with its own evidence block below:
+#   1. the visual target moves to InternViT-6B (the set every SOTA row supervises with);
+#   2. a coarse-to-fine two-phase loss schedule (MMD first, contrast second);
+#   3. `routed` layer fusion re-enabled WITH the constraints it was missing;
+#   4. a wider trunk and a larger concept batch.
+# The single most important one is (1): until it landed, our numbers were not
+# subtractable from the published table at all.
+
+# ------------------------------------------------------------------ model
+n_channels: 63          # inter-subject protocol uses all 63 (see PROTOCOL_INTER.md §1)
+n_timepoints: 250
+n_subjects: 9           # overwritten by load_loso with the fold's real count
+# --- trunk geometry: the plan doc §5.5 values, deliberately UNCHANGED --------------
+# The reference encoder runs its EEG trunk at `eeg_feature_dim 1024`, i.e. 5x this
+# width, and it is tempting to close that gap here. The plan doc says not to, in two
+# places: §3.3 selects "keep the existing EEGTrunk (ATM-S form), do NOT change the
+# block", and its lever ordering (§3.2) is ① visual target/supervision -> ② subject-aware
+# routing -> ③ coarse-to-fine alignment -> ④ test-time calibration, with the trunk on
+# none of them. The same review records independent evidence that the VISUAL encoder's
+# choice decides this task more than the EEG encoder's does.
+#
+# v3 therefore spends its risk budget on the four documented levers and leaves the trunk
+# where the plan put it. A wider trunk (d_model 256 / n_blocks 3 / dim_ff 768 / agg 32x8,
+# ~4.0M parameters against the ~2.7M built here -- of which 1.64M is the 3200-d image head
+# alone, so the EEG encoder proper is only ~1.0M) is a legitimate future arm, but it is an
+# UNMEASURED deviation, and with no ablation budget it would add variance rather than
+# expected gain.
+d_model: 200
+d_embed: 512
+n_heads: 4
+n_blocks: 2
+dim_ff: 512
+dropout: 0.1
+head_dropout: 0.1
+# The aggregator's output width is `agg_width * agg_pool` and is INDEPENDENT of d_model,
+# so it is the trunk's real information bottleneck (128 at these defaults). Stated
+# explicitly rather than left implicit: raising d_model without raising this pushes every
+# channel token through the same keyhole, which is how a "wider" encoder ends up no wider
+# where it matters.
+agg_width: 16
+agg_pool: 8
+
+# ------------------------------------------------------------- projection heads
+# `mlp | linear` for the image-side head. DEFAULT IS `linear`, changed from `mlp` on a
+# measured parameter-count inversion: at the old 1280-d target the MLP head was 2.30M =
+# 69% of the model, 2.27x the entire EEG encoder (869k trunk + 143k eeg_head = 1.01M).
+# Capacity was concentrated in the one component that maps a FROZEN target and so cannot
+# improve cross-subject generalisation. `linear` starts near-isometric instead of as a
+# random 1280->1280 map that destroys the target geometry.
+#
+# Under v3 the target is 3200-d, so `linear` is Linear(3200, 512) = 1.64M. That is larger
+# than the trunk again, and it is the honest cost of the 3200-d teacher: a single linear
+# map is still the least destructive option, and a hidden-layer MLP at this width would
+# be 3200x3200 = 10.2M parameters spent reparametrising a frozen input.
+#
+# This is a MEASURABLE question, not a preference -- run `img_head` in {linear, mlp} for a
+# few steps and compare the first-epoch `img` loss and Top-1.
+img_head: linear
+# The EEG head is small relative to the trunk at this width -- not inverted, stays MLP.
+eeg_head: mlp
+
+# ------------------------------------------------------- anti-collapse strength
+# `vicreg_terms` cov term weight. Measured on a trained checkpoint: `var` was 0.60 (a
+# UNIFORM push, since all 512 per-dim stds sat at 0.28-0.55, below the 1.0 hinge) while
+# `cov` was 0.057 -- an order of magnitude weaker -- and the embedding still occupied only
+# ~13 effective dimensions. Raising this is the only lever that can raise the rank; the
+# ablation arm `ablation_opt_cov.yaml` moves it to 0.5. The measurement's verdict was that
+# this is a symptom rather than the cause, so v3 leaves it at the v2 value.
+vicreg_cov_weight: 0.04
+
+# ------------------------------------------------- structured visual target
+# `mean | routed | routed_sr` -- how the K cached layers of the visual backbone are fused
+# into the single vector the EEG is aligned to (see models/samclip.LayerRouter).
+#
+# v2 defaulted to `mean`, changed from `routed`, on measured evidence: the probe
+# (`slurm/probe_fusion.sbatch`, 3 epochs, 2 seeds) put `mean` ahead on BOTH seeds
+# (12.50/13.50 vs 10.00/11.50 Top-1), and every 60-epoch run collapsed the learned router
+# onto the SAME shallow layer (weights ~[0.74, 0.13, 0.04, 0.01, 0.07] at epoch 59), i.e.
+# it spent the five-layer target down to essentially one layer.
+#
+# --- v3: `routed` is re-enabled, now WITH the constraints that were missing ----------
+# This is not a reversal of that measurement; it is a response to its *mechanism*. The old
+# routing collapsed because nothing stopped it: a uniform-initialised softmax over 5 free
+# logits can overfit, and its gradient is a small residual against a much larger `img`
+# loss, so "it initialises as `mean` and can only improve" was never implied. An
+# initialisation being a special case of the model does not make the model a strict
+# improvement of it. `mean` then "won" by refusing to learn anything -- it is the CONTROL
+# arm, not the solution.
+#
+# The reference implementation routes over the SAME five layers and deploys a DIFFUSE blend
+# ([0.0666, 0.1802, 0.493, 0.1873, 0.0729]), i.e. multi-granularity is achievable and is
+# the mechanism the plan doc credits for the inter-subject gain. Three constraints make
+# that the equilibrium instead of a one-hot corner:
+#   * `router_temperature` > 1 flattens the logits toward uniform;
+#   * `router_layer_dropout` hides a random subset of weights per row and renormalises, so
+#     no layer can become the only one the loss ever sees;
+#   * `loss_weights.router` adds a negative-entropy bonus, the direct statement of "keep
+#     all five layers alive" (bounded in [-ln 5, 0]).
+# `mean` remains one line away if the blend still collapses.
+target_fusion: routed
+target_subject_dropout: 0.3
+router_temperature: 2.0
+router_layer_dropout: 0.1
+# (`routed_sr` -- global weights + a per-subject residual, dropped at inference -- stays
+# registered as a live ablation arm but is NOT the default: making the training target a
+# function of the row's subject is an incentive to encode subject identity, which is
+# exactly what `loss_weights.dec` exists to remove. Under v1's stronger decorrelation
+# pressure it measurably backfired, driving `dec` from 0.22 to 0.48 in the first epochs.)
+
+image:
+  # ---- THE v3 CHANGE THAT MAKES OUR NUMBERS COMPARABLE TO THE TABLE ----------------
+  # Switched from `clip_h14_multilevel` (CLIP ViT-H-14, 1280-d) to InternViT-6B (3200-d).
+  # This is not a preference: EVERY row we are trying to beat -- SAMGA, SCORE, SVTL --
+  # supervises with `OpenGVLab/InternViT-6B-448px-V2_5`, layers 20/24/28/32/36. It was
+  # believed unavailable for a while and the pipeline fed five CLIP-H14 layers instead,
+  # which is the substitution PROTOCOL_INTER.md §7 records and then removes: "Removing
+  # that substitution is what makes the current run answerable to the paper." The
+  # InternViT arrays have since been extracted and are on disk in the reference's own
+  # layout.
+  #
+  # Verified before switching (shape AND a content gate, because a mis-pathed hook or a
+  # transposed axis yields correctly-shaped arrays carrying the wrong information):
+  #   train (1654, 10, 5, 3200)   test (200, 1, 5, 3200)
+  #   within-concept cos 0.3609   cross-concept cos -0.0014
+  #
+  # `config.IMAGE_FEATURE_SETS` already declares this set, so this line is the whole
+  # change -- `data/targets.py` needs no edit.
+  feature_set: internvit_multilevel
+  layers: [20, 24, 28, 32, 36]   # InternViT-6B intermediate layers (SAMGA's layout)
+  l2norm: true
+
+# ------------------------------------------------------------------- loss
+# L = img*L_clip + cross*L_xs + dec*L_hsic + mmd*L_mmd + reg*L_vicreg
+#     + proto*L_anchor + rkd*L_gram + adv*L_adv + router*(-H)
+#
+# An unknown key here is a hard error (see LossWeights.from_cfg): a typo would otherwise
+# turn "this term is in the objective" into a run that never applied it.
+loss_weights:
+  img: 1.0        # EEG <-> structured multi-layer image target
+  cross: 0.7      # same stimulus, different subjects, multi-positive InfoNCE.
+                  # THE term the evidence singles out: +2.23pp Top-1 (95% CI
+                  # [+1.28, +3.19]) in an independent LOSO study. Do not ablate this to
+                  # zero in a headline run.
+                  # v3: 0.5 -> 0.7, which is the plan doc §5.4 table's prescribed value
+                  # ("cross 0.5 -> 0.7, 升") and had never been applied. This literal is
+                  # the END of the ramp under `schedule.coarse_to_fine`; the run starts it
+                  # at `cross_start`.
+  dec: 0.05       # HSIC subject decorrelation. Lowered from v1's 0.2 on purpose:
+                  # suppressing subject identity is measured NOT to help on its own and to
+                  # hurt when pushed hard, while it still consumes encoder capacity.
+                  # Plan doc §5.4 is explicit that this is the single most important
+                  # weight change ("dec 0.2 -> 0.05"), because the old config
+                  # simultaneously maximised cross-subject consistency and subject
+                  # un-decodability -- two objectives whose gradients cancel.
+  mmd: 0.2        # coarse per-subject distribution matching (the "coarse" half of
+                  # coarse-to-fine: MMD first, then the contrastive fine term).
+                  # v3: 0.1 -> 0.2, the plan doc §5.4 value ("提为正式项") -- also never
+                  # applied. Under `schedule.coarse_to_fine` this literal is the END of
+                  # the Stage-1 anneal; the run starts at `schedule.mmd_start`.
+  reg: 0.5        # VICReg variance + covariance anti-collapse
+  proto: 0.2      # EMA neural class anchors, asymmetric (image embeddings are pulled to
+                  # the EEG prototypes, never the reverse). Set 0.0 to disable.
+                  # v3: 0.1 -> 0.2, the plan doc §5.4 value ("打开"); the published
+                  # result is that only the ASYMMETRIC anchoring helps, which is the form
+                  # implemented here.
+  rkd: 0.0        # Gram-matrix geometry matching. Off by default: the literature bundles
+                  # it with other changes so it cannot be credited alone, and this project's
+                  # own audit found no arm where it was load-bearing.
+  adv: 0.0        # gradient-reversal subject adversary. Aggressive version of `dec`;
+                  # measured risky (removing it HELPS). Ablation only.
+  router: 0.05    # negative-entropy bonus on the target layer blend (see
+                  # models/samclip.LayerRouter.entropy_penalty). It is the direct statement
+                  # of "keep all five visual layers alive", which is what stops the collapse
+                  # onto the shallowest layer measured at ~[0.74, 0.13, 0.04, 0.01, 0.07].
+                  # Bounded in [-ln 5, 0] = [-1.61, 0], so 0.05 caps its influence at 0.08
+                  # against an `img` term near 2.4: a tie-breaker between blends of equal
+                  # alignment quality, not a competitor to the alignment objective. 0.0
+                  # restores the v2 objective exactly.
+
+# how the EMA prototype bank is keyed (see losses/regularizers.PrototypeEMA):
+#   concept  -- one anchor per concept, pooling all subjects AND all 10 image slots
+#               (~90 updates/step). Matches the test set, which is concept-level.
+#   stimulus -- one anchor per (concept, image slot), pooling subjects only (~9
+#               updates/step). Keeps within-concept image identity; noisier.
+prototype_level: concept
+
+temp_img: 0.07
+temp_cross: 0.10
+# `PrototypeEMA`'s contrast temperature. Its logits are cosines between L2-normalised
+# vectors, so they live in [-1, 1] and WITHOUT a scale the softmax over the class bank is
+# essentially uniform. Measured on the v3 checkpoint: `proto` sat at 5.32-5.50 against the
+# ln(384) = 5.95 floor for all 50 epochs, i.e. it never left its initialisation, while
+# holding 26% of the reported loss VALUE and carrying 1.2% of the gradient. The term's
+# loss never looked wrong -- a uniform-softmax cross-entropy is a perfectly ordinary
+# number -- which is why this went unnoticed. Shares the InfoNCE clamp
+# (`contrastive.effective_logit_scale`).
+temp_proto: 0.07
+softplus: true
+
+# Which kernel `mmd_subject` uses: `linear | rbf`.
+#
+# `linear` is MMD with k(x,y) = <x,y>, i.e. EXACTLY the squared distance between the two
+# subjects' mean embeddings. It is the default because the RBF form provably cannot see
+# the subject shift on this representation: on the L2-normalised sphere the per-sample
+# spread is ~1.41 (every pair sits near sqrt(2)) while the subject-MEAN displacement is
+# only ~0.195 -- a factor of 7 -- so no bandwidth resolves it. At the old default the
+# reported MMD (~0.016) was almost entirely the `_rbf(a, a)` diagonal bias 2/N = 0.0156,
+# whose gradient is identically zero; the unbiased RBF-MMD^2 was ~1e-4 across a full
+# bandwidth sweep. Gradient share reaching the encoder measured 0.9% (rbf) vs 8.1%
+# (linear) at weight 1.0 on the same checkpoint.
+mmd_kernel: linear
+
+# ------------------------------------------------------ coarse-to-fine schedule
+# See `train.CoarseToFine`. Transcribed from the reference's released recipe, whose log
+# shows the ramp verbatim: `stage1 mmd=0.900 contrast=0.100` at epoch 1 ->
+# `stage1 mmd=0.689 contrast=0.311` at epoch 11 -> `stage2 contrastive only` at epoch 21.
+# The interpolation is `t = epoch / (stage1_epochs - 1)` on a 0-based epoch, which
+# reproduces those printed values to three decimals.
+#
+# Our v2 pipeline ran `img`/`cross` at full strength from step one and pinned MMD at 0.1
+# for the whole run, i.e. it skipped the coarse half entirely -- the half that removes the
+# per-subject location/scale shift before the contrastive term sharpens concept structure.
+#
+# Under this block `loss_weights.mmd` and `loss_weights.cross` are per-epoch OVERRIDES; the
+# literals there only state the non-scheduled fallback.
+schedule:
+  coarse_to_fine: true
+  stage1_epochs: 20       # must be < epochs, else there is no Stage 2
+  # The RAMP SHAPE is the reference's; the ENDPOINTS are the plan doc §5.4 weights. That
+  # split is deliberate. The reference's shape is the only measured coarse-to-fine recipe
+  # available (its log prints 0.900/0.100 -> 0.689/0.311 -> stage 2), while its ABSOLUTE
+  # MMD magnitude cannot be transplanted: it runs a two-term objective where MMD carries
+  # ~53% of the weighted loss, whereas ours carries eight terms (VICReg, prototype, HSIC,
+  # ...), so an un-normalised copy of `0.9` would reproduce the number and not the effect.
+  # Endpoints therefore come from the plan's own table.
+  mmd_start: 0.9          # MMD dominates at the start (coarse subject alignment)
+  mmd_end: 0.2            # -> the plan doc §5.4 steady-state value for MMD
+  # Stage 2 holds MMD at a RESIDUAL instead of the reference's exact 0.
+  #
+  # Not a preference. In v3 MMD was inert (0.9% of the gradient: its RBF kernel could
+  # not see the subject shift -- see `loss_weights.mmd` and `mmd_kernel`), so "stage 2
+  # turns the coarse term off" removed nothing and the two phases were indistinguishable
+  # at raw Top-1 ~12. With the kernel fixed, MMD is live, and zeroing it would delete the
+  # only term that penalises subject-MEAN drift: `cross` is a same-stimulus contrast and
+  # does not. The measured Stage 2 was a dip-then-recover with no net gain
+  # (21.0 -> 17.5 -> 20.5 Top-1), so a residual is cheap insurance. `0.0` reproduces the
+  # reference recipe exactly.
+  stage2_mmd: 0.05
+  cross_start: 0.1        # contrast is deliberately weak while the frames disagree
+  cross_end: 0.7          # -> the plan doc §5.4 steady-state value for the core term
+  stage2_lr: 5.0e-05      # Stage 2 runs contrast-only at half the Stage-1 rate
+
+# ------------------------------------------------------------ optimisation
+epochs: 50              # = schedule.stage1_epochs 20 + Stage 2 30. The reference's
+                        # released budget is 50 at final-epoch selection (SCORE's protocol
+                        # reports epoch 50 on a 50-epoch run), so 50 is the reproducible
+                        # object. It also bounds a real risk: under final-epoch selection
+                        # a longer run can REPORT WORSE, and this pipeline has already
+                        # seen it (one arm peaked 13.5 at epoch 19 and reported 12.5 at
+                        # epoch 59).
+lr: 0.001               # Deliberately NOT the plan doc §5.5 value of 3.0e-4.
+                        # That entry is annotated "ATM paper setting", and the ATM paper's
+                        # batch is the plan's `batch_stimuli: 8` -- 16x smaller than the
+                        # 128 used here. 1e-3 is the value this pipeline has actually
+                        # trained at (and is measured stable at batch 192-384 in every
+                        # logged run: the loss falls monotonically with no spike). Keeping
+                        # the empirically validated rate rather than a rate transferred
+                        # from a batch size we do not use is the smaller of the two risks.
+weight_decay: 0.0001
+grad_clip: 1.0
+
+# `batch_stimuli` is NOT a free knob -- it sets how many DISTINCT concepts a batch sees,
+# and that is what decides whether the two InfoNCE terms still carry gradient.
+#
+# Measured history on this fold:
+#   * `batch_stimuli: 8`  -- 8 distinct concepts/step. The `img` term (weight 1.0) reached
+#     2.38 against its ln(9)=2.197 floor by epoch 30 and the last 30 epochs ran with the
+#     MAIN term exhausted. Raw Top-1 9.0.
+#   * `batch_stimuli: 24` -- 24 concepts/step. Raw Top-1 13.5 (+4.5pp, ~+50% relative),
+#     and it reached 13.0 by epoch 30 -- beating the batch-8 run's 50-epoch score. This is
+#     the only change in this project that has a confirmed gain.
+#   * `batch_stimuli: 64` -- raw 14.0, w+csls 18.5.
+#   * v3: 128. The reference trains at `batch_size 1024`, i.e. 1024 distinct concepts per
+#     step against our evaluation's 200-way task; the reasoning that justified
+#     8 -> 24 -> 64 says the same thing one more time. 128 x 3 = 384 rows/batch, which is
+#     what the image head has to score against 128 shared target vectors per step.
+#
+# `subjects_per_stimulus: 3` (down from "all 9") is what keeps that affordable: 128 x 3 x 1
+# = 384 rows.
+#
+# Two caveats, both real:
+#   * the contrast floor DROPS to ln(3)=1.099 from ln(9)=2.197, because co-stimulus rows
+#     share a target vector and are therefore equivalent positives. That is headroom, not a
+#     loss -- the `img` term can now push further below its floor -- but it does mean
+#     "fewer subjects per stimulus" is not purely a cost-free way to buy concepts.
+#   * sampling 3 of 9 subjects per stimulus is random per step, so every source subject
+#     still appears in every batch (128 x 3 draws over 9 subjects); the HSIC/MMD subject
+#     terms keep their cross-subject structure.
+batch_stimuli: 128            # distinct stimuli (concepts) per batch
+subjects_per_stimulus: 3      # 3 x 128 = 384 rows/batch
+images_per_pair: 1
+num_workers: 4
+eval_batch: 200
+log_every: 50
+seed: 2025
+debug_steps: null             # cap optimizer steps per epoch (smoke runs)
+
+# ---------------------------------------------------------------- protocol
+target_subject: 1
+source_subjects: null   # null = all subjects except `target_subject`
+channel_set: all63      # all63 | occipital17
+mvnn: train             # off | train  (sources on train split, target on test split)
+
+# ------------------------------------------------- deployment calibration (Stage C)
+# Not training knobs: these parameterise scripts/run_eval.py, which applies them to
+# FROZEN embeddings. They are here so a run's deployable number can be reproduced from the
+# same file that produced the checkpoint.
+#
+# There is deliberately no `k_support` here any more. It used to size the unlabelled
+# support set that estimated a subject vector; with conditioning gone, nothing consumes it
+# -- SAW whitening uses the query embeddings' OWN covariance (200 trials) and needs no
+# separate calibration set. A knob that no code path reads is worse than no knob.
+calibration:
+  whiten: true          # SAW subject-adaptive whitening
+  csls: true            # adaptive CSLS (hubness mitigation)
+  csls_k: 10
+  # DISABLED BY DEFAULT. This is the one plan-doc lever that did NOT reproduce, and it
+  # failed for a mechanistic reason rather than a tuning one.
+  #
+  # The plan (§7) cites SCORE lifting a frozen SAMGA encoder 26.22 -> 53.23 by adding
+  # coordinate recovery. That premise is that the EEG and image spaces are UNALIGNED, so an
+  # orthogonal map has something to fix. Our encoder is trained by `L_img` to BE aligned,
+  # so there is no rotation left to recover and `recover` can only fit a map from mutual-NN
+  # pseudo-pairs -- which are mostly wrong at 13-15% Top-1. The reference project's own
+  # calibration ladder reproduces the same ordering on its own encoder (cosine 12.0 ->
+  # csls 17.5 -> moment+csls 18.0 -> recovery 16.0), i.e. recovery LOSES to CSLS there too.
+  #
+  # Measured here, and it is not noise:
+  #   * reference arm: recovery 29 -> 28 of 200 (paired, lost 9 / gained 8), p=1.0000
+  #   * cross=0 arm:   recovery 29 -> 19 of 200 (paired, lost 15 / gained 5), p=0.0414
+  # The better-aligned arm is neutral and the worse-aligned arm is significantly HURT,
+  # which is the opposite of the SCORE premise and consistent with the mechanism above:
+  # the worse the alignment, the dirtier the pseudo-pairs, the more damage the fitted map
+  # does. A leave-one-out fit using the TRUE labels -- an oracle upper bound -- reaches
+  # only 11.50 Top-1, BELOW the 14.50 already obtained label-free, which caps what ANY
+  # coordinate map can contribute here: the missing signal is in the representation, not
+  # in the frame. Keep the flag for the record; do not expect a gain from it.
+  recovery: false       # SCORE orthogonal Procrustes coordinate recovery
+  rho: 0.1

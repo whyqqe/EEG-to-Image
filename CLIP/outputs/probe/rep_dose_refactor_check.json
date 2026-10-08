@@ -1,0 +1,125 @@
+{
+  "cache": "outputs/probe/c2_feats_v5a1k20.npz",
+  "controls": {
+    "T1 best (no fusion)": {
+      "top1": 35.5,
+      "top5": 66.0,
+      "mean_rank": 7.695,
+      "n": 200
+    },
+    "C2 fuse(T1best, T1best)": {
+      "top1": 35.5,
+      "top5": 66.0,
+      "mean_rank": 7.695,
+      "n": 200
+    },
+    "C3 fuse(T1best, T1 w/o recovery)": {
+      "top1": 35.5,
+      "top5": 66.5,
+      "mean_rank": 8.15,
+      "n": 200
+    },
+    "C1 fuse(T1best, random)": {
+      "top1": 14.000000000000002,
+      "top5": 28.999999999999996,
+      "mean_rank": 22.885,
+      "n": 200
+    },
+    "C1b fuse(T1best, random2)": {
+      "top1": 13.0,
+      "top5": 31.0,
+      "mean_rank": 25.38,
+      "n": 200
+    }
+  },
+  "dose_curve": {
+    "1": {
+      "n_draws": 5,
+      "t2_alone_top1": [
+        5.5,
+        5.5,
+        6.5,
+        5.0,
+        4.5
+      ],
+      "fused_top1_mean": 21.3,
+      "fused_top1_std": 3.2649655434629015,
+      "fused_top5_mean": 52.2
+    },
+    "2": {
+      "n_draws": 5,
+      "t2_alone_top1": [
+        8.5,
+        6.0,
+        8.0,
+        11.0,
+        12.0
+      ],
+      "fused_top1_mean": 25.0,
+      "fused_top1_std": 1.449137674618944,
+      "fused_top5_mean": 56.7
+    },
+    "5": {
+      "n_draws": 5,
+      "t2_alone_top1": [
+        16.0,
+        15.5,
+        20.0,
+        14.0,
+        15.0
+      ],
+      "fused_top1_mean": 32.7,
+      "fused_top1_std": 1.5362291495737217,
+      "fused_top5_mean": 63.6
+    },
+    "10": {
+      "n_draws": 5,
+      "t2_alone_top1": [
+        24.0,
+        21.5,
+        26.0,
+        22.0,
+        22.0
+      ],
+      "fused_top1_mean": 36.4,
+      "fused_top1_std": 1.0677078252031311,
+      "fused_top5_mean": 67.9
+    },
+    "20": {
+      "n_draws": 5,
+      "t2_alone_top1": [
+        29.0,
+        35.0,
+        28.5,
+        31.5,
+        28.5
+      ],
+      "fused_top1_mean": 38.1,
+      "fused_top1_std": 2.477902338672773,
+      "fused_top5_mean": 71.5
+    },
+    "40": {
+      "n_draws": 5,
+      "t2_alone_top1": [
+        33.5,
+        33.5,
+        35.0,
+        36.0,
+        33.5
+      ],
+      "fused_top1_mean": 38.5,
+      "fused_top1_std": 0.7071067811865476,
+      "fused_top5_mean": 71.9
+    },
+    "80": {
+      "n_draws": 1,
+      "t2_alone_top1": [
+        33.5
+      ],
+      "fused_top1_mean": 39.5,
+      "fused_top1_std": 0.0,
+      "fused_top5_mean": 73.0
+    }
+  },
+  "verdict": "DOSE-RESPONSE PRESENT: the fused gain grows with R -> the repetition cloud is buying estimation variance, not a normalisation artefact"
+}

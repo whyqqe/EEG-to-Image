@@ -1,0 +1,25 @@
+# =====================================================================================
+# v14 / arm W05 (the hedge): the whitened-frame anchor at weight 0.5 instead of 2.0.
+#
+# WHY A SECOND WEIGHT AND NOT JUST 2.0. The v13 twin ran at weight 2.0 and lost 9-13pp of headline
+# Top-1, and part of that damage is weight-shaped: the term's own contribution was ~2.0 x 0.4 = 0.8
+# added to a ~6.0 total loss, i.e. a NEW term outweighing the main alignment term (`img: 1.0`). The
+# frame fix removes the anisotropy channel that made the gradient useless, but it does not follow
+# that the SAME magnitude is now benign -- a term that finally pushes in a useful direction can also
+# push TOO HARD. So this arm separates the two questions:
+#
+#     whit  vs raw    differ in EXACTLY `bias_anchor.frame`    -> is the FRAME the bug?
+#     whit05 vs whit  differ in EXACTLY `bias_anchor.weight`   -> what MAGNITUDE is right?
+#
+# Neither arm alone answers both, and running only 2.0 risks a null result that cannot distinguish
+# "wrong object" from "right object, too strong" -- the exact ambiguity the v13 early-stop left open.
+#
+# 0.5 is chosen as the value at which the term's contribution (~0.5 x 0.4 = 0.2 on a ~6.0 loss) is a
+# REGULARISER rather than a competing objective, while remaining large enough to move a 1.13M-parameter
+# encoder over 50 epochs. It is one point on a curve, not a tuned optimum, and it is labelled as such.
+base: v13_bias_loso_k20.yaml
+
+bias_anchor:
+  frame: whitened
+  whiten_shrink: 0.0
+  weight: 0.5

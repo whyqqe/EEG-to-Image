@@ -1,0 +1,24 @@
+# P1（SCORE 另一半）：source-only 回合。单变量叠加在当前最优臂（k=20, terms=[img]）之上。
+#
+# 依据 docs/eeg2image_v5_master_plan.md §10.2 / §11.1：
+#   部署端坐标恢复在**未联合训练**的模型上已把 27.00 → 35.50（+8.50pp，免重训）。
+#   SCORE 的训练端做法是：每步把一个源被试当作临时目标，隐藏其 EEG–图像配对，
+#   **先施加部署时的恢复**，再揭晓配对算 loss —— 让编码器在被优化的坐标系里就可恢复。
+#
+# 预登记读数（不是只看 Top-1）：
+#   ① raw cosine 应上升（当前 27.00）
+#   ② **恢复的边际增益应收缩**（当前 +4.0：从 +whiten+CSLS 的 31.50 到 35.50）
+#      —— 若真的"把恢复训进了网络"，部署端再恢复的余量就该变小
+#   ③ 被试差（当前 +29.78）应下降
+base: loso_sub08_v5_a1_img_k20.yaml
+
+recovery_aware:
+  enabled: true
+  block_per_subject: false
+  csls_k: 20
+  terms: [img]
+  recovery_episode: true
+  episode_rho: 0.1
+  episode_min_landmarks: 8
+
+out_dir: outputs/stage1/v5-ep

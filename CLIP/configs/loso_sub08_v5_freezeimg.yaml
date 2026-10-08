@@ -1,0 +1,16 @@
+# P5：冻结图像侧投影器 `img_pre`。单变量叠加在当前最优臂之上。
+#
+# 依据 docs/eeg2image_v5_master_plan.md §10.3-4：
+#   `img_pre` 有 204,864 参数（占模型 18.1%）且**当前可训练**，意味着"冻结教师"的锚
+#   根本没冻住——目标空间可以朝源被试弯曲，而"朝源弯曲"正是拉大训练/留出被试差的原因。
+#   SCORE 与 SVTL 都把图像侧固定住。
+#
+# 预登记读数：
+#   ① 被试差（当前 +29.78pp）应下降 —— 这是本臂的主判据
+#   ② raw cosine 不应明显下降（掉 >2pp 说明目标空间确实需要适配，那 P3 视觉目标升级更优先）
+#   ③ pre-SMN 被试识别率（历史 40.25%）应下降
+base: loso_sub08_v5_a1_img_k20.yaml
+
+freeze_img_pre: true
+
+out_dir: outputs/stage1/v5-freezeimg

@@ -1,0 +1,10 @@
+{
+  "last": {
+    "top1": 12.5,
+    "top5": 34.5,
+    "mean_rank": 25.665,
+    "n": 200
+  },
+  "best_seen": 14.499999999999998,
+  "out_dir": "/project/peilab/why/CLIP/outputs/stage1/opt_cov"
+}

@@ -1,0 +1,14 @@
+# A1 ablation row: the shared encoder with NO subject conditioning.
+#
+# This is the control every conditioning arm is measured against. If the conditioned
+# arms do not beat this, the "subject-as-modality" hypothesis bought nothing and the
+# honest report says so.
+base: default.yaml
+
+target_subject: 1
+out_dir: outputs/stage1/ablation_a1_no_conditioning
+
+conditioning:
+  enabled: false
+loss_weights:
+  cross: 0.0    # no conditioning means there is no z_s to align across subjects

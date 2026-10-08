@@ -1,0 +1,123 @@
+{
+  "n_folds": 10,
+  "device": "cuda",
+  "k": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "table": [
+    {
+      "K": 1,
+      "crossmodal_pool_mean": 0.20925198648615542,
+      "crossmodal_pool_sd": 0.002944492053909174,
+      "crossmodal_single_mean": 0.20925198648615542,
+      "crossmodal_shuffled_mean": -0.0006390483241545047,
+      "loo_pool_mean": 0.6978028816183206,
+      "loo_single_mean": 0.6978028816183206,
+      "pool_minus_single": 0.0,
+      "paired_t": NaN,
+      "folds_positive": 0
+    },
+    {
+      "K": 2,
+      "crossmodal_pool_mean": 0.22557424624698014,
+      "crossmodal_pool_sd": 0.001897021448455098,
+      "crossmodal_single_mean": 0.20925198648615542,
+      "crossmodal_shuffled_mean": 0.0009666364707040957,
+      "loo_pool_mean": 0.7161022220773849,
+      "loo_single_mean": 0.6575714261645144,
+      "pool_minus_single": 0.01632225976082473,
+      "paired_t": 14.891006969937774,
+      "folds_positive": 10
+    },
+    {
+      "K": 3,
+      "crossmodal_pool_mean": 0.23515426704467898,
+      "crossmodal_pool_sd": 0.0018944802104757508,
+      "crossmodal_single_mean": 0.20925198648615542,
+      "crossmodal_shuffled_mean": -0.0002503842005605183,
+      "loo_pool_mean": 0.7365722828706336,
+      "loo_single_mean": 0.6485931002681008,
+      "pool_minus_single": 0.02590228055852356,
+      "paired_t": 38.51478858781407,
+      "folds_positive": 10
+    },
+    {
+      "K": 4,
+      "crossmodal_pool_mean": 0.23989424962253106,
+      "crossmodal_pool_sd": 0.0017091653771965812,
+      "crossmodal_single_mean": 0.20925198648615542,
+      "crossmodal_shuffled_mean": -0.0003484912229795501,
+      "loo_pool_mean": 0.7886437040054982,
+      "loo_single_mean": 0.6716670467495958,
+      "pool_minus_single": 0.03064226313637567,
+      "paired_t": 34.36470185849789,
+      "folds_positive": 10
+    },
+    {
+      "K": 5,
+      "crossmodal_pool_mean": 0.243811378103408,
+      "crossmodal_pool_sd": 0.0020756261343430273,
+      "crossmodal_single_mean": 0.20925198648615542,
+      "crossmodal_shuffled_mean": -0.0005001517708153642,
+      "loo_pool_mean": 0.7676877445197634,
+      "loo_single_mean": 0.6641644232489552,
+      "pool_minus_single": 0.034559391617252584,
+      "paired_t": 43.804357785402274,
+      "folds_positive": 10
+    },
+    {
+      "K": 6,
+      "crossmodal_pool_mean": 0.24573018158807752,
+      "crossmodal_pool_sd": 0.002362312616327212,
+      "crossmodal_single_mean": 0.20925198648615542,
+      "crossmodal_shuffled_mean": -0.0010956563199296485,
+      "loo_pool_mean": 0.7744396626391491,
+      "loo_single_mean": 0.6858492313810025,
+      "pool_minus_single": 0.03647819510192209,
+      "paired_t": 43.98917294121732,
+      "folds_positive": 10
+    },
+    {
+      "K": 7,
+      "crossmodal_pool_mean": 0.24623514863645907,
+      "crossmodal_pool_sd": 0.002269045957063548,
+      "crossmodal_single_mean": 0.20925198648615542,
+      "crossmodal_shuffled_mean": -0.0012502889744848077,
+      "loo_pool_mean": 0.7485721918618381,
+      "loo_single_mean": 0.6355606271863112,
+      "pool_minus_single": 0.0369831621503037,
+      "paired_t": 40.417806313324306,
+      "folds_positive": 10
+    },
+    {
+      "K": 8,
+      "crossmodal_pool_mean": 0.2471333030263434,
+      "crossmodal_pool_sd": 0.0020667508023602442,
+      "crossmodal_single_mean": 0.20925198648615542,
+      "crossmodal_shuffled_mean": 0.0002629591823553845,
+      "loo_pool_mean": 0.8056607698755783,
+      "loo_single_mean": 0.6784659647839106,
+      "pool_minus_single": 0.03788131654018799,
+      "paired_t": 42.44426824118864,
+      "folds_positive": 10
+    }
+  ],
+  "verdict": {
+    "baseline_single_view": 0.20925198648615545,
+    "best_pooled": 0.2471333030263434,
+    "best_K": 8,
+    "pool_minus_single": 0.03788131654018795,
+    "pool_minus_shuffled": 0.246870343843988,
+    "monotone_in_K": true,
+    "loo_pool_gain": 0.10785788825725784,
+    "prediction1_passed": true,
+    "reading": "PREDICTION 1 PASSES: pooling raises structure SNR, monotonically in K, and separates from the correspondence-destroying control -> build L2-L5"
+  }
+}

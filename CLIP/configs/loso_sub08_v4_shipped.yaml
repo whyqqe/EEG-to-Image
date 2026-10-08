@@ -1,0 +1,30 @@
+# REPRODUCES THE RECORDED `v4-sub-08` ARTEFACTS, bit-for-bit in configuration terms.
+#
+# WHY THIS FILE EXISTS. v5 changed four defaults in `configs/v4.yaml` (lr 1e-4 -> 1e-3,
+# `freeze_encoder_stage2` true -> false, `share_head_hidden` 128 -> 0, `spec` 0.05 -> 0)
+# because each was measured wrong or inert (docs/eeg2image_v5_plan.md §1.5). That
+# silently broke a link: `configs/loso_sub08_v4.yaml` inherits `v4.yaml`, so re-running it
+# would NO LONGER reproduce the `v4-sub-08` evals and checkpoints already recorded and
+# quoted in the analyses. A config whose meaning drifts away from the artefacts produced
+# under it is exactly how a result gets orphaned, so the old values are pinned here
+# instead of being lost.
+#
+# This is the ONLY file that should be used to reproduce the "v4 as shipped" arm:
+#   python scripts/submit_pipeline.py --target-subject 8 \
+#       --config configs/loso_sub08_v4_shipped.yaml --out-tag v4-sub-08 \
+#       --seeds 2025 2026 2027
+#
+# (Checkpoints are also self-describing -- `state["cfg"]` carries the resolved config --
+# so an existing checkpoint can always be re-evaluated and inspected without this file.
+# What this file preserves is the ability to re-TRAIN the arm, which is what a claim
+# about the arm's performance depends on.)
+base: loso_sub08_v4.yaml
+
+lr: 0.0001              # the pre-v5 value
+share_head_hidden: 128  # the pre-v5 value: the nonlinear (C1) shared head
+loss_weights:
+  spec: 0.05            # the pre-v5 value
+schedule:
+  freeze_encoder_stage2: true   # the pre-v5 value
+out_dir: outputs/stage1/v4-sub-08   # NOT the inherited `v5-sub-08`: this arm must write
+                                    # where the recorded `v4-sub-08` artefacts live.

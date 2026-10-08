@@ -1,0 +1,21 @@
+# Cheap end-to-end smoke for the v3 recipe: real data path, real targets, real fusion.
+#
+# `epochs: 2` with `stage1_epochs: 1` puts exactly ONE epoch in each schedule phase, so
+# the whole coarse-to-fine machinery runs (the MMD->contrast ramp in Stage 1, the MMD-off
+# + halved-lr branch in Stage 2) instead of only the branch the first epoch would take.
+# `batch_stimuli: 8` keeps the batch small; `debug_steps: 5` caps the epoch at 5 optimizer
+# steps, so the run is minutes rather than hours.
+#
+# Everything else is inherited from the real fold config ON PURPOSE: the point of this
+# file is to exercise the production path (InternViT-6B targets at 3200-d, `routed` fusion
+# with its constraints, the widened trunk) rather than a reduced stand-in for it.
+base: loso_sub08.yaml
+
+epochs: 2
+debug_steps: 5
+batch_stimuli: 8
+subjects_per_stimulus: 3
+
+schedule:
+  coarse_to_fine: true
+  stage1_epochs: 1

@@ -1,0 +1,11 @@
+# A1 归因消融（master plan §8）：邻域大小 k 是否敏感（大侧）？
+# 与 k5 一起决定 A2 的邻域设计；k=20 在 200-way 上已覆盖 10% 的 gallery。
+base: loso_sub08_v5_rat_csls.yaml
+
+recovery_aware:
+  enabled: true
+  block_per_subject: false
+  csls_k: 20
+  terms: [img, cross]
+
+out_dir: outputs/stage1/v5-a1-k20

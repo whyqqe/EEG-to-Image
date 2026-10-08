@@ -1,0 +1,21 @@
+reference: outputs/eval/g3  (30 reports)
+================================================================================================
+
+### s3r_tau0.01   (30 runs joined with the reference)
+  + T1(CSLS + recovery) + T2 reps              top1=48.13  delta=+2.80+-1.75  +28/+1  t= 8.77
+      per-fold (10/10 improving): {'sub01': 3.33, 'sub02': 2.33, 'sub03': 1.5, 'sub04': 3.17, 'sub05': 3.33, 'sub06': 3.0, 'sub07': 2.0, 'sub08': 3.17, 'sub09': 3.0, 'sub10': 3.17}
+  + T2 reps                                    top1=48.23  delta=+2.70+-2.74  +23/+5  t= 5.40
+      per-fold (9/10 improving): {'sub01': 5.5, 'sub02': 2.0, 'sub03': 1.83, 'sub04': 1.5, 'sub05': 2.33, 'sub06': 0.83, 'sub07': -1.17, 'sub08': 6.33, 'sub09': 5.17, 'sub10': 2.67}
+  + CSLS + recovery                            top1=38.77  delta=+3.05+-2.35  +26/+1  t= 7.12
+      per-fold (10/10 improving): {'sub01': 5.33, 'sub02': 2.5, 'sub03': 2.83, 'sub04': 2.0, 'sub05': 4.33, 'sub06': 2.5, 'sub07': 1.33, 'sub08': 2.33, 'sub09': 2.83, 'sub10': 4.5}
+
+### s3r_tau0.05   (30 runs joined with the reference)
+  + T1(CSLS + recovery) + T2 reps              top1=48.12  delta=+2.78+-1.86  +29/+1  t= 8.17
+      per-fold (10/10 improving): {'sub01': 3.0, 'sub02': 2.67, 'sub03': 1.0, 'sub04': 2.83, 'sub05': 5.83, 'sub06': 2.0, 'sub07': 1.67, 'sub08': 2.33, 'sub09': 3.5, 'sub10': 3.0}
+  + T2 reps                                    top1=48.10  delta=+2.57+-2.51  +24/+5  t= 5.60
+      per-fold (8/10 improving): {'sub01': 6.0, 'sub02': 2.33, 'sub03': 1.5, 'sub04': 1.67, 'sub05': 1.5, 'sub06': -0.17, 'sub07': -0.17, 'sub08': 6.5, 'sub09': 4.17, 'sub10': 2.33}
+  + CSLS + recovery                            top1=38.95  delta=+3.23+-2.80  +24/+4  t= 6.33
+      per-fold (10/10 improving): {'sub01': 4.5, 'sub02': 3.5, 'sub03': 3.0, 'sub04': 2.33, 'sub05': 6.0, 'sub06': 2.67, 'sub07': 0.67, 'sub08': 2.33, 'sub09': 3.33, 'sub10': 4.0}
+
+wrote /project/peilab/why/CLIP/outputs/s3r_summary.json
+reference points: G3 banked headline 45.53 (10-fold x 3-seed mean); SCORE 53.23.

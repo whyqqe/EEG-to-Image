@@ -1,0 +1,12 @@
+{
+  "last": {
+    "top1": 22.5,
+    "top5": 61.5,
+    "mean_rank": 8.51,
+    "n": 200,
+    "offset_ratio": 0.47657400369644165,
+    "spec_top_frac": 0.9698732495307922
+  },
+  "best_seen": 26.5,
+  "out_dir": "/project/peilab/why/CLIP/outputs/stage1/v6-rat-nowhiten"
+}

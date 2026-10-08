@@ -1,0 +1,10 @@
+{
+  "last": {
+    "top1": 0.0,
+    "top5": 2.5,
+    "mean_rank": 99.975,
+    "n": 200
+  },
+  "best_seen": 0.5,
+  "out_dir": "/project/peilab/why/CLIP/outputs/stage1/smoke"
+}

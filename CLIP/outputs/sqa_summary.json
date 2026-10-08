@@ -1,0 +1,21 @@
+{
+  "cell": "+ T2 R=80,a=0.75,t=0.03,fuse=16",
+  "n_folds_present": 10,
+  "grid_complete": true,
+  "paired_top1": {
+    "n": 10,
+    "mean_delta": 2.1,
+    "sd": 3.348299734359382,
+    "t": 1.98332993256476,
+    "n_positive": 8
+  },
+  "paired_top5": {
+    "n": 10,
+    "mean_delta": 1.7,
+    "sd": 1.5846485765339617,
+    "t": 3.3924695367124706,
+    "n_positive": 8
+  },
+  "noaug_top1_mean": 51.95,
+  "sqa_top1_mean": 54.05
+}

@@ -1,0 +1,34 @@
+# =====================================================================================
+# v14 / O2-MVE, arm W (the FIX): the v13 bias anchor scored in the DEPLOYED frame.
+#
+# THE SINGLE-VARIABLE CHANGE FROM v13 IS `bias_anchor.frame: raw -> whitened`. Nothing else moves:
+# same recipe, same weight 2.0, same data path, same `concept.enabled: true, reps_weight: 0.0`.
+#
+# WHY THIS IS THE RIGHT FIX AND NOT A KNOB SWEEP. The v13 twin (job 650254) measured that its gain
+# survived ONLY in the raw encoder frame:
+#
+#     fold    dR80 raw    dR80 whitened (the DEPLOYED frame)    headline Top-1
+#     sub-01   +0.041     +0.0011                              -9.0pp
+#     sub-02   +0.025     +0.0107                              -13.0pp
+#
+# A genuine structural improvement cannot vanish under a change of basis. One that does is
+# ANISOTROPY: the gradient was spent on the direction the deployment whitener deletes. So the
+# diagnosis is "the loss was scored in the wrong frame", not "the training side is dead" -- and the
+# repair is to score it in the frame the operator actually reads.
+#
+# WHAT THE FIX BUYS, AND WHY IT IS PROVABLE RATHER THAN PLAUSIBLE. Whitening is fitted FROM the
+# same cloud it is applied to, so `D_student` is invariant to any per-subject invertible linear map
+# applied to that subject's cloud. That is exactly the anisotropy class the raw-frame loss rewarded.
+# Measured in `smoke_test.py` §22: |delta| = 2e-6 under a random per-subject `A` in the whitened
+# frame vs 4.8e-3 in the raw frame (~2400x), so the invariance is real and the old frame genuinely
+# lacked it.
+#
+# `whiten_shrink: 0.0` IS LOAD-BEARING, not a taste. Shrinkage re-introduces a scale term and
+# degrades the invariance by >100x (smoke §22 pins both numbers). The deployed operator's 0.1 is a
+# conditioning choice for a C=200 cloud; the LOSS cloud is the selected tile, where exact
+# invariance is what we are buying, so the loss uses 0.0 and says so.
+base: v13_bias_loso_k20.yaml
+
+bias_anchor:
+  frame: whitened
+  whiten_shrink: 0.0

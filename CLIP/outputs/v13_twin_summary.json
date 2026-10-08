@@ -1,0 +1,22 @@
+{
+  "arg": {
+    "on_eval": "/project/peilab/why/CLIP/outputs/eval/v13_bias",
+    "off_eval": "/project/peilab/why/CLIP/outputs/eval/v13_bias_off",
+    "on_probe": "/project/peilab/why/CLIP/outputs/probe/v13_bias",
+    "off_probe": "/project/peilab/why/CLIP/outputs/probe/v13_bias_off",
+    "on_cfg": "/project/peilab/why/CLIP/configs/v13_bias_loso_k20.yaml",
+    "off_cfg": "/project/peilab/why/CLIP/configs/v13_bias_off_loso_k20.yaml",
+    "out": "/project/peilab/why/CLIP/outputs/v13_twin_summary.json"
+  },
+  "n_folds_eval": 0,
+  "n_folds_probe": 0,
+  "config_diff": {
+    "diffs": {
+      "bias_anchor.enabled": {
+        "on": true,
+        "off": false
+      }
+    },
+    "single_variable": true
+  }
+}

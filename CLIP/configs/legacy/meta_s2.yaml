@@ -1,0 +1,38 @@
+# Stage 2 -- episodic meta-training of the hypernetwork for the new-subject path.
+#
+# Each episode holds one source subject out as a stand-in "new subject", encodes K
+# of its trials into z_s, and decodes its query trials with that z_s. The shared
+# trunk is FROZEN so Stage 1's geometry is preserved and only the conditioning
+# generators learn.
+base: default.yaml
+
+target_subject: 1
+stage1_dir: outputs/stage1/sub-01
+out_dir: outputs/stage2/sub-01
+
+# the meta path conditions on a support set, never on a known subject id
+z_source: support
+
+# Stage-2 episodes are SINGLE-SUBJECT by construction (the point is to infer one new
+# subject's z_s), so the three subject-mixing terms cannot do what their names say:
+# every row shares one subject, and each query stimulus is distinct, which makes
+#   * `dec`  (HSIC vs subject label)   a no-op -- it needs >=2 subjects in the batch,
+#   * `mmd`  (per-subject distributions) a no-op for the same reason,
+#   * `cross`(cross-subject contrast)   degenerate to a within-subject discriminative
+#           CE (every stimulus group has exactly one member), which is not the term
+#           the weight was set for.
+# They are zeroed rather than left at their Stage-1 values so the logged loss is the
+# loss that is actually being optimised.
+loss_weights:
+  img: 1.0
+  cross: 0.0
+  dec: 0.0
+  mmd: 0.0
+  reg: 0.5
+
+episodes: 2000
+meta_lr: 0.001
+k_support: 10        # support trials per episode (the "few-shot" budget)
+query_stimuli: 16    # query stimuli per episode
+save_every: 500
+log_every: 50

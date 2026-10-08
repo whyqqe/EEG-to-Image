@@ -1,0 +1,22 @@
+# G1b / v5 pillar A, arm 3 of 3: FULL recovery-aware -- per-subject blocking AND CSLS.
+#
+# This is the configuration the plan actually proposes: the encoder is optimised in the
+# metric the score is produced in, over the same retrieval set deployment uses. `arm3 - arm1`
+# is the CSLS contribution at the correct layout, and `arm3 - arm2` is the layout
+# correction. It is only interpretable because arms 1 and 2 exist.
+#
+# The pre-registered readings (docs/eeg2image_v5_plan.md §3.1):
+#   1. raw cosine should RISE, and the post-hoc `+ centre + CSLS` headroom should SHRINK
+#      toward 0 -- i.e. the gain is trained in rather than patched on afterwards;
+#   2. the trained-vs-held-out subject gap should SHRINK.
+#   3. If raw does not rise while the post-hoc CSLS headroom stays large, the operator
+#      chosen for the loop was the wrong one: record that negative and fall back to arm 1.
+base: loso_sub08_v4.yaml
+
+recovery_aware:
+  enabled: true
+  block_per_subject: true
+  csls_k: 10
+  terms: [img, cross]
+
+out_dir: outputs/stage1/v5-rat-both-sub-08

@@ -1,0 +1,265 @@
+======================================================================
+1. target fusion modes: forward + backward through the whole objective
+  [ok] fusion=mean      shapes (9, 24)
+  [ok] fusion=mean      loss=3.902 grads=46/46
+  [ok] fusion=routed    shapes (9, 24)
+  [ok] fusion=routed    loss=3.808 grads=47/47
+  [ok] fusion=routed_sr shapes (9, 24)
+  [ok] fusion=routed_sr loss=3.885 grads=48/48
+2. routed_sr: the subject residual is dropped at inference
+  [ok] the residual changes the TRAINING blend
+  [ok] the residual is dropped at INFERENCE (subject-agnostic blend)
+3. routed_sr refuses to train without subject ids
+  [ok] routed_sr guard fires when ids are missing
+4. cross-subject sampler guarantees co-stimulus rows
+  [ok] sampler produced 33/33 valid batches
+5. prototype bank: EMA, validity mask, and the ASYMMETRY direction
+  [ok] an untouched bank contributes zero (validity mask)
+  [ok] prototype contrast is finite after an update (1.271)
+  [ok] proto_contrast reaches the EEG encoder (|grad_trunk| 1.618e+02)
+  [ok] image_anchor_contrast reaches the IMAGE head (2.135e+01)
+  [ok] ...and NOT the EEG encoder (0.000e+00) -- that asymmetry is the anchor
+  [ok] the prototype bank receives no gradient (it is a buffer)
+6. adversary path
+  [ok] adversary loss finite (1.336)
+7. retrieval metrics + calibration score path
+  [ok] perfect retrieval top1=100.0
+  [ok] csls+whiten produces a score matrix
+  [ok] coordinate recovery (30 landmarks, |R-I|=0.000)
+  [ok] recovery abstention gate (rate 0.68)
+8. end-to-end training step + evaluation on a synthetic fold
+[17:14:31 INFO samclip.train] Stage A | augmentation OFF (raw epochs)
+  [ok] ran 9 optimizer steps, last loss 3.590
+  [ok] the prototype term was actually applied and logged ['anchor', 'cov', 'cross', 'dec', 'img', 'mmd', 'proto', 'sc_img', 'sc_proto', 'sc_x', 'total', 'var']
+  [ok] a missing prototype key raises instead of silently disabling the term
+  [ok] evaluation produced valid metrics {'top1': 20.0, 'top5': 100.0, 'mean_rank': 3.0, 'n': 5, 'offset_ratio': 0.9769166707992554, 'spec_top_frac': 1.0}
+  [ok] an unknown loss weight is rejected (unknown loss_weights key(s) ['imgg']; known: ['adv',...)
+9. invariants (each one is a bug that shipped)
+  [ok] encoder is input-dependent (fusion=mean, off-diag cos 0.908, max 0.963)
+  [ok] encoder is input-dependent (fusion=routed, off-diag cos 0.901, max 0.962)
+  [ok] the model has no conditioning attribute at all
+  [ok] encode_eeg takes no conditioning argument
+  [ok] both InfoNCE temperatures are in the optimizer and move (2 params, |grad| 0.0632)
+  [ok] the alignment rewards moving toward the row's own target (dL/d<z_i, target_i> < 0 for all 6 rows, worst -0.2676)
+  [ok] sharing a target vector makes the mask a no-op on both halves, so the diagonal image term is exact (|grouped - diagonal| 1.19e-07)
+  [ok] a one-row-per-stimulus batch is unaffected by grouping (|diff| 0.00e+00)
+  [ok] the temperature is floored at 1.0 so the encoder keeps its gradient (scale 1.000, |grad| 3.354e-01)
+  [ok] a fresh criterion starts inside the clamp (scale 2.727)
+  [ok] whitening caps its condition number (9.1e+01)
+  [ok] calibrate reports recovery=False truthfully (cond 9.1e+01)
+  [ok] checkpoint tags stay unique across arms (stage1/sub-08 | ablation_a7_routed_sr/sub-08)
+  [ok] gram_distill_loss is scale-invariant in the EEG arm (0.0103 vs 0.0103)
+  [ok] the prototype contrast has a temperature, so it can move the embedding (scale 2.727, |grad| 4.598e-01 vs 1.827e-01 at scale 1)
+  [ok] the prototype temperature reaches the optimizer
+  [ok] the linear kernel IS the squared subject-mean distance, with no bandwidth and no diagonal bias (0.032398 vs 0.032398)
+  [ok] mmd_subject defaults to the linear kernel
+  [ok] the linear kernel tracks a deliberate subject shift (0.03915 -> 0.11796)
+  [ok] ...while the RBF form does not report the shift at a usable magnitude (0.01246 -> 0.02696, against linear 0.11796)
+  [ok] augmentation is OFF by default and off is `None`, not an identity callable
+  [ok] a mistyped augment key is a hard error (a silent no-op arm is the failure)
+  [ok] augmentation perturbs the epoch, is reproducible from the seed, and does not mutate its input (mean |dx| 1.230, x untouched True)
+  [ok] a dropped channel is EXACTLY zero even with noise enabled (so ELU(0) = 0 and the encoder cannot read that it was dropped)
+10. coarse-to-fine schedule
+  [ok] the interpolation law reproduces the reference at epoch 1 (mmd 0.900 contrast 0.100)
+  [ok] the interpolation law reproduces the reference at epoch 11 (mmd 0.689 vs 0.689, contrast 0.311 vs 0.311)
+  [ok] stage 2 drops the lr and holds a residual MMD rather than the reference's zero (phase stage2, mmd 0.050, lr 5e-05)
+  [ok] ...and `stage2_mmd: 0` reproduces the reference's contrastive-only Stage 2
+  [ok] stage-1 start matches the reference (mmd 0.900, contrast 0.100, stage1)
+  [ok] stage-1 ends at the plan doc §5.4 steady state (mmd 0.200 vs 0.2, cross 0.700 vs 0.7)
+  [ok] stage 2 holds the residual state (mmd 0.050, cross 0.700, lr 5e-05, stage2)
+  [ok] loss weights match the plan doc §5.4 table ({'img': 1.0, 'cross': 0.7, 'mmd': 0.2, 'proto': 0.2, 'reg': 0.5, 'dec': 0.05, 'adv': 0.0})
+  [ok] a Stage 1 spanning the whole run is rejected
+  [ok] stage1_epochs is not validated when the schedule is off
+  [ok] an unknown schedule key is rejected (unknown schedule key(s) ['stage_1_epochs']; ...)
+  [ok] a disabled schedule reports itself as single-stage
+11. router entropy bonus
+  [ok] the bonus is exactly one-sided at uniform init (penalty -1.0986 = -ln3 = -1.0986, |grad| 0.0e+00)
+  [ok] the bonus bites as the router collapses (-1.099 -> -0.080, approaching 0 = one-hot)
+  [ok] a uniform (`mean`) fusion contributes no entropy term
+  [ok] the entropy stash is cleared by an inference pass
+  [ok] the clean weights are a distribution (sum 1.000000, min 0.3333)
+  [ok] the model exposes the router penalty for the Trainer
+  [ok] the router term reaches the objective and the log (['cov', 'cross', 'dec', 'img', 'mmd', 'router', 'sc_img', 'sc_x', 'total', 'var'] contains 'router' = -1.0986)
+  [ok] router=0 restores the v2 objective bit-for-bit (no 'router' part)
+12. v4 architecture: share_head / SMN / low rank
+  [ok] v4 has a SHARED head and no per-modality head (arch=v4, d_align=16)
+  [ok] v3 keeps its two heads and has NO smn submodule (so old checkpoints still load strictly)
+  [ok] v4 forward is shaped as before ((9, 16), d_align 16)
+  [ok] the EEG branch back-props into share_head (2.043e-05)
+  [ok] ...and so does the IMAGE branch (2.843e-05) -- one map, two modalities
+  [ok] the shared head is NOT absorbable by a private linear map (best linear fit leaves 0.413 relative residual), so C1 constrains the hypothesis class rather than reparameterising it
+  [ok] ...whereas the LINEAR ablation arm (`share_head_hidden: 0`) is absorbed exactly (4.85e-07), which is why it is an ARM and not the default: a linear share_head constrains nothing at all
+  [ok] the shared head's LAST op is linear (Linear/GELU/Linear), so `z_eeg_raw` is an affine function of the pre-activations and the D1 offset diagnostic still measures the offset
+  [ok] the shared head is genuinely nonlinear (share_head(2x) != 2*share_head(x) by 0.794), so the residual above is not an artefact of the fit
+  [ok] a shared-head bias moves BOTH modalities' pre-SMN embeddings by the SAME vector (|delta_eeg - delta_img| 5.96e-08), i.e. it translates the pair rather than displacing one against the other
+  [ok] ...and the SMN cancels that bias on the EEG side (|delta| 8.52e-08), so the head's bias cannot offset the EEG cloud and L_mmd must align by moving the IMAGE cloud instead
+  [ok] SMN is invariant to ANY shared offset (|delta| 1.19e-06 << offset norm 26.99, bound 2.8e-05)
+  [ok] ...and EXACTLY invariant in float64 (|delta| 0.0e+00 on an offset of norm 26.99, i.e. it is the arithmetic that is exact and the float32 residual is only cancellation rounding)
+  [ok] ...and when disabled the SAME offset passes straight through, which is what makes the check mean something (|delta| 14.13)
+  [ok] a group below `min_rows` is passed through untouched (|out| 2.730 > 0)
+  [ok] the scale gate starts CLOSED, so the module is exactly centring at init (gate=0 means scale**0 == 1, and the offset it removes is the whole measured lever)
+  [ok] opening the gate really changes the output, so the previous check was not vacuous (|delta| 1.87e-01)
+  [ok] the gate is clamped into [0, 1] (raw -3.0 -> 0.0)
+  [ok] the gate is clamped into [0, 1] (raw +4.0 -> 1.0)
+  [ok] the gate is clamped into [0, 1] (raw +0.7 -> 0.7)
+  [ok] a rank-`r0` representation has ~zero tail energy (1.53e-07) while an isotropic one does not (0.574)
+  [ok] the spectral ratio is scale-invariant (0.573647 vs 0.573647), so it cannot be satisfied by inflating the embedding -- unlike the VICReg hinge it replaces
+  [ok] it is monotone in the amount of tail energy (0.000 < 0.110 < 0.574)
+  [ok] the log reports the complementary `top_frac` (1.0000)
+  [ok] the OLD tail ratio CANNOT tell collapse from the target rank (rank-1 8.05e-08 vs rank-16 2.00e-07: both ~0, so TOTAL COLLAPSE is not penalised -- it is the global optimum)
+  [ok] ...whereas the bilateral target is minimised AT r0 and penalises collapse (rank-1 0.879 > rank-16 0.157 < rank-64 1.427)
+  [ok] ...and it is scale-invariant like the ratio it replaces, so it cannot be satisfied by inflating the embedding
+  [ok] `spec_mode: tail` assembles and logs a finite `spec` term (0.0000)
+  [ok] `spec_mode: rank` assembles and logs a finite `spec` term (0.5690)
+  [ok] the differentiable CSLS equals the NUMPY deployment CSLS that the score uses (Q=200, G=200, k=10, max|diff| 3.8e-07)
+  [ok] the differentiable CSLS equals the NUMPY deployment CSLS that the score uses (Q=128, G=128, k=10, max|diff| 3.5e-07)
+  [ok] the differentiable CSLS equals the NUMPY deployment CSLS that the score uses (Q=37, G=91, k=10, max|diff| 2.9e-07)
+  [ok] the differentiable CSLS equals the NUMPY deployment CSLS that the score uses (Q=128, G=128, k=3, max|diff| 4.0e-07)
+  [ok] ...and transposition is consistent, which is what keeps the SYMMETRIC InfoNCE valid (transposing the corrected matrix equals correcting the transpose, so the correction must not be applied twice)
+  [ok] `recovery_aware.enabled: false` is INERT (img 2.3738 equals the never-configured value), so a baseline cannot silently be the treatment
+  [ok] ...and blocking and the CSLS correction are SEPARATELY attributable, not one bundled switch (baseline 2.374 vs {'block': 1.223, 'csls': 2.682, 'both': 1.367})
+  [ok] ...and `terms` routes per contrast (with terms=[cross] the `img` term returns to baseline 2.3738 while `cross` moves 1.8963 -> 2.6424)
+  [ok] the per-subject block form really differs from the whole-batch form (3.9497 vs 2.6310), so the block structure is load-bearing
+  [ok] identical clouds give ~0, not the 2/N self-pair bias that made the v3 RBF term inert (0.00e+00)
+  [ok] a row-PERMUTATION is (correctly) not a displacement on the sphere (0.00e+00) -- the two clouds still occupy the same region, so this is the term agreeing, not failing
+  [ok] ...but the SAME two independent same-distribution clouds sit at an O(1/n) floor under the biased estimator (0.01023 vs unbiased 0.00017), which never anneals to zero
+  [ok] a real region displacement is reported, and monotonically in its size (0.0010 < 0.0252 < 0.0905 < 0.2058)
+  [ok] ...and the value is ~proportional to the offset ratio it is there to remove (0.206 at ratio 0.905), so it is a usable Stage-1 signal rather than a flat penalty
+  [ok] DESCENDING L_mmd actually removes the EEG-image offset it exists to remove (ratio 0.709 -> 0.047, value -> 0.00e+00)
+  [ok] ...without collapsing the cloud, which is the degenerate way to satisfy any distribution match (0.201 vs 0.204 at start -- it grows, it does not shrink)
+  [ok] ...and the SIGN is load-bearing: ASCENT drives the same offset the other way (1.022 > 0.709), so this is a directed term and not a magnitude penalty
+  [ok] the bandwidth is data-adaptive: rescaling BOTH clouds by 10x leaves the value unchanged (0.013546 vs 0.013546)
+  [ok] ...and a single bandwidth set is used for all three kernel terms, so the value cannot go negative before the clamp (0.013546 >= 0)
+  [ok] the v4 objective logs exactly the live terms ['cross', 'img', 'mmd', 'sc_img', 'sc_x', 'spec', 'total']
+  [ok] the v4 objective back-props (3.6133)
+  [ok] objective=v4 rejects a non-zero `dec` weight
+  [ok] objective=v4 rejects a non-zero `proto` weight
+  [ok] objective=v4 rejects a non-zero `rkd` weight
+  [ok] objective=v4 rejects a non-zero `adv` weight
+  [ok] objective=v4 rejects a non-zero `reg` weight
+  [ok] objective=v3 with a v4-only term is rejected
+  [ok] the v3 defaults still validate
+  [ok] objective=v4 on an arch=v3 model is refused
+  [ok] halving `fine` does not simply halve the total (the coarse term is coefficient-scaled, not `fine`-scaled): 0.5018 -> 0.8956
+  [ok] with only the `img` term live, v4's loss is EXACTLY `fine` x its unscaled value (2.347886 -> 0.939154, ratio 0.4000)
+  [ok] ...while on v3 the coefficient is IGNORED by the loss (the loop writes it into `weights` instead), so an existing run is unchanged (2.302897 == 2.302897)
+  [ok] Stage 1's two coefficients sum to 1 at every epoch ([(0.9, 0.1), (0.837, 0.163), (0.774, 0.226)] ...)
+  [ok] Stage 2 is contrast-only at full weight (coarse 0.0, fine 1.0, lr 5e-05, stage2)
+  [ok] the v4 default does NOT freeze the encoder in Stage 2 (freeze_encoder_stage2=False)
+  [ok] ...and the run record does NOT claim a freeze it is not doing
+  [ok] ...but `freeze_encoder_stage2: true` is still honoured when asked for (True)
+  [ok] the v4 schedule describes the freeze in its run record
+  [ok] the freeze removes every trunk parameter from the optimiser (26264 scalars frozen, 16 tensors left)
+  [ok] ...and keeps share_head, the modality pre-projections and the SMN gate trainable (freezing the head would stop the fine phase adapting the map the whole design is about)
+  [ok] ...and keeps the InfoNCE temperatures in the optimiser
+  [ok] extraction is identical for eval_batch=40, 13 and 7 (|deeg| 7.90e-07)
+  [ok] ...and it returns the PRE-SMN spectrum for the D1 diagnostic
+  [ok] ...and a PER-MINIBATCH SMN, the version this replaces, really does depend on the batch size on the same data (|deeg| 6.11e-01), so the two-pass extraction is doing work rather than rubber-stamping
+11. D2 front end: locality prior, not just a shape
+  [ok] front_end defaults to 'linear' and is bit-identical to it (max|diff| 0.0e+00)
+  [ok] a dense temporal map reaches all 250 timepoints, the conv stack only 101 (receptive field ~97) -- this IS the hypothesis-class change
+  [ok] the dense map shrinks 50,000 -> 10,000 (20%) and the two depthwise convs cost k*C each
+  [ok] both depthwise convs receive gradient (conv1 1.93e+03, dilated 4.69e+03)
+  [ok] front_pool that does not divide T is rejected (3/3)
+  [ok] a misspelled front_end raises rather than silently using 'linear'
+12. differentiable coordinate recovery (SCORE source-only episodes)
+  [ok] Procrustes output is orthogonal (max|R R^T - I| 1.2e-07) and a proper rotation (det 1.0000)
+  [ok] rho -> inf collapses R to the identity (max|R - I| 2.3e-05)
+  [ok] already-aligned clouds are left alone (relative move 0.0e+00, n_mutual 120)
+  [ok] recovery is a rotation: row norms preserved (max|Δ| 9.5e-07)
+  [ok] gradient reaches the query cloud through recovery (|grad| 3.79e-02)
+  [ok] too few mutual landmarks abstains (n_mutual 5)
+  [ok] an abstained episode is bit-identical to its input
+  [ok] low-rank (L=42 < d=64, rank 16) gradient is finite at rho=0.05 (max|grad| 3.44e-04)
+  [ok] low-rank (L=42 < d=64, rank 16) gradient is finite at rho=0.1 (max|grad| 3.44e-04)
+  [ok] low-rank (L=42 < d=64, rank 16) gradient is finite at rho=0.3 (max|grad| 3.44e-04)
+  [ok] low-rank (L=42 < d=64, rank 16) gradient is finite at rho=1.0 (max|grad| 3.44e-04)
+  [ok] rho = 0 is refused
+13. M1 source-metric template (v10 stage 2.5)
+  [ok] src_mix=0 is bit-identical to a run with no template
+  [ok] src_mix=0 records no template diagnostic (nothing was blended)
+  [ok] template == target's own metric: mix=1 leaves the scores EXACTLY unchanged (max|diff| 0.0e+00)
+  [ok] ...and the diagnostic reports the degenerate correlation it should (1.0000)
+  [ok] diagnostic is high for a template that carries the target's structure (+0.997)
+  [ok] ...and near zero for a pure-noise template (+0.004)
+  [ok] the diagnostic ORDERS the two, which is what makes it usable as a gate before any accuracy is read
+  [ok] mixing a signal-carrying template moves the result (the lever is connected)
+  [ok] n recorded is the number of upper-triangular pairs 19900 == C(C-1)/2
+14. P1 spectral rank prior (v10 stage 3)
+  [ok] spec_rank=0 is bit-identical to no truncation at all (0 means FULL rank, not empty)
+  [ok] truncating to rank 16 changes the plan (the prior is connected)
+  [ok] the rank actually used is recorded
+  [ok] the source-estimated rank is reported
+  [ok] the source effective rank itself is permutation-invariant
+  [ok] PERMUTATION INVARIANCE: shuffling the source concept axis leaves the output BIT-IDENTICAL -- no index correspondence can enter, unlike the M1 template
+  [ok] ...and it is still not the untruncated operator (the prior is doing work)
+  [ok] spectral truncation is symmetric
+  [ok] truncation to 16 lowers numerical rank to <= 16 (got 16)
+  [ok] the metric spectrum is invariant under concept permutation
+15. P2 unwhitened metric + P3 topological reference (v10 stage 3)
+  [ok] P2 PREMISE: whitening RAISES the metric effective rank (unwhitened 26.5 -> whitened 33.1); if this ever fails the relocation has nothing to relocate
+  [ok] raw_metric/topo off is bit-identical to the shipped operator (defaults are inert)
+  [ok] P2 records the unwhitened effective rank (the prior's premise is on every run)
+  [ok] P2 records the pre-registered kill switch (`p2_premise_ok`)
+  [ok] ...and it is the <=50 test it claims (unwhitened rank below 50 on 8-d structure)
+  [ok] ...and the unwhitened branch actually CHANGES the operator vs the whitened one
+  [ok] raw-metric full rank is NOT the whitened operator, and equals raw-metric-no-flag (rawspec=0 is the paired twin, not a relabelling)
+  [ok] P2 spectral truncation acts on the UNWHITENED object and changes the plan
+  [ok] P2 flags the rank as applied to the unwhitened metric
+  [ok] P2 source-estimated rank is permutation-invariant (scalar: no index can enter)
+  [ok] P2 PERMUTATION INVARIANCE: shuffling the source concept axis leaves output BIT-IDENTICAL
+  [ok] topo graph is 0/1 with zero diagonal and symmetric
+  [ok] topo graph density is the requested quantile, not a byproduct (q=0.10 -> 0.100)
+  [ok] topo scale is a permutation-invariant scalar
+  [ok] topo graph commutes with relabelling (it is a property of the points, not the order)
+  [ok] topo edge count is monotone in eps (raising the threshold can only add edges)
+  [ok] P3 reports the per-domain threshold scales and both edge counts
+  [ok] P3 uses a SEPARATE scale per domain (topology is scale-free, not one shared eps)
+  [ok] P3 reports a label-free graph-overlap diagnostic
+  [ok] P3 changes the operator vs the metric reference it replaces
+  [ok] P3 disables the spectral rank rather than silently applying it to a 0/1 matrix
+  [ok] P3 accepts an explicit eps instead of the gallery-derived one
+16. L2/L3/L4 structure ensemble + reliability-weighted fusion (v11)
+  [ok] fuse=0 leaves no fusion diagnostic (nothing was fused)
+  [ok] fuse=1 is bit-identical to fuse=0 (a single block IS the mean, so it must no-op)
+  [ok] fusion records the blocks and their sizes (summing to R)
+  [ok] weights form a distribution
+  [ok] L3 is a MEASUREMENT: the noisy half is down-weighted (0.175 vs 0.075)
+  [ok] fusion changes the plan vs the shipped mean (the lever is connected)
+  [ok] PERMUTATION EQUIVARIANCE: relabelling concepts relabels the scores (max|err| 2.4e-07, solver tolerance) and leaves the weights untouched
+  [ok] a pure-noise cloud reports the fusion as FLAT (records it rather than pretending a gain)
+17. v12 metric self-distillation + subject consistency (training-side)
+  [ok] the distillation loss is small when the repetitions share structure (0.012) and large when they do not (1.034)
+  [ok] the student metric is NOT collapsed (rank is reported and substantial)
+  [ok] identical repetitions give a ZERO loss (a correct distillation is not a constant penalty; got 0.0e+00)
+  [ok] PERMUTATION INVARIANCE: relabelling the stimuli leaves the loss unchanged (0.0121 vs 0.0121)
+  [ok] subject-consistency is NEGATIVE when the two subjects share a metric (-0.980, corr +0.980) and near zero when they do not (-0.110)
+  [ok] subject-consistency reports the number of compared pairs
+  [ok] the distillation loss responds to a perturbation of the student's repetitions
+18. SATTC structural expert -- _ranks correctness (E2 baseline)
+  [ok] _ranks gives valid ranks on 200x200 (float32): both in [0,199], integer
+  [ok] _ranks backward rank matches its definition on sampled columns
+  [ok] _ranks gives valid ranks on 200x200 (float64): both in [0,199], integer
+  [ok] _ranks backward rank matches its definition on sampled columns
+  [ok] structural_scores emits NO NaN/Inf (the bug's signature was NaN from log(negative))
+  [ok] lam=0 recovers the base per-row ranking exactly (the geometry-only twin)
+  [ok] the structural expert reports its mutual-top-k enrichment diagnostic
+20. v13 bias anchor -- the ONLY new training term (order-2 bias gradient)
+  [ok] v13: the torch metric is the EXACT twin of calibration._sq_cos_dist (ddof pinned)
+  [ok] v13: the loss is strictly the gradient of SUBJECT bias (agreement rises as bias falls)
+  [ok] v13: per-subject orthogonal maps are FREE (term does not fight the falsified order-1 nuisance)
+  [ok] v13: student metric stays full-rank (collapse guard, v12's failure was rank 2)
+  [ok] v13: gradient flows to the encoder and is finite
+  [ok] v13: the gallery anchor is detached (loss has no grad_fn on z_img -> cannot be bent)
+  [ok] v13: a block with too few concepts reports pairs=0 instead of a phantom loss
+  [ok] v13: enabling bias_anchor without concept.enabled raises (no silent no-op term)
+  [ok] v13: a negative bias_anchor.weight raises
+  [ok] v13: the OFF arm zeroes its weight (enabled: false is a real no-op)
+  [ok] fgw_di_ref=None is bit-identical to the shipped operator
+  [ok] an EXACT gallery reference reproduces the operator (the injected metric is the same object `_fgw_plan` would have computed)
+  [ok] a DIFFERENT gallery reference actually reaches the plan (not dropped in `**kw`)
+  [ok] with the structural term OFF the injected reference is EXACTLY inert (it can only route through the structural term)
+  [ok] rep_cloud_scores reports whether a gallery reference arrived
+  [ok] the gallery reference changes the score through the recovery wrapper
+======================================================================
+ALL SMOKE TESTS PASSED

@@ -1,0 +1,12 @@
+# SQA ATTRIBUTION, arm `orth` -- the ORTHOGONAL subgroup of GL(C).
+#
+# `X -> exp(mixing*(S - S^T)) X` is invertible, norm-preserving, and genuinely mixes
+# channels (off-diagonal), but it cannot inflate amplitude. Read against `dense` (which can)
+# and `diag` (which does not mix): if `orth` matches `dense`, the gain is the MIXING and not
+# an amplitude/scale effect.
+base: sqa_loso_k20.yaml
+
+augment:
+  enabled: true
+  mixing: 3.15              # same ||M - I||_F as the dense arm -- the arms are matched
+  mixing_mode: orth

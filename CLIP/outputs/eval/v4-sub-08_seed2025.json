@@ -1,0 +1,131 @@
+{
+  "target_subject": 8,
+  "reference": {
+    "top1": 22.0,
+    "top5": 50.0,
+    "note": "SAMGA encoder re-measured by SCORE, final epoch"
+  },
+  "checkpoints": {
+    "stage1/v4-sub-08_seed2025": {
+      "ckpt": "/project/peilab/why/CLIP/outputs/stage1/v4-sub-08_seed2025/last.pt",
+      "epoch": 49,
+      "channel_set": "all63",
+      "feature_set": "internvit_multilevel",
+      "target_layers": [
+        20,
+        24,
+        28,
+        32,
+        36
+      ],
+      "target_fusion": "routed",
+      "arch": "v4",
+      "objective": "v4",
+      "d_align": 64,
+      "smn_gate": 0.0,
+      "target_layer_weights": [
+        0.1897517293691635,
+        0.19291362166404724,
+        0.1984272301197052,
+        0.21241670846939087,
+        0.2064906507730484
+      ],
+      "mvnn": "test",
+      "n_queries": 200,
+      "rows": {
+        "raw cosine": {
+          "top1": 15.0,
+          "top5": 39.5,
+          "mean_rank": 13.5,
+          "n": 200
+        },
+        "+ CSLS": {
+          "top1": 17.0,
+          "top5": 45.5,
+          "mean_rank": 12.48,
+          "n": 200,
+          "diag": {
+            "center": false,
+            "whiten": false,
+            "csls": true,
+            "recovery": false
+          }
+        },
+        "+ centre": {
+          "top1": 15.5,
+          "top5": 39.5,
+          "mean_rank": 13.625,
+          "n": 200,
+          "diag": {
+            "center": true,
+            "whiten": false,
+            "csls": false,
+            "recovery": false,
+            "center_diag": {
+              "offset_ratio": 0.07562123616668606,
+              "n_samples": 200
+            }
+          }
+        },
+        "+ centre + CSLS": {
+          "top1": 15.5,
+          "top5": 45.0,
+          "mean_rank": 12.615,
+          "n": 200,
+          "diag": {
+            "center": true,
+            "whiten": false,
+            "csls": true,
+            "recovery": false,
+            "center_diag": {
+              "offset_ratio": 0.07562123616668606,
+              "n_samples": 200
+            }
+          }
+        },
+        "+ SAW whiten": {
+          "top1": 16.5,
+          "top5": 45.0,
+          "mean_rank": 13.9,
+          "n": 200,
+          "diag": {
+            "center": false,
+            "whiten": true,
+            "csls": false,
+            "recovery": false,
+            "whiten_diag": {
+              "eig_max": 0.26458179407180915,
+              "eig_min": 0.0015616661100656963,
+              "cond": 169.42276736778177,
+              "n_samples": 200,
+              "d_embed": 64,
+              "rank_deficient": false
+            }
+          }
+        },
+        "+ whiten + CSLS": {
+          "top1": 18.0,
+          "top5": 48.0,
+          "mean_rank": 13.41,
+          "n": 200,
+          "diag": {
+            "center": false,
+            "whiten": true,
+            "csls": true,
+            "recovery": false,
+            "whiten_diag": {
+              "eig_max": 0.26458179407180915,
+              "eig_min": 0.0015616661100656963,
+              "cond": 169.42276736778177,
+              "n_samples": 200,
+              "d_embed": 64,
+              "rank_deficient": false
+            }
+          }
+        }
+      },
+      "offset_ratio": 0.335096150636673
+    }
+  },
+  "n_queries": 200
+}

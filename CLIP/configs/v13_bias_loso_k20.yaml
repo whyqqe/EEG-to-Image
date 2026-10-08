@@ -1,0 +1,82 @@
+# v13 / CROMA -- the order-2 BIAS ANCHOR, as ONE variable added to the banked best.
+#
+# WHAT IS ADDED. One term: `bias_anchor`, which asks each SUBJECT's pooled concept metric to agree
+# with the exogenous gallery metric D_g (the metric of the frozen image embeddings this batch is
+# already labelled with). Total objective:
+#
+#     L = L_clip + L_cross        (the g3 recipe, unchanged)
+#       + 0.5 * L_soft_plan       (v8, unchanged -- the operator-aligned structural term)
+#       + w   * L_bias_anchor     (v13, THE ONLY NEW TERM)
+#
+# WHY THESE THREE AND NOTHING ELSE. The deployed object's estimator error has exactly three
+# components -- bias, variance, rank -- so a training term is only justified as the gradient of one
+# of them, and a measurement on ten banked checkpoints (job 650135,
+# scripts/probe_view_independence.py) settled which:
+#
+#   * VARIANCE IS EXHAUSTED. The repetition-error correlation is rho <= 0 on 10/10 folds, so
+#     K_eff = R = 80: pooling already removes every independent component. A variance term would be
+#     decoration whose loss curve cannot fall, so there is deliberately NONE here. (v11 listed rho
+#     as an unmeasured HIGH risk; it is now measured.)
+#   * BIAS IS LIVE, AND IT IS SUBJECT-SPECIFIC. corr(D_R80, D_g) = 0.616, but a 9-subject pooled EEG
+#     metric -- 9 independent ENCODINGS, ~720 repetitions -- reaches 0.796: +0.180, paired t = +22.2,
+#     10/10 folds positive, its own concept-shuffle control at -0.0005. Pooling cannot remove a
+#     subject's own deviation from the shared structure; averaging over encodings can. That gap is
+#     exactly what `bias_anchor` attacks, and it also kills the "0.593 is the cross-modal ceiling"
+#     reading of M2: the ceiling is not the binding constraint, the subject bias is.
+#
+# WHY THIS DOES NOT REPEAT v12's COLLAPSE. v12 distilled the repetition cloud's own consensus metric
+# into a single repetition: a SELF-CONSISTENT target is shrinkable, so a rank-2 student can be
+# arbitrarily correlated with it, and it was (rank 2.09, raw cosine -13.85pp, headline -20.15pp).
+# D_g is exogenous (not a function of the encoder) and full-rank, so the encoder cannot make it
+# low-rank; the collapse channel is closed by construction. `ba_student_rank` is logged anyway,
+# because "cannot collapse" is an argument and the rank is the measurement.
+#
+# THE STUDENT IS THE POOLED METRIC. `student_reps: null` scores the R-repetition pooled metric, i.e.
+# the deployed readout. That is deliberate: the measured gap lives at the POOLED level, so scoring
+# anything else would optimise a quantity the operator does not consume.
+base: v8_loso_k20.yaml
+
+target_subject: null        # MUST come from the command line
+source_subjects: null
+seed: null
+out_dir: null
+
+# `concept.enabled` is the switch that makes the loader pass per-repetition EEG (`batch["reps"]`);
+# `reps_weight: 0.0` keeps the T2' repetition-collapse term OFF, so this block changes the data
+# plumbing and adds NO loss. That is the only way to get repetitions without also adding the
+# (separately falsified) T2' term, and `Trainer.__init__` raises rather than letting the anchor
+# silently never fire.
+concept:
+  enabled: true
+  reps_weight: 0.0
+  reps_r_use: 8
+
+bias_anchor:
+  enabled: true
+
+  # THE experimental variable. The twin arm is this same file with `enabled: false` (no branch
+  # taken, bit-identical to v8), so the difference between the arms is exactly this term.
+  weight: 2.0
+
+  # Repetitions consumed per selected row. The TRAIN split only has R=4 repetitions per trial
+  # (measured: `T2' train repetitions shape=(1654, 10, 4, 63, 250)`), so 4 is the honest value and
+  # the effective student is a 4-repetition pooled metric. This is a real limitation, recorded
+  # rather than hidden: the gate measured the headroom at R=1 -> R=80, so at train time the term
+  # sees the pooled metric at R=4, not the deployed R=80. It still targets SUBJECT bias (the
+  # quantity that survives any amount of repetition pooling), which is why it is not simply the
+  # same object as the single-view arm.
+  r_use: 4
+
+  # Select the WHOLE subject tile (v4.yaml: batch_stimuli 128 x subjects_per_stimulus 3), so every
+  # subject block gets 32 concepts = 496 metric pairs, i.e. a well-conditioned correlation. All
+  # three subjects are taken (`subj_sel: 3`) because the term is per-subject and restricting to one
+  # would throw away two thirds of the batch's supervision.
+  n_stim: 32
+  subj_sel: 3
+
+  # null = the POOLED student metric (the deployed readout). See the header.
+  student_reps: null
+
+  # A block with fewer concepts has a metric too small to correlate meaningfully; skipping it is
+  # honest, and `ba_pairs` in the logs reports how many blocks actually contributed.
+  min_concepts: 4

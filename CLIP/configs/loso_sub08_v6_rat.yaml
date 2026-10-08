@@ -1,0 +1,26 @@
+# v6 PILLAR A -- the "faithful RAT" arm (docs/eeg2image_v6_architecture.md §3.5, §10 V0).
+
+# THE ONE HYPOTHESIS THIS ARM TESTS.  A source-only recovery episode only helps if the
+# metric it trains in IS the metric deployment scores in.  `v5-ep2` moved the raw number
+# (+3.00) and shrank the subject gap (-5.67pp) and still LOST 2.0pp on deployment,
+# because its episode ran `CSLS(k=20) -> recovery` while deployment runs
+# `whiten -> recovery(k=10) -> CSLS(k=10)`.
+base: loso_sub08_k20.yaml
+
+recovery_aware:
+  enabled: true
+  block_per_subject: false
+  # k = 10, NOT the base's 20: 10 is what `calibration.csls_scores` uses at deployment,
+  # so this is the deployment metric rather than a metric near it.
+  csls_k: 10
+  terms: [img, cross]
+  recovery_episode: true
+  # ---- the v6 switch: run the WHOLE deployment ladder inside the episode ----
+  in_loop_full: true          # whiten -> CSLS(k) -> mutual-NN -> Procrustes -> apply
+  episode_whiten: true        # SAW whitening (the half that was MISSING in v5-ep2)
+  episode_shrink: 0.1         # same shrinkage as `calibration.saw_whiten`'s default
+  episode_csls_k: 10          # deployment's k, decoupled from the loss's `csls_k`
+  episode_rho: 0.1            # same regularisation as deployment's Procrustes
+  episode_min_landmarks: 8
+
+out_dir: outputs/stage1/v6-rat

@@ -1,0 +1,21 @@
+# ATTRIBUTION ARM A2 -- V0 with the loss's CSLS k restored to 20.
+#
+# The other half of the -12.5pp ledger. `v5-a1-k20` trains its logits at CSLS(k=20) and
+# scores 34.00 (+CSLS); `v5-rat-csls` at CSLS(k=10) and scores 31.00. That -3.00pp was
+# measured with NO episode in either arm, so it is a property of the training metric and
+# not of the episode.
+#
+# WHY THE LOSS's k AND THE DEPLOYMENT's k ARE ALLOWED TO DIFFER, which is the point of
+# `episode_csls_k` existing as a separate key: deployment's CSLS is `calibration.csls_scores`
+# at k=10 and cannot be changed without changing the reported number, while the k the
+# ENCODER is optimised under is a free hyper-parameter. `v5-ep2` conflated the two and lost
+# 2.0pp on deployment, which is why they were split. This arm keeps the deployment-side k
+# pinned at 10 (`episode_csls_k: 10`) and moves only the loss's k, so a gain here cannot be
+# an artefact of scoring at a different k than deployment uses.
+base: loso_sub08_v6_rat.yaml
+
+recovery_aware:
+  csls_k: 20                 # the loss's logits
+  episode_csls_k: 10         # deployment's k, unchanged
+
+out_dir: outputs/stage1/v6-rat-k20

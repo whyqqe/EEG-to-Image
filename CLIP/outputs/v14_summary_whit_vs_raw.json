@@ -1,0 +1,75 @@
+{
+  "arg": {
+    "on_eval": "/project/peilab/why/CLIP/outputs/eval/v14_anchor_whit",
+    "off_eval": "/project/peilab/why/CLIP/outputs/eval/v14_anchor_raw",
+    "on_probe": "/project/peilab/why/CLIP/outputs/probe/v14_anchor_whit",
+    "off_probe": "/project/peilab/why/CLIP/outputs/probe/v14_anchor_raw",
+    "on_cfg": "/project/peilab/why/CLIP/configs/v14_anchor_whit.yaml",
+    "off_cfg": "/project/peilab/why/CLIP/configs/v14_anchor_raw.yaml",
+    "out": "/project/peilab/why/CLIP/outputs/v14_summary_whit_vs_raw.json"
+  },
+  "n_folds_eval": 8,
+  "n_folds_probe": 8,
+  "config_diff": {
+    "diffs": {
+      "bias_anchor.frame": {
+        "on": "whitened",
+        "off": "raw"
+      }
+    },
+    "single_variable": true
+  },
+  "headline_top1_on": 0.1875,
+  "headline_top1_off": 41.8125,
+  "headline_top1_delta": {
+    "mean": -41.625,
+    "sd": 7.918107638282557,
+    "t": -14.868865699468643,
+    "folds_positive": 0,
+    "n": 8
+  },
+  "headline_top5_delta": {
+    "mean": -71.375,
+    "sd": 5.578978401105349,
+    "t": -36.18565470494769,
+    "folds_positive": 0,
+    "n": 8
+  },
+  "headline_row": "+ T2 R=80,a=0.75,t=0.03,fuse=16",
+  "probe": {
+    "delta_corr_R1": {
+      "mean": -0.14485818731074426,
+      "sd": 0.020801884035956467,
+      "t": -19.69633257848486,
+      "folds_positive": 0,
+      "n": 8
+    },
+    "delta_corr_R80": {
+      "mean": -0.5574394772336646,
+      "sd": 0.024263805594315017,
+      "t": -64.98061203480162,
+      "folds_positive": 0,
+      "n": 8
+    },
+    "delta_corr_R1_raw": {
+      "mean": -0.3402199819154219,
+      "sd": 0.0654581226004893,
+      "t": -14.700810029388844,
+      "folds_positive": 0,
+      "n": 8
+    },
+    "delta_corr_R80_raw": {
+      "mean": -0.660776127726374,
+      "sd": 0.053123071793015904,
+      "t": -35.181646316087864,
+      "folds_positive": 0,
+      "n": 8
+    },
+    "shuffle_control_max_abs": 0.01019543187475121,
+    "effrank_single_guard_ok": false,
+    "effrank_pooled_guard_ok": true
+  },
+  "PASS_mechanism": false,
+  "PASS_guards": false,
+  "reading": "NO LIFT AT R80: only the single-view agreement (or neither) moved. The lever did not reach the deployed estimator -- pooling already removes view noise, so this is the predicted null, NOT a mechanism failure. Record it and keep the shipped 54.83."
+}

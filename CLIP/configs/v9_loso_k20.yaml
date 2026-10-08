@@ -1,0 +1,51 @@
+# v9 -- v8's soft-plan term, with the coupling solved as a FUSED GROMOV-WASSERSTEIN problem.
+#
+# WHY THE STRUCTURAL TERM, IN ONE PARAGRAPH. Every mechanism that has ever worked on this task
+# added constraints to an under-determined correspondence problem, and every mechanism that
+# failed tried to add them through the ENCODER instead of the ESTIMATOR. `coordinate_recovery`
+# fits 2016 rotation parameters from ~42 mutual-NN landmarks; v8's S3R replaced the hard 0/1
+# assignment with a doubly-stochastic plan and took effective landmarks 42 -> 465 for +2.80pp
+# (t = 8.77) with the model class held fixed. A plan solved from the cross-modal similarity
+# alone uses only that term, whose rank is bounded by the aligned dimension (64, and ~8-16 after
+# the concept-manifold measurement), so it CANNOT express information that lives in the
+# orthogonal complement of that subspace of matrix space. The intra-domain metric carries exactly
+# that information -- and it is measurably shared across subjects
+# (`corr(D_eeg_s, D_eeg_t) = +0.565` over 45 pairs, chance -0.003), which is the direct footprint
+# of the cross-subject concept supervision this project is built on. Nothing in the deployed
+# ladder used it before v9.
+#
+# MEASURED, on frozen v8-era checkpoints, before any training: the fused coupling has an
+# INTERIOR optimum and collapses at pure structure --
+#     alpha  0.00    0.10    0.25    0.50    0.75    1.00
+#     top-1  37.00   37.30   38.80   37.90   36.30   1.90
+# i.e. +1.80pp at alpha ~ 0.25 and -35.10pp at alpha = 1. That shape is predicted by the rank
+# argument and is why this is FUSED rather than structural.
+#
+# ONE VARIABLE AGAINST v8, AND IT IS THE SAME VARIABLE IN BOTH PLACES. `base: v8_loso_k20.yaml`
+# carries the whole banked recipe; this file adds the FGW weight and nothing else. The DEPLOYED
+# value is injected at run time from the validation stage (`--recovery-alpha`, chosen by
+# leave-one-subject-out), and the TRAINING value from `--soft-plan-alpha`, so the encoder is
+# shaped against the same coupling deployment solves. They are separate flags because the two
+# temperatures differ (training 0.1 for gradient flow, deployment 0.01-0.05 for sharpness) and
+# conflating the two settings is the documented way to make the term silently vanish.
+base: v8_loso_k20.yaml
+
+# Same fold-shadowing discipline as G3/v8: these MUST come from the command line, and a
+# forgotten `--target-subject` dies on `None` rather than silently training fold 8.
+target_subject: null
+source_subjects: null
+seed: null
+out_dir: null
+
+soft_plan:
+  enabled: true
+  tau: 0.1
+  iters: 20
+  csls_k: 20
+  weight: 0.5
+  block_per_subject: true
+  # Overridden by `--soft-plan-alpha` from the validation stage. The value here is the
+  # frozen-checkpoint optimum and is a DEFENSIBLE DEFAULT for a smoke run, not a claim: the
+  # pipeline rewrites it after Stage A measures it on all 30 banked runs.
+  alpha: 0.25
+  fgw_outer: 10

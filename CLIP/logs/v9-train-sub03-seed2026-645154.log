@@ -1,0 +1,352 @@
+[stageA] config:
+{
+  "arch": "v4",
+  "objective": "v4",
+  "d_latent": 64,
+  "d_align": 64,
+  "d_embed": 64,
+  "share_head_hidden": 0,
+  "smn": {
+    "enabled": true,
+    "gate_scale": true,
+    "init_gate": 0.0,
+    "min_rows": 4
+  },
+  "n_channels": 63,
+  "n_timepoints": 250,
+  "n_subjects": 9,
+  "d_model": 200,
+  "n_heads": 4,
+  "n_blocks": 2,
+  "dim_ff": 512,
+  "dropout": 0.5,
+  "head_dropout": 0.1,
+  "agg_width": 16,
+  "agg_pool": 8,
+  "img_head": "linear",
+  "eeg_head": "mlp",
+  "vicreg_cov_weight": 0.04,
+  "target_fusion": "routed",
+  "target_subject_dropout": 0.3,
+  "router_temperature": 2.0,
+  "router_layer_dropout": 0.1,
+  "image": {
+    "feature_set": "internvit_multilevel",
+    "layers": [
+      20,
+      24,
+      28,
+      32,
+      36
+    ],
+    "l2norm": true
+  },
+  "loss_weights": {
+    "img": 1.0,
+    "cross": 0.7,
+    "mmd": 1.0,
+    "spec": 0.0,
+    "reg": 0.0,
+    "dec": 0.0,
+    "proto": 0.0,
+    "rkd": 0.0,
+    "adv": 0.0,
+    "router": 0.05
+  },
+  "spec_r0": 16,
+  "spec_mode": "rank",
+  "keep_last_epochs": 2,
+  "temp_img": 0.07,
+  "temp_cross": 0.1,
+  "recovery_aware": {
+    "enabled": true,
+    "block_per_subject": false,
+    "csls_k": 20,
+    "terms": [
+      "img",
+      "cross"
+    ]
+  },
+  "temp_proto": 0.07,
+  "softplus": true,
+  "prototype_level": "concept",
+  "mmd_kernel": "linear",
+  "schedule": {
+    "coarse_to_fine": true,
+    "stage1_epochs": 20,
+    "mmd_start": 0.9,
+    "mmd_end": 0.5,
+    "stage2_mmd": 0.0,
+    "cross_start": 0.1,
+    "cross_end": 0.5,
+    "stage2_cross": 1.0,
+    "stage2_lr": 5e-05,
+    "freeze_encoder_stage2": false
+  },
+  "epochs": 50,
+  "lr": 0.001,
+  "weight_decay": 0.0001,
+  "grad_clip": 1.0,
+  "batch_stimuli": 128,
+  "subjects_per_stimulus": 3,
+  "images_per_pair": 1,
+  "num_workers": 4,
+  "eval_batch": 200,
+  "log_every": 50,
+  "seed": 2026,
+  "debug_steps": null,
+  "target_subject": 3,
+  "source_subjects": [
+    1,
+    2,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+  ],
+  "channel_set": "all63",
+  "mvnn": "train",
+  "calibration": {
+    "center": true,
+    "whiten": false,
+    "csls": true,
+    "recovery": false,
+    "csls_k": 10,
+    "rho": 0.1
+  },
+  "out_dir": "/project/peilab/why/CLIP/outputs/stage1/v9/sub03_k20_seed2026",
+  "soft_plan": {
+    "enabled": true,
+    "tau": 0.1,
+    "iters": 20,
+    "csls_k": 20,
+    "weight": 0.5,
+    "block_per_subject": true,
+    "alpha": 0.5,
+    "fgw_outer": 10
+  }
+}
+[loso ] sources [1, 2, 4, 5, 6, 7, 8, 9, 10] -> hold out sub-03; 9 subjects x 1654 concepts x 10 images = 148860 rows; test (200, 1, 63, 250)
+[10:46:18 INFO samclip.train] Stage A | augmentation OFF (raw epochs)
+[10:46:18 INFO samclip.train] Stage A | fold sub-03 held out | 1.13M params | 50 epochs | 129 batches/epoch
+[10:46:18 INFO samclip.train] Stage A | schedule coarse-to-fine | stage1 20 epochs coarse 0.9->0.5, fine 0.1->0.5 @ lr 0.001 | stage2 coarse=0, fine=1 @ lr 5e-05
+[10:46:18 INFO samclip.train] Stage A | arch=v4 objective=v4 | d_align=64 d_latent=64 | smn=on (gate_scale=True, init_gate=0.000, min_rows=4)
+[10:46:18 INFO samclip.train] Stage A | target_fusion=routed (init weights [0.2, 0.2, 0.2, 0.2, 0.2]) | loss weights {'img': 1.0, 'cross': 0.7, 'dec': 0.0, 'mmd': 1.0, 'reg': 0.0, 'proto': 0.0, 'rkd': 0.0, 'adv': 0.0, 'spec': 0.0, 'router': 0.05}
+[10:46:18 INFO samclip.train] Stage A | prototype_level=concept
+[10:46:18 INFO samclip.train] epoch -1 (init) | test top1 0.00 top5 1.00 meanrank 101.9 | offset 0.983 spec_top 0.835
+[10:46:19 INFO samclip.train] epoch 0 step 0/129 loss 3.2890 {'img': 5.9842, 'sc_img': 2.7269, 'sc_x': 2.3979, 'cross': 4.9271, 'mmd': 0.5868, 'router': -1.6094, 'soft_plan': 3.7959, 'sp_diag_mass': 0.0234, 'sp_entropy': 3.7318, 'total': 3.289}
+[10:46:23 INFO samclip.train] epoch 0 step 50/129 loss 2.8958 {'img': 5.9754, 'sc_img': 2.6811, 'sc_x': 2.3723, 'cross': 5.206, 'mmd': 0.0709, 'router': -1.6094, 'soft_plan': 3.7838, 'sp_diag_mass': 0.0242, 'sp_entropy': 3.7153, 'total': 2.8372}
+[10:46:26 INFO samclip.train] epoch 0 step 100/129 loss 2.8771 {'img': 6.0043, 'sc_img': 2.6404, 'sc_x': 2.313, 'cross': 5.2259, 'mmd': 0.0587, 'router': -1.6094, 'soft_plan': 3.8297, 'sp_diag_mass': 0.0232, 'sp_entropy': 3.711, 'total': 2.8535}
+[10:46:27 INFO samclip.train] epoch 0 [stage1] | lr 1.00e-03 | coarse 0.900 fine 0.100 | loss 2.8674 | test top1 1.00 top5 2.50 meanrank 92.7 | offset 0.990 spec_top 0.984 | smn_gate 0.126 | layer_w [0.199, 0.197, 0.197, 0.203, 0.204]
+[10:46:28 INFO samclip.train] epoch 1 step 0/129 loss 3.0251 {'img': 6.0234, 'sc_img': 2.6183, 'sc_x': 2.29, 'cross': 5.1501, 'mmd': 0.0599, 'router': -1.6093, 'soft_plan': 3.7746, 'sp_diag_mass': 0.024, 'sp_entropy': 3.7319, 'total': 3.0251}
+[10:46:31 INFO samclip.train] epoch 1 step 50/129 loss 3.0469 {'img': 6.0217, 'sc_img': 2.5767, 'sc_x': 2.2577, 'cross': 5.1686, 'mmd': 0.0291, 'router': -1.6093, 'soft_plan': 3.8209, 'sp_diag_mass': 0.0235, 'sp_entropy': 3.7078, 'total': 3.0225}
+[10:46:34 INFO samclip.train] epoch 1 step 100/129 loss 3.0313 {'img': 5.968, 'sc_img': 2.5264, 'sc_x': 2.2639, 'cross': 5.0359, 'mmd': 0.0442, 'router': -1.6092, 'soft_plan': 3.7822, 'sp_diag_mass': 0.0236, 'sp_entropy': 3.7178, 'total': 2.9987}
+[10:46:36 INFO samclip.train] epoch 1 [stage1] | lr 1.00e-03 | coarse 0.879 fine 0.121 | loss 3.0265 | test top1 1.00 top5 5.00 meanrank 63.3 | offset 0.988 spec_top 0.993 | smn_gate 0.238 | layer_w [0.198, 0.196, 0.195, 0.205, 0.207]
+[10:46:36 INFO samclip.train] epoch 2 step 0/129 loss 3.2177 {'img': 5.9197, 'sc_img': 2.5046, 'sc_x': 2.2783, 'cross': 5.0081, 'mmd': 0.0461, 'router': -1.6092, 'soft_plan': 3.8385, 'sp_diag_mass': 0.0236, 'sp_entropy': 3.6851, 'total': 3.2177}
+[10:46:39 INFO samclip.train] epoch 2 step 50/129 loss 3.0532 {'img': 5.5955, 'sc_img': 2.5037, 'sc_x': 2.3309, 'cross': 4.9267, 'mmd': 0.0231, 'router': -1.6091, 'soft_plan': 3.515, 'sp_diag_mass': 0.0423, 'sp_entropy': 3.2629, 'total': 2.9821}
+[10:46:43 INFO samclip.train] epoch 2 step 100/129 loss 3.2087 {'img': 5.7089, 'sc_img': 2.493, 'sc_x': 2.377, 'cross': 4.8263, 'mmd': 0.0452, 'router': -1.6089, 'soft_plan': 6.1264, 'sp_diag_mass': 0.0138, 'sp_entropy': 3.2671, 'total': 4.3129}
+[10:46:44 INFO samclip.train] epoch 2 [stage1] | lr 1.00e-03 | coarse 0.858 fine 0.142 | loss 3.2219 | test top1 1.00 top5 4.50 meanrank 68.8 | offset 0.965 spec_top 0.997 | smn_gate 0.327 | layer_w [0.195, 0.192, 0.192, 0.208, 0.212]
+[10:46:45 INFO samclip.train] epoch 3 step 0/129 loss 3.2954 {'img': 5.7872, 'sc_img': 2.4824, 'sc_x': 2.3683, 'cross': 4.9656, 'mmd': 0.0358, 'router': -1.6086, 'soft_plan': 3.6691, 'sp_diag_mass': 0.034, 'sp_entropy': 3.4799, 'total': 3.2954}
+[10:46:48 INFO samclip.train] epoch 3 step 50/129 loss 3.3058 {'img': 5.6108, 'sc_img': 2.497, 'sc_x': 2.3971, 'cross': 4.8324, 'mmd': 0.0799, 'router': -1.6084, 'soft_plan': 3.3943, 'sp_diag_mass': 0.0426, 'sp_entropy': 3.3554, 'total': 3.151}
+[10:46:51 INFO samclip.train] epoch 3 step 100/129 loss 3.3504 {'img': 5.6547, 'sc_img': 2.5051, 'sc_x': 2.3774, 'cross': 4.8918, 'mmd': 0.0926, 'router': -1.6082, 'soft_plan': 3.5178, 'sp_diag_mass': 0.0356, 'sp_entropy': 3.5179, 'total': 3.2372}
+[10:46:52 INFO samclip.train] epoch 3 [stage1] | lr 1.00e-03 | coarse 0.837 fine 0.163 | loss 3.3246 | test top1 1.00 top5 5.00 meanrank 62.2 | offset 0.781 spec_top 1.000 | smn_gate 0.437 | layer_w [0.193, 0.19, 0.191, 0.21, 0.216]
+[10:46:53 INFO samclip.train] epoch 4 step 0/129 loss 3.8731 {'img': 5.532, 'sc_img': 2.5255, 'sc_x': 2.3884, 'cross': 4.8509, 'mmd': 0.0584, 'router': -1.6079, 'soft_plan': 4.5225, 'sp_diag_mass': 0.0328, 'sp_entropy': 3.156, 'total': 3.8731}
+[10:46:56 INFO samclip.train] epoch 4 step 50/129 loss 3.5865 {'img': 5.6199, 'sc_img': 2.5692, 'sc_x': 2.4188, 'cross': 4.9414, 'mmd': 0.0645, 'router': -1.6077, 'soft_plan': 3.4494, 'sp_diag_mass': 0.0451, 'sp_entropy': 3.2441, 'total': 3.3694}
+[10:46:59 INFO samclip.train] epoch 4 step 100/129 loss 3.6413 {'img': 5.5924, 'sc_img': 2.5652, 'sc_x': 2.4516, 'cross': 4.7384, 'mmd': 0.0846, 'router': -1.6073, 'soft_plan': 3.4043, 'sp_diag_mass': 0.0444, 'sp_entropy': 3.4533, 'total': 3.332}
+[10:47:01 INFO samclip.train] epoch 4 [stage1] | lr 1.00e-03 | coarse 0.816 fine 0.184 | loss 3.6261 | test top1 1.00 top5 5.50 meanrank 64.0 | offset 0.996 spec_top 0.994 | smn_gate 0.532 | layer_w [0.19, 0.188, 0.189, 0.212, 0.221]
+[10:47:01 INFO samclip.train] epoch 5 step 0/129 loss 3.8011 {'img': 5.728, 'sc_img': 2.5636, 'sc_x': 2.4751, 'cross': 4.9987, 'mmd': 0.14, 'router': -1.6072, 'soft_plan': 3.7523, 'sp_diag_mass': 0.0245, 'sp_entropy': 3.7174, 'total': 3.8011}
+[10:47:04 INFO samclip.train] epoch 5 step 50/129 loss 3.8350 {'img': 5.6188, 'sc_img': 2.5908, 'sc_x': 2.4356, 'cross': 4.8715, 'mmd': 0.0511, 'router': -1.6066, 'soft_plan': 3.4212, 'sp_diag_mass': 0.0413, 'sp_entropy': 3.394, 'total': 3.5241}
+[10:47:07 INFO samclip.train] epoch 5 step 100/129 loss 3.7566 {'img': 5.5453, 'sc_img': 2.6215, 'sc_x': 2.4563, 'cross': 4.8444, 'mmd': 0.023, 'router': -1.6062, 'soft_plan': 3.3818, 'sp_diag_mass': 0.052, 'sp_entropy': 3.0687, 'total': 3.4632}
+[10:47:09 INFO samclip.train] epoch 5 [stage1] | lr 1.00e-03 | coarse 0.795 fine 0.205 | loss 3.8065 | test top1 1.00 top5 6.00 meanrank 59.8 | offset 0.967 spec_top 0.998 | smn_gate 0.613 | layer_w [0.188, 0.185, 0.187, 0.214, 0.226]
+[10:47:09 INFO samclip.train] epoch 6 step 0/129 loss 3.8858 {'img': 5.7467, 'sc_img': 2.6165, 'sc_x': 2.4803, 'cross': 4.7499, 'mmd': 0.1482, 'router': -1.606, 'soft_plan': 3.5967, 'sp_diag_mass': 0.0343, 'sp_entropy': 3.5522, 'total': 3.8858}
+[10:47:13 INFO samclip.train] epoch 6 step 50/129 loss 3.9005 {'img': 5.4886, 'sc_img': 2.6409, 'sc_x': 2.5288, 'cross': 4.7046, 'mmd': 0.0503, 'router': -1.6053, 'soft_plan': 5.3873, 'sp_diag_mass': 0.0273, 'sp_entropy': 3.1184, 'total': 4.6398}
+[10:47:16 INFO samclip.train] epoch 6 step 100/129 loss 3.8921 {'img': 5.5336, 'sc_img': 2.6855, 'sc_x': 2.5653, 'cross': 4.7404, 'mmd': 0.0911, 'router': -1.6052, 'soft_plan': 3.6202, 'sp_diag_mass': 0.0431, 'sp_entropy': 3.3581, 'total': 3.8037}
+[10:47:18 INFO samclip.train] epoch 6 [stage1] | lr 1.00e-03 | coarse 0.774 fine 0.226 | loss 3.8678 | test top1 1.00 top5 6.50 meanrank 57.9 | offset 0.815 spec_top 1.000 | smn_gate 0.642 | layer_w [0.186, 0.183, 0.186, 0.215, 0.229]
+[10:47:18 INFO samclip.train] epoch 7 step 0/129 loss 3.6553 {'img': 5.4083, 'sc_img': 2.7147, 'sc_x': 2.5867, 'cross': 4.6822, 'mmd': 0.0392, 'router': -1.6051, 'soft_plan': 3.1149, 'sp_diag_mass': 0.0566, 'sp_entropy': 3.0763, 'total': 3.6553}
+[10:47:21 INFO samclip.train] epoch 7 step 50/129 loss 4.1454 {'img': 5.5166, 'sc_img': 2.7316, 'sc_x': 2.6099, 'cross': 4.7517, 'mmd': 0.0997, 'router': -1.6048, 'soft_plan': 3.3835, 'sp_diag_mass': 0.0489, 'sp_entropy': 3.2675, 'total': 3.874}
+[10:47:25 INFO samclip.train] epoch 7 step 100/129 loss 4.1316 {'img': 5.6299, 'sc_img': 2.7717, 'sc_x': 2.6276, 'cross': 4.7666, 'mmd': 0.1526, 'router': -1.604, 'soft_plan': 3.5948, 'sp_diag_mass': 0.0352, 'sp_entropy': 3.5336, 'total': 4.0501}
+[10:47:26 INFO samclip.train] epoch 7 [stage1] | lr 1.00e-03 | coarse 0.753 fine 0.247 | loss 4.1110 | test top1 1.00 top5 7.00 meanrank 55.9 | offset 0.827 spec_top 1.000 | smn_gate 0.667 | layer_w [0.184, 0.182, 0.184, 0.217, 0.233]
+[10:47:27 INFO samclip.train] epoch 8 step 0/129 loss 3.9340 {'img': 5.4357, 'sc_img': 2.7977, 'sc_x': 2.6326, 'cross': 4.7315, 'mmd': 0.1037, 'router': -1.604, 'soft_plan': 3.1806, 'sp_diag_mass': 0.0544, 'sp_entropy': 3.3327, 'total': 3.934}
+[10:47:30 INFO samclip.train] epoch 8 step 50/129 loss 4.1424 {'img': 5.4562, 'sc_img': 2.8612, 'sc_x': 2.6497, 'cross': 4.6903, 'mmd': 0.0993, 'router': -1.6037, 'soft_plan': 3.2212, 'sp_diag_mass': 0.0541, 'sp_entropy': 3.2959, 'total': 3.9489}
+[10:47:33 INFO samclip.train] epoch 8 step 100/129 loss 4.2159 {'img': 5.4737, 'sc_img': 2.9096, 'sc_x': 2.6571, 'cross': 4.7415, 'mmd': 0.0694, 'router': -1.6038, 'soft_plan': 5.6215, 'sp_diag_mass': 0.0198, 'sp_entropy': 3.1237, 'total': 5.1415}
+[10:47:35 INFO samclip.train] epoch 8 [stage1] | lr 1.00e-03 | coarse 0.732 fine 0.268 | loss 4.2761 | test top1 1.00 top5 7.50 meanrank 57.4 | offset 0.827 spec_top 0.999 | smn_gate 0.679 | layer_w [0.183, 0.18, 0.184, 0.218, 0.235]
+[10:47:36 INFO samclip.train] epoch 9 step 0/129 loss 5.3974 {'img': 5.6003, 'sc_img': 2.9321, 'sc_x': 2.6622, 'cross': 4.6883, 'mmd': 0.0829, 'router': -1.6034, 'soft_plan': 5.6951, 'sp_diag_mass': 0.015, 'sp_entropy': 3.2328, 'total': 5.3974}
+[10:47:39 INFO samclip.train] epoch 9 step 50/129 loss 4.6144 {'img': 5.4296, 'sc_img': 2.9817, 'sc_x': 2.5803, 'cross': 4.7546, 'mmd': 0.0513, 'router': -1.6026, 'soft_plan': 3.1324, 'sp_diag_mass': 0.0554, 'sp_entropy': 3.1379, 'total': 4.0577}
+[10:47:42 INFO samclip.train] epoch 9 step 100/129 loss 4.5100 {'img': 5.5149, 'sc_img': 3.0163, 'sc_x': 2.5926, 'cross': 4.7128, 'mmd': 0.0913, 'router': -1.6026, 'soft_plan': 3.4503, 'sp_diag_mass': 0.0433, 'sp_entropy': 3.3592, 'total': 4.2613}
+[10:47:44 INFO samclip.train] epoch 9 [stage1] | lr 1.00e-03 | coarse 0.711 fine 0.289 | loss 4.4828 | test top1 1.00 top5 5.50 meanrank 57.8 | offset 0.929 spec_top 0.999 | smn_gate 0.728 | layer_w [0.181, 0.179, 0.183, 0.219, 0.237]
+[10:47:44 INFO samclip.train] epoch 10 step 0/129 loss 4.4499 {'img': 5.6043, 'sc_img': 3.029, 'sc_x': 2.6052, 'cross': 4.6788, 'mmd': 0.0993, 'router': -1.6026, 'soft_plan': 3.4084, 'sp_diag_mass': 0.0411, 'sp_entropy': 3.4486, 'total': 4.4499}
+[10:47:47 INFO samclip.train] epoch 10 step 50/129 loss 4.6244 {'img': 5.4397, 'sc_img': 3.0701, 'sc_x': 2.6322, 'cross': 4.6304, 'mmd': 0.0745, 'router': -1.602, 'soft_plan': 3.2269, 'sp_diag_mass': 0.0539, 'sp_entropy': 3.1764, 'total': 4.2804}
+[10:47:50 INFO samclip.train] epoch 10 step 100/129 loss 4.5845 {'img': 5.4075, 'sc_img': 3.1237, 'sc_x': 2.6607, 'cross': 4.6122, 'mmd': 0.0929, 'router': -1.602, 'soft_plan': 3.4073, 'sp_diag_mass': 0.0489, 'sp_entropy': 3.3161, 'total': 4.3693}
+[10:47:52 INFO samclip.train] epoch 10 [stage1] | lr 1.00e-03 | coarse 0.689 fine 0.311 | loss 4.5616 | test top1 1.00 top5 7.50 meanrank 52.9 | offset 0.835 spec_top 0.999 | smn_gate 0.742 | layer_w [0.18, 0.179, 0.183, 0.219, 0.239]
+[10:47:52 INFO samclip.train] epoch 11 step 0/129 loss 4.4270 {'img': 5.4, 'sc_img': 3.1638, 'sc_x': 2.678, 'cross': 4.5999, 'mmd': 0.079, 'router': -1.6022, 'soft_plan': 3.1921, 'sp_diag_mass': 0.0543, 'sp_entropy': 3.3546, 'total': 4.427}
+[10:47:55 INFO samclip.train] epoch 11 step 50/129 loss 4.8221 {'img': 5.4587, 'sc_img': 3.1984, 'sc_x': 2.6905, 'cross': 4.6231, 'mmd': 0.1651, 'router': -1.6022, 'soft_plan': 3.2131, 'sp_diag_mass': 0.0525, 'sp_entropy': 3.4051, 'total': 4.5198}
+[10:47:59 INFO samclip.train] epoch 11 step 100/129 loss 4.7389 {'img': 5.3806, 'sc_img': 3.2206, 'sc_x': 2.7006, 'cross': 4.6175, 'mmd': 0.0744, 'router': -1.6014, 'soft_plan': 3.3466, 'sp_diag_mass': 0.0537, 'sp_entropy': 3.2267, 'total': 4.4988}
+[10:48:00 INFO samclip.train] epoch 11 [stage1] | lr 1.00e-03 | coarse 0.668 fine 0.332 | loss 4.7341 | test top1 1.00 top5 7.00 meanrank 54.3 | offset 0.839 spec_top 1.000 | smn_gate 0.744 | layer_w [0.179, 0.178, 0.183, 0.22, 0.24]
+[10:48:01 INFO samclip.train] epoch 12 step 0/129 loss 4.6753 {'img': 5.4543, 'sc_img': 3.2474, 'sc_x': 2.7091, 'cross': 4.5983, 'mmd': 0.1183, 'router': -1.6015, 'soft_plan': 3.2408, 'sp_diag_mass': 0.0548, 'sp_entropy': 3.3884, 'total': 4.6753}
+[10:48:04 INFO samclip.train] epoch 12 step 50/129 loss 4.8727 {'img': 5.5784, 'sc_img': 3.2594, 'sc_x': 2.7182, 'cross': 4.6439, 'mmd': 0.0791, 'router': -1.6014, 'soft_plan': 3.5396, 'sp_diag_mass': 0.0419, 'sp_entropy': 3.3376, 'total': 4.8543}
+[10:48:07 INFO samclip.train] epoch 12 step 100/129 loss 4.8571 {'img': 5.3765, 'sc_img': 3.282, 'sc_x': 2.7173, 'cross': 4.6227, 'mmd': 0.0538, 'router': -1.6008, 'soft_plan': 3.2018, 'sp_diag_mass': 0.0539, 'sp_entropy': 3.2081, 'total': 4.5927}
+[10:48:09 INFO samclip.train] epoch 12 [stage1] | lr 1.00e-03 | coarse 0.647 fine 0.353 | loss 4.8946 | test top1 1.00 top5 5.50 meanrank 55.0 | offset 0.899 spec_top 0.999 | smn_gate 0.766 | layer_w [0.177, 0.177, 0.183, 0.22, 0.243]
+[10:48:10 INFO samclip.train] epoch 13 step 0/129 loss 4.9802 {'img': 5.4381, 'sc_img': 3.2956, 'sc_x': 2.719, 'cross': 4.6698, 'mmd': 0.121, 'router': -1.6006, 'soft_plan': 3.4615, 'sp_diag_mass': 0.0457, 'sp_entropy': 3.3484, 'total': 4.9802}
+[10:48:13 INFO samclip.train] epoch 13 step 50/129 loss 5.0505 {'img': 5.3689, 'sc_img': 3.322, 'sc_x': 2.7159, 'cross': 4.5941, 'mmd': 0.0735, 'router': -1.5999, 'soft_plan': 4.1764, 'sp_diag_mass': 0.0403, 'sp_entropy': 3.1797, 'total': 5.2622}
+[10:48:16 INFO samclip.train] epoch 13 step 100/129 loss 5.1130 {'img': 5.3921, 'sc_img': 3.3325, 'sc_x': 2.7135, 'cross': 4.6366, 'mmd': 0.037, 'router': -1.5993, 'soft_plan': 5.2766, 'sp_diag_mass': 0.0269, 'sp_entropy': 3.0783, 'total': 5.8092}
+[10:48:17 INFO samclip.train] epoch 13 [stage1] | lr 1.00e-03 | coarse 0.626 fine 0.374 | loss 5.0817 | test top1 2.00 top5 7.00 meanrank 52.3 | offset 0.868 spec_top 0.999 | smn_gate 0.764 | layer_w [0.175, 0.175, 0.182, 0.222, 0.246]
+[10:48:18 INFO samclip.train] epoch 14 step 0/129 loss 5.0459 {'img': 5.4375, 'sc_img': 3.3557, 'sc_x': 2.7242, 'cross': 4.5778, 'mmd': 0.09, 'router': -1.5994, 'soft_plan': 3.3201, 'sp_diag_mass': 0.0497, 'sp_entropy': 3.3206, 'total': 5.0459}
+[10:48:21 INFO samclip.train] epoch 14 step 50/129 loss 5.2819 {'img': 5.4084, 'sc_img': 3.3965, 'sc_x': 2.7279, 'cross': 4.5814, 'mmd': 0.1173, 'router': -1.5995, 'soft_plan': 3.1934, 'sp_diag_mass': 0.0555, 'sp_entropy': 3.4004, 'total': 4.9886}
+[10:48:24 INFO samclip.train] epoch 14 step 100/129 loss 5.2325 {'img': 5.3849, 'sc_img': 3.4261, 'sc_x': 2.7278, 'cross': 4.6288, 'mmd': 0.0547, 'router': -1.5996, 'soft_plan': 3.8732, 'sp_diag_mass': 0.0442, 'sp_entropy': 3.155, 'total': 5.2943}
+[10:48:26 INFO samclip.train] epoch 14 [stage1] | lr 1.00e-03 | coarse 0.605 fine 0.395 | loss 5.2507 | test top1 1.00 top5 7.00 meanrank 55.1 | offset 0.917 spec_top 0.999 | smn_gate 0.772 | layer_w [0.175, 0.176, 0.183, 0.222, 0.245]
+[10:48:26 INFO samclip.train] epoch 15 step 0/129 loss 5.1849 {'img': 5.435, 'sc_img': 3.4161, 'sc_x': 2.728, 'cross': 4.6079, 'mmd': 0.0557, 'router': -1.5994, 'soft_plan': 3.2628, 'sp_diag_mass': 0.0532, 'sp_entropy': 3.2183, 'total': 5.1849}
+[10:48:29 INFO samclip.train] epoch 15 step 50/129 loss 5.3623 {'img': 5.2535, 'sc_img': 3.4244, 'sc_x': 2.7363, 'cross': 4.5696, 'mmd': 0.0417, 'router': -1.5989, 'soft_plan': 5.2112, 'sp_diag_mass': 0.0297, 'sp_entropy': 3.0674, 'total': 6.0644}
+[10:48:32 INFO samclip.train] epoch 15 step 100/129 loss 5.3702 {'img': 5.2879, 'sc_img': 3.4396, 'sc_x': 2.7415, 'cross': 4.535, 'mmd': 0.0676, 'router': -1.5988, 'soft_plan': 5.8777, 'sp_diag_mass': 0.0147, 'sp_entropy': 3.1123, 'total': 6.4169}
+[10:48:34 INFO samclip.train] epoch 15 [stage1] | lr 1.00e-03 | coarse 0.584 fine 0.416 | loss 5.3751 | test top1 2.00 top5 8.50 meanrank 52.4 | offset 0.821 spec_top 0.999 | smn_gate 0.780 | layer_w [0.173, 0.174, 0.182, 0.222, 0.248]
+[10:48:34 INFO samclip.train] epoch 16 step 0/129 loss 5.2649 {'img': 5.3923, 'sc_img': 3.4432, 'sc_x': 2.7492, 'cross': 4.5674, 'mmd': 0.058, 'router': -1.5984, 'soft_plan': 3.1198, 'sp_diag_mass': 0.0548, 'sp_entropy': 3.1992, 'total': 5.2649}
+[10:48:37 INFO samclip.train] epoch 16 step 50/129 loss 5.4728 {'img': 5.411, 'sc_img': 3.4486, 'sc_x': 2.7525, 'cross': 4.5853, 'mmd': 0.0502, 'router': -1.598, 'soft_plan': 3.2913, 'sp_diag_mass': 0.0523, 'sp_entropy': 3.1553, 'total': 5.3599}
+[10:48:41 INFO samclip.train] epoch 16 step 100/129 loss 5.4543 {'img': 5.3512, 'sc_img': 3.4873, 'sc_x': 2.774, 'cross': 4.5739, 'mmd': 0.0564, 'router': -1.5986, 'soft_plan': 4.8084, 'sp_diag_mass': 0.0278, 'sp_entropy': 3.1851, 'total': 6.0923}
+[10:48:43 INFO samclip.train] epoch 16 [stage1] | lr 1.00e-03 | coarse 0.563 fine 0.437 | loss 5.5061 | test top1 2.00 top5 8.00 meanrank 49.6 | offset 0.702 spec_top 1.000 | smn_gate 0.814 | layer_w [0.173, 0.175, 0.183, 0.222, 0.247]
+[10:48:43 INFO samclip.train] epoch 17 step 0/129 loss 5.7424 {'img': 5.3135, 'sc_img': 3.4923, 'sc_x': 2.7837, 'cross': 4.5314, 'mmd': 0.0819, 'router': -1.5988, 'soft_plan': 3.7851, 'sp_diag_mass': 0.041, 'sp_entropy': 3.2519, 'total': 5.7424}
+[10:48:46 INFO samclip.train] epoch 17 step 50/129 loss 5.6853 {'img': 5.3873, 'sc_img': 3.5141, 'sc_x': 2.8028, 'cross': 4.5106, 'mmd': 0.0761, 'router': -1.5989, 'soft_plan': 3.2728, 'sp_diag_mass': 0.0515, 'sp_entropy': 3.2952, 'total': 5.5103}
+[10:48:49 INFO samclip.train] epoch 17 step 100/129 loss 5.6279 {'img': 5.3124, 'sc_img': 3.5539, 'sc_x': 2.8288, 'cross': 4.447, 'mmd': 0.063, 'router': -1.5985, 'soft_plan': 3.2039, 'sp_diag_mass': 0.0539, 'sp_entropy': 3.2607, 'total': 5.4141}
+[10:48:50 INFO samclip.train] epoch 17 [stage1] | lr 1.00e-03 | coarse 0.542 fine 0.458 | loss 5.6689 | test top1 2.50 top5 9.00 meanrank 44.2 | offset 0.761 spec_top 1.000 | smn_gate 0.840 | layer_w [0.172, 0.174, 0.183, 0.223, 0.248]
+[10:48:51 INFO samclip.train] epoch 18 step 0/129 loss 5.9163 {'img': 5.2935, 'sc_img': 3.5658, 'sc_x': 2.8383, 'cross': 4.5419, 'mmd': 0.0939, 'router': -1.5982, 'soft_plan': 3.7784, 'sp_diag_mass': 0.0475, 'sp_entropy': 3.1968, 'total': 5.9163}
+[10:48:54 INFO samclip.train] epoch 18 step 50/129 loss 5.8340 {'img': 5.2909, 'sc_img': 3.5946, 'sc_x': 2.8408, 'cross': 4.5833, 'mmd': 0.0537, 'router': -1.598, 'soft_plan': 3.2802, 'sp_diag_mass': 0.0516, 'sp_entropy': 3.2403, 'total': 5.6588}
+[10:48:57 INFO samclip.train] epoch 18 step 100/129 loss 5.7870 {'img': 5.2408, 'sc_img': 3.6214, 'sc_x': 2.8507, 'cross': 4.4587, 'mmd': 0.0542, 'router': -1.598, 'soft_plan': 4.1306, 'sp_diag_mass': 0.0401, 'sp_entropy': 3.1021, 'total': 6.0186}
+[10:48:58 INFO samclip.train] epoch 18 [stage1] | lr 1.00e-03 | coarse 0.521 fine 0.479 | loss 5.7617 | test top1 4.00 top5 15.50 meanrank 40.0 | offset 0.880 spec_top 1.000 | smn_gate 0.863 | layer_w [0.171, 0.174, 0.183, 0.224, 0.249]
+[10:48:59 INFO samclip.train] epoch 19 step 0/129 loss 7.1956 {'img': 5.2222, 'sc_img': 3.6433, 'sc_x': 2.8665, 'cross': 4.4445, 'mmd': 0.0417, 'router': -1.5979, 'soft_plan': 6.1759, 'sp_diag_mass': 0.0143, 'sp_entropy': 3.1067, 'total': 7.1956}
+[10:49:02 INFO samclip.train] epoch 19 step 50/129 loss 6.0116 {'img': 5.3046, 'sc_img': 3.6602, 'sc_x': 2.8804, 'cross': 4.4352, 'mmd': 0.0825, 'router': -1.5979, 'soft_plan': 3.2693, 'sp_diag_mass': 0.051, 'sp_entropy': 3.352, 'total': 5.8006}
+[10:49:05 INFO samclip.train] epoch 19 step 100/129 loss 5.9769 {'img': 5.2023, 'sc_img': 3.681, 'sc_x': 2.8734, 'cross': 4.4418, 'mmd': 0.0527, 'router': -1.5976, 'soft_plan': 3.0267, 'sp_diag_mass': 0.0613, 'sp_entropy': 3.1066, 'total': 5.6156}
+[10:49:07 INFO samclip.train] epoch 19 [stage1] | lr 1.00e-03 | coarse 0.500 fine 0.500 | loss 6.0008 | test top1 4.00 top5 11.00 meanrank 45.2 | offset 0.871 spec_top 0.999 | smn_gate 0.914 | layer_w [0.17, 0.173, 0.183, 0.225, 0.249]
+[10:49:07 INFO samclip.train] epoch 20 step 0/129 loss 9.8733 {'img': 5.2455, 'sc_img': 3.6858, 'sc_x': 2.8693, 'cross': 4.4715, 'router': -1.5973, 'soft_plan': 3.1551, 'sp_diag_mass': 0.0541, 'sp_entropy': 3.2222, 'total': 9.8733}
+[10:49:10 INFO samclip.train] epoch 20 step 50/129 loss 9.9332 {'img': 5.1163, 'sc_img': 3.6886, 'sc_x': 2.8705, 'cross': 4.4118, 'router': -1.5973, 'soft_plan': 3.3612, 'sp_diag_mass': 0.0498, 'sp_entropy': 3.1809, 'total': 9.8053}
+[10:49:13 INFO samclip.train] epoch 20 step 100/129 loss 9.9347 {'img': 5.0563, 'sc_img': 3.6926, 'sc_x': 2.873, 'cross': 4.4184, 'router': -1.5974, 'soft_plan': 4.2123, 'sp_diag_mass': 0.0441, 'sp_entropy': 3.0936, 'total': 10.1755}
+[10:49:15 INFO samclip.train] epoch 20 [stage2] | lr 5.00e-05 | coarse 0.000 fine 1.000 | loss 9.9276 | test top1 4.50 top5 13.00 meanrank 41.5 | offset 0.900 spec_top 0.999 | smn_gate 0.916 | layer_w [0.17, 0.173, 0.183, 0.225, 0.249]
+[10:49:15 INFO samclip.train] epoch 21 step 0/129 loss 9.6678 {'img': 5.146, 'sc_img': 3.6944, 'sc_x': 2.8744, 'cross': 4.392, 'router': -1.5975, 'soft_plan': 3.0544, 'sp_diag_mass': 0.0592, 'sp_entropy': 3.157, 'total': 9.6678}
+[10:49:18 INFO samclip.train] epoch 21 step 50/129 loss 9.8682 {'img': 5.1047, 'sc_img': 3.6974, 'sc_x': 2.8762, 'cross': 4.395, 'router': -1.5975, 'soft_plan': 3.0679, 'sp_diag_mass': 0.0606, 'sp_entropy': 3.152, 'total': 9.6352}
+[10:49:22 INFO samclip.train] epoch 21 step 100/129 loss 9.8587 {'img': 5.1195, 'sc_img': 3.7006, 'sc_x': 2.8787, 'cross': 4.4525, 'router': -1.5976, 'soft_plan': 3.043, 'sp_diag_mass': 0.0604, 'sp_entropy': 3.2022, 'total': 9.6779}
+[10:49:23 INFO samclip.train] epoch 21 [stage2] | lr 5.00e-05 | coarse 0.000 fine 1.000 | loss 9.8616 | test top1 5.00 top5 13.50 meanrank 40.9 | offset 0.897 spec_top 0.999 | smn_gate 0.913 | layer_w [0.17, 0.173, 0.183, 0.225, 0.248]
+[10:49:24 INFO samclip.train] epoch 22 step 0/129 loss 9.6251 {'img': 5.1255, 'sc_img': 3.7021, 'sc_x': 2.8797, 'cross': 4.3596, 'router': -1.5976, 'soft_plan': 3.0553, 'sp_diag_mass': 0.0602, 'sp_entropy': 3.1803, 'total': 9.6251}
+[10:49:27 INFO samclip.train] epoch 22 step 50/129 loss 9.8716 {'img': 5.1025, 'sc_img': 3.7049, 'sc_x': 2.8824, 'cross': 4.4158, 'router': -1.5977, 'soft_plan': 3.6545, 'sp_diag_mass': 0.0409, 'sp_entropy': 3.292, 'total': 9.941}
+[10:49:30 INFO samclip.train] epoch 22 step 100/129 loss 9.8320 {'img': 5.0819, 'sc_img': 3.7077, 'sc_x': 2.8839, 'cross': 4.323, 'router': -1.5977, 'soft_plan': 3.2317, 'sp_diag_mass': 0.057, 'sp_entropy': 3.1503, 'total': 9.6439}
+[10:49:32 INFO samclip.train] epoch 22 [stage2] | lr 5.00e-05 | coarse 0.000 fine 1.000 | loss 9.8326 | test top1 4.50 top5 12.50 meanrank 40.7 | offset 0.902 spec_top 0.999 | smn_gate 0.911 | layer_w [0.17, 0.173, 0.183, 0.225, 0.248]
+[10:49:32 INFO samclip.train] epoch 23 step 0/129 loss 9.9479 {'img': 5.1861, 'sc_img': 3.7092, 'sc_x': 2.885, 'cross': 4.4335, 'router': -1.5977, 'soft_plan': 3.4765, 'sp_diag_mass': 0.0505, 'sp_entropy': 3.1903, 'total': 9.9479}
+[10:49:35 INFO samclip.train] epoch 23 step 50/129 loss 9.8827 {'img': 5.1397, 'sc_img': 3.7119, 'sc_x': 2.8866, 'cross': 4.3678, 'router': -1.5978, 'soft_plan': 3.0758, 'sp_diag_mass': 0.0595, 'sp_entropy': 3.222, 'total': 9.6552}
+[10:49:38 INFO samclip.train] epoch 23 step 100/129 loss 9.8300 {'img': 5.1306, 'sc_img': 3.7147, 'sc_x': 2.8889, 'cross': 4.4115, 'router': -1.5978, 'soft_plan': 3.1443, 'sp_diag_mass': 0.0558, 'sp_entropy': 3.2408, 'total': 9.7109}
+[10:49:40 INFO samclip.train] epoch 23 [stage2] | lr 5.00e-05 | coarse 0.000 fine 1.000 | loss 9.8150 | test top1 5.00 top5 13.50 meanrank 39.9 | offset 0.898 spec_top 0.999 | smn_gate 0.909 | layer_w [0.17, 0.174, 0.184, 0.225, 0.248]
+[10:49:40 INFO samclip.train] epoch 24 step 0/129 loss 9.7123 {'img': 5.0903, 'sc_img': 3.7163, 'sc_x': 2.8898, 'cross': 4.43, 'router': -1.5979, 'soft_plan': 3.2017, 'sp_diag_mass': 0.0579, 'sp_entropy': 3.2188, 'total': 9.7123}
+[10:49:44 INFO samclip.train] epoch 24 step 50/129 loss 9.8097 {'img': 4.9941, 'sc_img': 3.7193, 'sc_x': 2.8919, 'cross': 4.3116, 'router': -1.5979, 'soft_plan': 2.9637, 'sp_diag_mass': 0.065, 'sp_entropy': 3.188, 'total': 9.4142}
+[10:49:47 INFO samclip.train] epoch 24 step 100/129 loss 9.8044 {'img': 5.0555, 'sc_img': 3.722, 'sc_x': 2.8937, 'cross': 4.3974, 'router': -1.598, 'soft_plan': 3.4428, 'sp_diag_mass': 0.0538, 'sp_entropy': 3.1728, 'total': 9.7752}
+[10:49:49 INFO samclip.train] epoch 24 [stage2] | lr 5.00e-05 | coarse 0.000 fine 1.000 | loss 9.8013 | test top1 4.00 top5 13.50 meanrank 39.6 | offset 0.898 spec_top 0.999 | smn_gate 0.905 | layer_w [0.171, 0.174, 0.184, 0.225, 0.247]
+[10:49:49 INFO samclip.train] epoch 25 step 0/129 loss 9.6717 {'img': 5.0972, 'sc_img': 3.7237, 'sc_x': 2.8949, 'cross': 4.4677, 'router': -1.598, 'soft_plan': 3.054, 'sp_diag_mass': 0.0613, 'sp_entropy': 3.183, 'total': 9.6717}
+[10:49:52 INFO samclip.train] epoch 25 step 50/129 loss 9.8287 {'img': 5.088, 'sc_img': 3.7256, 'sc_x': 2.8962, 'cross': 4.4031, 'router': -1.598, 'soft_plan': 3.334, 'sp_diag_mass': 0.0547, 'sp_entropy': 3.2313, 'total': 9.7573}
+[10:49:55 INFO samclip.train] epoch 25 step 100/129 loss 9.8088 {'img': 5.0618, 'sc_img': 3.728, 'sc_x': 2.898, 'cross': 4.3825, 'router': -1.5981, 'soft_plan': 3.4433, 'sp_diag_mass': 0.0501, 'sp_entropy': 3.2667, 'total': 9.7713}
+[10:49:57 INFO samclip.train] epoch 25 [stage2] | lr 5.00e-05 | coarse 0.000 fine 1.000 | loss 9.8102 | test top1 4.00 top5 13.50 meanrank 39.5 | offset 0.897 spec_top 0.999 | smn_gate 0.904 | layer_w [0.171, 0.174, 0.184, 0.225, 0.247]
+[10:49:57 INFO samclip.train] epoch 26 step 0/129 loss 9.9746 {'img': 5.178, 'sc_img': 3.7293, 'sc_x': 2.899, 'cross': 4.4898, 'router': -1.5981, 'soft_plan': 3.4672, 'sp_diag_mass': 0.0504, 'sp_entropy': 3.1571, 'total': 9.9746}
+[10:50:01 INFO samclip.train] epoch 26 step 50/129 loss 9.7577 {'img': 5.1151, 'sc_img': 3.7314, 'sc_x': 2.9007, 'cross': 4.3391, 'router': -1.5982, 'soft_plan': 3.202, 'sp_diag_mass': 0.0546, 'sp_entropy': 3.2922, 'total': 9.6736}
+[10:50:03 INFO samclip.train] epoch 26 step 100/129 loss 9.7801 {'img': 5.1517, 'sc_img': 3.7339, 'sc_x': 2.903, 'cross': 4.416, 'router': -1.5982, 'soft_plan': 3.9954, 'sp_diag_mass': 0.0399, 'sp_entropy': 3.1809, 'total': 10.1607}
+[10:50:05 INFO samclip.train] epoch 26 [stage2] | lr 5.00e-05 | coarse 0.000 fine 1.000 | loss 9.7668 | test top1 4.50 top5 14.50 meanrank 39.6 | offset 0.892 spec_top 0.999 | smn_gate 0.903 | layer_w [0.171, 0.174, 0.184, 0.224, 0.247]
+[10:50:06 INFO samclip.train] epoch 27 step 0/129 loss 9.9075 {'img': 5.185, 'sc_img': 3.7352, 'sc_x': 2.9042, 'cross': 4.4409, 'router': -1.5982, 'soft_plan': 3.3876, 'sp_diag_mass': 0.0556, 'sp_entropy': 3.195, 'total': 9.9075}
+[10:50:09 INFO samclip.train] epoch 27 step 50/129 loss 9.7556 {'img': 5.0692, 'sc_img': 3.7375, 'sc_x': 2.9059, 'cross': 4.349, 'router': -1.5983, 'soft_plan': 3.0339, 'sp_diag_mass': 0.0598, 'sp_entropy': 3.2078, 'total': 9.5505}
+[10:50:12 INFO samclip.train] epoch 27 step 100/129 loss 9.7509 {'img': 5.0962, 'sc_img': 3.7398, 'sc_x': 2.9079, 'cross': 4.3973, 'router': -1.5983, 'soft_plan': 3.2503, 'sp_diag_mass': 0.0544, 'sp_entropy': 3.1637, 'total': 9.7196}
+[10:50:13 INFO samclip.train] epoch 27 [stage2] | lr 5.00e-05 | coarse 0.000 fine 1.000 | loss 9.7337 | test top1 5.00 top5 14.00 meanrank 39.6 | offset 0.885 spec_top 0.999 | smn_gate 0.902 | layer_w [0.171, 0.174, 0.184, 0.224, 0.246]
+[10:50:14 INFO samclip.train] epoch 28 step 0/129 loss 9.6307 {'img': 5.112, 'sc_img': 3.7413, 'sc_x': 2.9091, 'cross': 4.3205, 'router': -1.5984, 'soft_plan': 3.1487, 'sp_diag_mass': 0.0561, 'sp_entropy': 3.2684, 'total': 9.6307}
+[10:50:17 INFO samclip.train] epoch 28 step 50/129 loss 9.7851 {'img': 4.9799, 'sc_img': 3.7437, 'sc_x': 2.9111, 'cross': 4.3375, 'router': -1.5984, 'soft_plan': 2.9492, 'sp_diag_mass': 0.0629, 'sp_entropy': 3.1575, 'total': 9.4108}
+[10:50:19 INFO samclip.train] epoch 28 step 100/129 loss 9.7986 {'img': 5.0472, 'sc_img': 3.7458, 'sc_x': 2.9125, 'cross': 4.3583, 'router': -1.5984, 'soft_plan': 3.1629, 'sp_diag_mass': 0.0598, 'sp_entropy': 3.1803, 'total': 9.5995}
+[10:50:21 INFO samclip.train] epoch 28 [stage2] | lr 5.00e-05 | coarse 0.000 fine 1.000 | loss 9.7925 | test top1 4.50 top5 13.00 meanrank 39.4 | offset 0.891 spec_top 0.999 | smn_gate 0.901 | layer_w [0.171, 0.174, 0.184, 0.224, 0.246]
+[10:50:22 INFO samclip.train] epoch 29 step 0/129 loss 9.5270 {'img': 4.9865, 'sc_img': 3.7471, 'sc_x': 2.9133, 'cross': 4.2973, 'router': -1.5985, 'soft_plan': 3.2246, 'sp_diag_mass': 0.0582, 'sp_entropy': 3.1361, 'total': 9.527}
+[10:50:25 INFO samclip.train] epoch 29 step 50/129 loss 9.7966 {'img': 5.1052, 'sc_img': 3.7493, 'sc_x': 2.9145, 'cross': 4.3723, 'router': -1.5985, 'soft_plan': 3.5687, 'sp_diag_mass': 0.051, 'sp_entropy': 3.1924, 'total': 9.8702}
+[10:50:28 INFO samclip.train] epoch 29 step 100/129 loss 9.7886 {'img': 5.1318, 'sc_img': 3.7515, 'sc_x': 2.916, 'cross': 4.4173, 'router': -1.5986, 'soft_plan': 3.6889, 'sp_diag_mass': 0.0429, 'sp_entropy': 3.1956, 'total': 9.9884}
+[10:50:29 INFO samclip.train] epoch 29 [stage2] | lr 5.00e-05 | coarse 0.000 fine 1.000 | loss 9.7799 | test top1 4.50 top5 14.00 meanrank 39.0 | offset 0.888 spec_top 0.999 | smn_gate 0.899 | layer_w [0.171, 0.174, 0.185, 0.224, 0.246]
+[10:50:30 INFO samclip.train] epoch 30 step 0/129 loss 9.6110 {'img': 5.0479, 'sc_img': 3.7527, 'sc_x': 2.9168, 'cross': 4.3246, 'router': -1.5986, 'soft_plan': 3.2315, 'sp_diag_mass': 0.0557, 'sp_entropy': 3.1524, 'total': 9.611}
+[10:50:33 INFO samclip.train] epoch 30 step 50/129 loss 9.7420 {'img': 5.0868, 'sc_img': 3.7542, 'sc_x': 2.918, 'cross': 4.3165, 'router': -1.5987, 'soft_plan': 3.0334, 'sp_diag_mass': 0.0606, 'sp_entropy': 3.2405, 'total': 9.5451}
+[10:50:36 INFO samclip.train] epoch 30 step 100/129 loss 9.7478 {'img': 5.1343, 'sc_img': 3.7561, 'sc_x': 2.9198, 'cross': 4.4393, 'router': -1.5987, 'soft_plan': 3.2359, 'sp_diag_mass': 0.0558, 'sp_entropy': 3.165, 'total': 9.7798}
+[10:50:38 INFO samclip.train] epoch 30 [stage2] | lr 5.00e-05 | coarse 0.000 fine 1.000 | loss 9.7417 | test top1 5.00 top5 14.50 meanrank 39.3 | offset 0.888 spec_top 0.999 | smn_gate 0.899 | layer_w [0.171, 0.175, 0.185, 0.224, 0.246]
+[10:50:40 INFO samclip.train] epoch 31 step 0/129 loss 10.1496 {'img': 5.1414, 'sc_img': 3.7571, 'sc_x': 2.9204, 'cross': 4.35, 'router': -1.5987, 'soft_plan': 4.0862, 'sp_diag_mass': 0.043, 'sp_entropy': 3.1713, 'total': 10.1496}
+[10:50:43 INFO samclip.train] epoch 31 step 50/129 loss 9.7654 {'img': 5.1658, 'sc_img': 3.7591, 'sc_x': 2.9216, 'cross': 4.4037, 'router': -1.5988, 'soft_plan': 4.8397, 'sp_diag_mass': 0.029, 'sp_entropy': 3.1822, 'total': 10.5883}
+[10:50:46 INFO samclip.train] epoch 31 step 100/129 loss 9.7704 {'img': 5.1275, 'sc_img': 3.761, 'sc_x': 2.9226, 'cross': 4.4384, 'router': -1.5988, 'soft_plan': 3.3173, 'sp_diag_mass': 0.0539, 'sp_entropy': 3.1167, 'total': 9.8132}
+[10:50:48 INFO samclip.train] epoch 31 [stage2] | lr 5.00e-05 | coarse 0.000 fine 1.000 | loss 9.7627 | test top1 5.00 top5 14.00 meanrank 39.3 | offset 0.884 spec_top 0.999 | smn_gate 0.898 | layer_w [0.171, 0.175, 0.185, 0.224, 0.245]
+[10:50:49 INFO samclip.train] epoch 32 step 0/129 loss 9.7581 {'img': 5.0496, 'sc_img': 3.762, 'sc_x': 2.9235, 'cross': 4.388, 'router': -1.5988, 'soft_plan': 3.4336, 'sp_diag_mass': 0.055, 'sp_entropy': 3.0775, 'total': 9.7581}
+[10:50:52 INFO samclip.train] epoch 32 step 50/129 loss 9.7781 {'img': 5.1626, 'sc_img': 3.764, 'sc_x': 2.9251, 'cross': 4.4501, 'router': -1.5989, 'soft_plan': 4.1503, 'sp_diag_mass': 0.0345, 'sp_entropy': 3.2335, 'total': 10.2728}
+[10:50:55 INFO samclip.train] epoch 32 step 100/129 loss 9.7713 {'img': 5.0421, 'sc_img': 3.7662, 'sc_x': 2.9264, 'cross': 4.3752, 'router': -1.5989, 'soft_plan': 3.353, 'sp_diag_mass': 0.0533, 'sp_entropy': 3.1656, 'total': 9.7013}
+[10:50:57 INFO samclip.train] epoch 32 [stage2] | lr 5.00e-05 | coarse 0.000 fine 1.000 | loss 9.7757 | test top1 4.50 top5 13.50 meanrank 38.9 | offset 0.878 spec_top 0.999 | smn_gate 0.897 | layer_w [0.171, 0.175, 0.185, 0.224, 0.245]
+[10:50:57 INFO samclip.train] epoch 33 step 0/129 loss 9.7861 {'img': 4.959, 'sc_img': 3.7671, 'sc_x': 2.9269, 'cross': 4.3005, 'router': -1.599, 'soft_plan': 3.7933, 'sp_diag_mass': 0.0437, 'sp_entropy': 3.1947, 'total': 9.7861}
+[10:51:00 INFO samclip.train] epoch 33 step 50/129 loss 9.7794 {'img': 5.1416, 'sc_img': 3.7694, 'sc_x': 2.9281, 'cross': 4.4129, 'router': -1.599, 'soft_plan': 3.7252, 'sp_diag_mass': 0.0428, 'sp_entropy': 3.203, 'total': 10.0133}
+[10:51:03 INFO samclip.train] epoch 33 step 100/129 loss 9.7544 {'img': 5.0784, 'sc_img': 3.7712, 'sc_x': 2.9293, 'cross': 4.4192, 'router': -1.5991, 'soft_plan': 3.0097, 'sp_diag_mass': 0.0639, 'sp_entropy': 3.1726, 'total': 9.5967}
+[10:51:05 INFO samclip.train] epoch 33 [stage2] | lr 5.00e-05 | coarse 0.000 fine 1.000 | loss 9.7321 | test top1 4.50 top5 13.50 meanrank 39.1 | offset 0.886 spec_top 0.999 | smn_gate 0.896 | layer_w [0.172, 0.175, 0.185, 0.224, 0.244]
+[10:51:05 INFO samclip.train] epoch 34 step 0/129 loss 9.4447 {'img': 5.0106, 'sc_img': 3.7728, 'sc_x': 2.9304, 'cross': 4.325, 'router': -1.5991, 'soft_plan': 2.9732, 'sp_diag_mass': 0.0624, 'sp_entropy': 3.1449, 'total': 9.4447}
+[10:51:09 INFO samclip.train] epoch 34 step 50/129 loss 9.7192 {'img': 5.0459, 'sc_img': 3.7748, 'sc_x': 2.932, 'cross': 4.2977, 'router': -1.5991, 'soft_plan': 3.3873, 'sp_diag_mass': 0.0558, 'sp_entropy': 3.1686, 'total': 9.6679}
+[10:51:12 INFO samclip.train] epoch 34 step 100/129 loss 9.7091 {'img': 5.0802, 'sc_img': 3.7767, 'sc_x': 2.9332, 'cross': 4.3412, 'router': -1.5992, 'soft_plan': 3.6076, 'sp_diag_mass': 0.0475, 'sp_entropy': 3.1577, 'total': 9.8429}
+[10:51:13 INFO samclip.train] epoch 34 [stage2] | lr 5.00e-05 | coarse 0.000 fine 1.000 | loss 9.7281 | test top1 4.50 top5 13.00 meanrank 38.8 | offset 0.884 spec_top 0.999 | smn_gate 0.896 | layer_w [0.172, 0.175, 0.185, 0.224, 0.244]
+[10:51:14 INFO samclip.train] epoch 35 step 0/129 loss 9.5310 {'img': 5.0337, 'sc_img': 3.7777, 'sc_x': 2.9338, 'cross': 4.3606, 'router': -1.5992, 'soft_plan': 3.0498, 'sp_diag_mass': 0.0593, 'sp_entropy': 3.1482, 'total': 9.531}
+[10:51:17 INFO samclip.train] epoch 35 step 50/129 loss 9.7356 {'img': 5.0645, 'sc_img': 3.7796, 'sc_x': 2.935, 'cross': 4.3913, 'router': -1.5993, 'soft_plan': 3.2003, 'sp_diag_mass': 0.0568, 'sp_entropy': 3.2391, 'total': 9.6586}
+[10:51:19 INFO samclip.train] epoch 35 step 100/129 loss 9.7369 {'img': 5.0397, 'sc_img': 3.7812, 'sc_x': 2.9367, 'cross': 4.3179, 'router': -1.5994, 'soft_plan': 3.0303, 'sp_diag_mass': 0.0598, 'sp_entropy': 3.2136, 'total': 9.4975}
+[10:51:21 INFO samclip.train] epoch 35 [stage2] | lr 5.00e-05 | coarse 0.000 fine 1.000 | loss 9.7421 | test top1 4.50 top5 14.00 meanrank 38.7 | offset 0.881 spec_top 0.999 | smn_gate 0.895 | layer_w [0.172, 0.175, 0.185, 0.224, 0.244]
+[10:51:21 INFO samclip.train] epoch 36 step 0/129 loss 9.5346 {'img': 5.0062, 'sc_img': 3.7823, 'sc_x': 2.9376, 'cross': 4.37, 'router': -1.5994, 'soft_plan': 3.0986, 'sp_diag_mass': 0.0586, 'sp_entropy': 3.2105, 'total': 9.5346}
+[10:51:24 INFO samclip.train] epoch 36 step 50/129 loss 9.7388 {'img': 5.0901, 'sc_img': 3.784, 'sc_x': 2.9382, 'cross': 4.4085, 'router': -1.5994, 'soft_plan': 3.0695, 'sp_diag_mass': 0.0604, 'sp_entropy': 3.1871, 'total': 9.6308}
+[10:51:27 INFO samclip.train] epoch 36 step 100/129 loss 9.7632 {'img': 5.091, 'sc_img': 3.7856, 'sc_x': 2.9392, 'cross': 4.3522, 'router': -1.5995, 'soft_plan': 3.2614, 'sp_diag_mass': 0.0565, 'sp_entropy': 3.2201, 'total': 9.6883}
+[10:51:29 INFO samclip.train] epoch 36 [stage2] | lr 5.00e-05 | coarse 0.000 fine 1.000 | loss 9.7386 | test top1 4.50 top5 13.00 meanrank 38.7 | offset 0.876 spec_top 0.999 | smn_gate 0.895 | layer_w [0.172, 0.175, 0.186, 0.224, 0.243]
+[10:51:29 INFO samclip.train] epoch 37 step 0/129 loss 9.5860 {'img': 5.0605, 'sc_img': 3.7866, 'sc_x': 2.9399, 'cross': 4.3766, 'router': -1.5995, 'soft_plan': 3.0837, 'sp_diag_mass': 0.0591, 'sp_entropy': 3.1653, 'total': 9.586}
+[10:51:32 INFO samclip.train] epoch 37 step 50/129 loss 9.8049 {'img': 5.0248, 'sc_img': 3.7887, 'sc_x': 2.9413, 'cross': 4.3208, 'router': -1.5996, 'soft_plan': 3.2219, 'sp_diag_mass': 0.0578, 'sp_entropy': 3.1394, 'total': 9.5803}
+[10:51:35 INFO samclip.train] epoch 37 step 100/129 loss 9.7641 {'img': 5.0377, 'sc_img': 3.7905, 'sc_x': 2.9423, 'cross': 4.3363, 'router': -1.5996, 'soft_plan': 3.0176, 'sp_diag_mass': 0.0621, 'sp_entropy': 3.1313, 'total': 9.5019}
+[10:51:36 INFO samclip.train] epoch 37 [stage2] | lr 5.00e-05 | coarse 0.000 fine 1.000 | loss 9.7409 | test top1 4.50 top5 13.50 meanrank 38.5 | offset 0.877 spec_top 0.999 | smn_gate 0.895 | layer_w [0.172, 0.175, 0.186, 0.224, 0.243]
+[10:51:37 INFO samclip.train] epoch 38 step 0/129 loss 9.6660 {'img': 5.1327, 'sc_img': 3.7915, 'sc_x': 2.9427, 'cross': 4.369, 'router': -1.5996, 'soft_plan': 3.11, 'sp_diag_mass': 0.0606, 'sp_entropy': 3.1362, 'total': 9.666}
+[10:51:40 INFO samclip.train] epoch 38 step 50/129 loss 9.7134 {'img': 5.0086, 'sc_img': 3.7933, 'sc_x': 2.9443, 'cross': 4.3592, 'router': -1.5997, 'soft_plan': 3.2926, 'sp_diag_mass': 0.0546, 'sp_entropy': 3.1933, 'total': 9.6264}
+[10:51:43 INFO samclip.train] epoch 38 step 100/129 loss 9.7308 {'img': 5.1385, 'sc_img': 3.7952, 'sc_x': 2.9453, 'cross': 4.4596, 'router': -1.5997, 'soft_plan': 3.1814, 'sp_diag_mass': 0.0545, 'sp_entropy': 3.2209, 'total': 9.771}
+[10:51:45 INFO samclip.train] epoch 38 [stage2] | lr 5.00e-05 | coarse 0.000 fine 1.000 | loss 9.7111 | test top1 4.50 top5 13.50 meanrank 38.5 | offset 0.876 spec_top 0.999 | smn_gate 0.894 | layer_w [0.172, 0.176, 0.186, 0.224, 0.243]
+[10:51:45 INFO samclip.train] epoch 39 step 0/129 loss 9.6985 {'img': 5.0863, 'sc_img': 3.7963, 'sc_x': 2.9461, 'cross': 4.3296, 'router': -1.5997, 'soft_plan': 3.323, 'sp_diag_mass': 0.0548, 'sp_entropy': 3.2055, 'total': 9.6985}
+[10:51:48 INFO samclip.train] epoch 39 step 50/129 loss 9.7126 {'img': 5.0962, 'sc_img': 3.7979, 'sc_x': 2.9473, 'cross': 4.3966, 'router': -1.5998, 'soft_plan': 3.0806, 'sp_diag_mass': 0.0594, 'sp_entropy': 3.2018, 'total': 9.6342}
+[10:51:51 INFO samclip.train] epoch 39 step 100/129 loss 9.7015 {'img': 5.1059, 'sc_img': 3.7998, 'sc_x': 2.9485, 'cross': 4.4268, 'router': -1.5998, 'soft_plan': 3.8842, 'sp_diag_mass': 0.0463, 'sp_entropy': 3.1641, 'total': 10.0668}
+[10:51:53 INFO samclip.train] epoch 39 [stage2] | lr 5.00e-05 | coarse 0.000 fine 1.000 | loss 9.7289 | test top1 4.50 top5 13.00 meanrank 38.6 | offset 0.873 spec_top 0.999 | smn_gate 0.894 | layer_w [0.172, 0.176, 0.186, 0.224, 0.242]
+[10:51:53 INFO samclip.train] epoch 40 step 0/129 loss 10.2702 {'img': 5.0276, 'sc_img': 3.8007, 'sc_x': 2.9491, 'cross': 4.3148, 'router': -1.5999, 'soft_plan': 4.6045, 'sp_diag_mass': 0.0283, 'sp_entropy': 3.1753, 'total': 10.2702}
+[10:51:56 INFO samclip.train] epoch 40 step 50/129 loss 9.6779 {'img': 5.1723, 'sc_img': 3.8022, 'sc_x': 2.9501, 'cross': 4.3706, 'router': -1.5999, 'soft_plan': 3.0417, 'sp_diag_mass': 0.0622, 'sp_entropy': 3.1702, 'total': 9.6725}
+[10:51:59 INFO samclip.train] epoch 40 step 100/129 loss 9.6825 {'img': 5.0877, 'sc_img': 3.804, 'sc_x': 2.951, 'cross': 4.3782, 'router': -1.6, 'soft_plan': 3.4609, 'sp_diag_mass': 0.052, 'sp_entropy': 3.1758, 'total': 9.8029}
+[10:52:01 INFO samclip.train] epoch 40 [stage2] | lr 5.00e-05 | coarse 0.000 fine 1.000 | loss 9.6971 | test top1 4.50 top5 14.00 meanrank 38.6 | offset 0.873 spec_top 0.999 | smn_gate 0.894 | layer_w [0.172, 0.176, 0.186, 0.224, 0.242]
+[10:52:02 INFO samclip.train] epoch 41 step 0/129 loss 9.5487 {'img': 5.0763, 'sc_img': 3.805, 'sc_x': 2.9515, 'cross': 4.3212, 'router': -1.6, 'soft_plan': 3.0551, 'sp_diag_mass': 0.0607, 'sp_entropy': 3.2067, 'total': 9.5487}
+[10:52:04 INFO samclip.train] epoch 41 step 50/129 loss 9.7400 {'img': 4.9866, 'sc_img': 3.8068, 'sc_x': 2.9526, 'cross': 4.2949, 'router': -1.6, 'soft_plan': 2.9422, 'sp_diag_mass': 0.0642, 'sp_entropy': 3.1483, 'total': 9.3841}
+[10:52:07 INFO samclip.train] epoch 41 step 100/129 loss 9.7350 {'img': 5.1089, 'sc_img': 3.8085, 'sc_x': 2.9538, 'cross': 4.4229, 'router': -1.6001, 'soft_plan': 3.4359, 'sp_diag_mass': 0.0499, 'sp_entropy': 3.2195, 'total': 9.8429}
+[10:52:09 INFO samclip.train] epoch 41 [stage2] | lr 5.00e-05 | coarse 0.000 fine 1.000 | loss 9.7287 | test top1 5.00 top5 13.50 meanrank 38.7 | offset 0.875 spec_top 0.999 | smn_gate 0.893 | layer_w [0.173, 0.176, 0.186, 0.224, 0.242]
+[10:52:09 INFO samclip.train] epoch 42 step 0/129 loss 9.5810 {'img': 5.093, 'sc_img': 3.8095, 'sc_x': 2.9546, 'cross': 4.3577, 'router': -1.6001, 'soft_plan': 3.0352, 'sp_diag_mass': 0.0624, 'sp_entropy': 3.1779, 'total': 9.581}
+[10:52:12 INFO samclip.train] epoch 42 step 50/129 loss 9.6870 {'img': 5.028, 'sc_img': 3.8111, 'sc_x': 2.9554, 'cross': 4.3233, 'router': -1.6002, 'soft_plan': 3.0188, 'sp_diag_mass': 0.0635, 'sp_entropy': 3.1971, 'total': 9.4837}
+[10:52:15 INFO samclip.train] epoch 42 step 100/129 loss 9.6780 {'img': 5.0686, 'sc_img': 3.813, 'sc_x': 2.9566, 'cross': 4.3773, 'router': -1.6002, 'soft_plan': 3.0323, 'sp_diag_mass': 0.0617, 'sp_entropy': 3.1759, 'total': 9.5689}
+[10:52:17 INFO samclip.train] epoch 42 [stage2] | lr 5.00e-05 | coarse 0.000 fine 1.000 | loss 9.6963 | test top1 4.50 top5 14.00 meanrank 38.3 | offset 0.887 spec_top 0.999 | smn_gate 0.893 | layer_w [0.173, 0.176, 0.186, 0.224, 0.241]
+[10:52:17 INFO samclip.train] epoch 43 step 0/129 loss 9.5216 {'img': 5.0418, 'sc_img': 3.814, 'sc_x': 2.9575, 'cross': 4.3468, 'router': -1.6002, 'soft_plan': 3.0342, 'sp_diag_mass': 0.0615, 'sp_entropy': 3.1256, 'total': 9.5216}
+[10:52:20 INFO samclip.train] epoch 43 step 50/129 loss 9.6797 {'img': 4.9881, 'sc_img': 3.8157, 'sc_x': 2.9582, 'cross': 4.3618, 'router': -1.6002, 'soft_plan': 3.048, 'sp_diag_mass': 0.0614, 'sp_entropy': 3.2021, 'total': 9.4853}
+[10:52:23 INFO samclip.train] epoch 43 step 100/129 loss 9.6698 {'img': 5.0426, 'sc_img': 3.8173, 'sc_x': 2.9588, 'cross': 4.3004, 'router': -1.6003, 'soft_plan': 3.0513, 'sp_diag_mass': 0.0604, 'sp_entropy': 3.1646, 'total': 9.4985}
+[10:52:25 INFO samclip.train] epoch 43 [stage2] | lr 5.00e-05 | coarse 0.000 fine 1.000 | loss 9.6694 | test top1 4.50 top5 13.50 meanrank 38.4 | offset 0.885 spec_top 0.999 | smn_gate 0.892 | layer_w [0.173, 0.176, 0.186, 0.224, 0.241]
+[10:52:26 INFO samclip.train] epoch 44 step 0/129 loss 9.7831 {'img': 5.0364, 'sc_img': 3.8184, 'sc_x': 2.9596, 'cross': 4.3454, 'router': -1.6003, 'soft_plan': 3.5698, 'sp_diag_mass': 0.0521, 'sp_entropy': 3.1077, 'total': 9.7831}
+[10:52:28 INFO samclip.train] epoch 44 step 50/129 loss 9.6829 {'img': 5.0326, 'sc_img': 3.82, 'sc_x': 2.9603, 'cross': 4.3822, 'router': -1.6003, 'soft_plan': 3.0988, 'sp_diag_mass': 0.0562, 'sp_entropy': 3.2131, 'total': 9.5695}
+[10:52:31 INFO samclip.train] epoch 44 step 100/129 loss 9.6999 {'img': 5.1324, 'sc_img': 3.8216, 'sc_x': 2.9612, 'cross': 4.4347, 'router': -1.6004, 'soft_plan': 4.3285, 'sp_diag_mass': 0.0402, 'sp_entropy': 3.1286, 'total': 10.3209}
+[10:52:33 INFO samclip.train] epoch 44 [stage2] | lr 5.00e-05 | coarse 0.000 fine 1.000 | loss 9.6969 | test top1 5.00 top5 14.50 meanrank 38.0 | offset 0.878 spec_top 0.999 | smn_gate 0.892 | layer_w [0.173, 0.176, 0.187, 0.223, 0.241]
+[10:52:33 INFO samclip.train] epoch 45 step 0/129 loss 9.7073 {'img': 5.0826, 'sc_img': 3.8227, 'sc_x': 2.9619, 'cross': 4.433, 'router': -1.6004, 'soft_plan': 3.2033, 'sp_diag_mass': 0.0562, 'sp_entropy': 3.2418, 'total': 9.7073}
+[10:52:36 INFO samclip.train] epoch 45 step 50/129 loss 9.7485 {'img': 5.1077, 'sc_img': 3.8243, 'sc_x': 2.9627, 'cross': 4.3825, 'router': -1.6004, 'soft_plan': 4.1031, 'sp_diag_mass': 0.0372, 'sp_entropy': 3.21, 'total': 10.147}
+[10:52:40 INFO samclip.train] epoch 45 step 100/129 loss 9.6905 {'img': 4.9977, 'sc_img': 3.8255, 'sc_x': 2.9636, 'cross': 4.3512, 'router': -1.6005, 'soft_plan': 2.966, 'sp_diag_mass': 0.0632, 'sp_entropy': 3.1503, 'total': 9.4465}
+[10:52:41 INFO samclip.train] epoch 45 [stage2] | lr 5.00e-05 | coarse 0.000 fine 1.000 | loss 9.6817 | test top1 4.50 top5 15.50 meanrank 38.2 | offset 0.891 spec_top 0.999 | smn_gate 0.892 | layer_w [0.173, 0.177, 0.187, 0.223, 0.24]
+[10:52:42 INFO samclip.train] epoch 46 step 0/129 loss 9.3779 {'img': 4.9608, 'sc_img': 3.8266, 'sc_x': 2.9641, 'cross': 4.3164, 'router': -1.6005, 'soft_plan': 2.9511, 'sp_diag_mass': 0.0633, 'sp_entropy': 3.1056, 'total': 9.3779}
+[10:52:45 INFO samclip.train] epoch 46 step 50/129 loss 9.6752 {'img': 5.039, 'sc_img': 3.8283, 'sc_x': 2.9652, 'cross': 4.4074, 'router': -1.6005, 'soft_plan': 3.3064, 'sp_diag_mass': 0.055, 'sp_entropy': 3.1965, 'total': 9.6974}
+[10:52:48 INFO samclip.train] epoch 46 step 100/129 loss 9.7109 {'img': 5.0923, 'sc_img': 3.8302, 'sc_x': 2.9661, 'cross': 4.328, 'router': -1.6006, 'soft_plan': 3.4496, 'sp_diag_mass': 0.0542, 'sp_entropy': 3.2175, 'total': 9.7667}
+[10:52:50 INFO samclip.train] epoch 46 [stage2] | lr 5.00e-05 | coarse 0.000 fine 1.000 | loss 9.6970 | test top1 4.50 top5 14.50 meanrank 38.0 | offset 0.885 spec_top 0.999 | smn_gate 0.892 | layer_w [0.173, 0.177, 0.187, 0.223, 0.24]
+[10:52:50 INFO samclip.train] epoch 47 step 0/129 loss 9.6374 {'img': 5.0993, 'sc_img': 3.8313, 'sc_x': 2.9666, 'cross': 4.3825, 'router': -1.6006, 'soft_plan': 3.1008, 'sp_diag_mass': 0.0613, 'sp_entropy': 3.2505, 'total': 9.6374}
+[10:52:53 INFO samclip.train] epoch 47 step 50/129 loss 9.6825 {'img': 4.9453, 'sc_img': 3.833, 'sc_x': 2.9675, 'cross': 4.2935, 'router': -1.6007, 'soft_plan': 3.1656, 'sp_diag_mass': 0.0573, 'sp_entropy': 3.155, 'total': 9.4535}
+[10:52:56 INFO samclip.train] epoch 47 step 100/129 loss 9.7063 {'img': 5.0261, 'sc_img': 3.8344, 'sc_x': 2.9686, 'cross': 4.3496, 'router': -1.6007, 'soft_plan': 3.1579, 'sp_diag_mass': 0.0571, 'sp_entropy': 3.2828, 'total': 9.5698}
+[10:52:58 INFO samclip.train] epoch 47 [stage2] | lr 5.00e-05 | coarse 0.000 fine 1.000 | loss 9.6942 | test top1 4.50 top5 14.00 meanrank 37.9 | offset 0.877 spec_top 0.999 | smn_gate 0.892 | layer_w [0.173, 0.177, 0.187, 0.223, 0.24]
+[10:52:58 INFO samclip.train] epoch 48 step 0/129 loss 10.3132 {'img': 5.1348, 'sc_img': 3.8353, 'sc_x': 2.9692, 'cross': 4.3237, 'router': -1.6008, 'soft_plan': 4.4636, 'sp_diag_mass': 0.0341, 'sp_entropy': 3.196, 'total': 10.3132}
+[10:53:01 INFO samclip.train] epoch 48 step 50/129 loss 9.6907 {'img': 5.0944, 'sc_img': 3.8368, 'sc_x': 2.97, 'cross': 4.3689, 'router': -1.6008, 'soft_plan': 4.8548, 'sp_diag_mass': 0.0288, 'sp_entropy': 3.18, 'total': 10.5}
+[10:53:04 INFO samclip.train] epoch 48 step 100/129 loss 9.6779 {'img': 4.9889, 'sc_img': 3.8384, 'sc_x': 2.9712, 'cross': 4.3019, 'router': -1.6009, 'soft_plan': 3.2073, 'sp_diag_mass': 0.058, 'sp_entropy': 3.1413, 'total': 9.5238}
+[10:53:06 INFO samclip.train] epoch 48 [stage2] | lr 5.00e-05 | coarse 0.000 fine 1.000 | loss 9.6864 | test top1 4.50 top5 15.00 meanrank 37.8 | offset 0.878 spec_top 0.999 | smn_gate 0.891 | layer_w [0.173, 0.177, 0.187, 0.223, 0.239]
+[10:53:07 INFO samclip.train] epoch 49 step 0/129 loss 9.6251 {'img': 4.9877, 'sc_img': 3.8393, 'sc_x': 2.9716, 'cross': 4.3299, 'router': -1.6009, 'soft_plan': 3.373, 'sp_diag_mass': 0.0504, 'sp_entropy': 3.2049, 'total': 9.6251}
+[10:53:10 INFO samclip.train] epoch 49 step 50/129 loss 9.6381 {'img': 5.0472, 'sc_img': 3.8408, 'sc_x': 2.9727, 'cross': 4.3859, 'router': -1.6009, 'soft_plan': 3.3076, 'sp_diag_mass': 0.0559, 'sp_entropy': 3.1357, 'total': 9.6911}
+[10:53:13 INFO samclip.train] epoch 49 step 100/129 loss 9.6564 {'img': 4.9616, 'sc_img': 3.8424, 'sc_x': 2.9738, 'cross': 4.2967, 'router': -1.601, 'soft_plan': 3.1147, 'sp_diag_mass': 0.0601, 'sp_entropy': 3.2315, 'total': 9.4466}
+[10:53:14 INFO samclip.train] epoch 49 [stage2] | lr 5.00e-05 | coarse 0.000 fine 1.000 | loss 9.6614 | test top1 4.50 top5 15.00 meanrank 37.8 | offset 0.884 spec_top 0.999 | smn_gate 0.892 | layer_w [0.174, 0.177, 0.187, 0.223, 0.239]
+[10:53:14 INFO samclip.train] Stage A done. last-epoch top1 4.50 | best-seen (diagnostic only) 5.00
+[stageA] result: {
+  "last": {
+    "top1": 4.5,
+    "top5": 15.0,
+    "mean_rank": 37.78,
+    "n": 200,
+    "offset_ratio": 0.8839479684829712,
+    "spec_top_frac": 0.9993951916694641
+  },
+  "best_seen": 5.0,
+  "out_dir": "/project/peilab/why/CLIP/outputs/stage1/v9/sub03_k20_seed2026"
+}

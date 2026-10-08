@@ -1,0 +1,12 @@
+{
+  "last": {
+    "top1": 21.0,
+    "top5": 48.5,
+    "mean_rank": 12.06,
+    "n": 200,
+    "offset_ratio": 0.5695509910583496,
+    "spec_top_frac": 0.9554740190505981
+  },
+  "best_seen": 25.5,
+  "out_dir": "/project/peilab/why/CLIP/outputs/stage1/v7_t2b/sub08_stimulus_gatelock"
+}

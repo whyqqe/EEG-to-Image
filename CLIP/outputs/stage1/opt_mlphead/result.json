@@ -1,0 +1,10 @@
+{
+  "last": {
+    "top1": 11.5,
+    "top5": 32.0,
+    "mean_rank": 21.55,
+    "n": 200
+  },
+  "best_seen": 15.0,
+  "out_dir": "/project/peilab/why/CLIP/outputs/stage1/opt_mlphead"
+}

@@ -1,0 +1,63 @@
+{
+  "ckpt": "/project/peilab/why/eeg-retrieval/outputs/samga_official/inter/seed2025/20260923-192743-sub-08/checkpoint_last.pth",
+  "target_subject": 8,
+  "layer_weights": [
+    0.06657186150550842,
+    0.18015868961811066,
+    0.4929616451263428,
+    0.18731752038002014,
+    0.07299027591943741
+  ],
+  "reference": {
+    "top1": 22.0,
+    "top5": 50.0
+  },
+  "raw_cosine": {
+    "top1": 22.0,
+    "top5": 50.0,
+    "mean_rank": 11.505,
+    "n": 200
+  },
+  "csls": {
+    "top1": 25.5,
+    "top5": 56.99999999999999,
+    "mean_rank": 10.005,
+    "n": 200,
+    "n_landmarks": 98,
+    "landmark_rate": 0.49,
+    "landmark_acc": 0.336734693877551
+  },
+  "moment": {
+    "top1": 27.0,
+    "top5": 56.49999999999999,
+    "mean_rank": 8.99,
+    "n": 200,
+    "n_landmarks": 103,
+    "landmark_rate": 0.515,
+    "landmark_acc": 0.3883495145631068
+  },
+  "recovery": {
+    "top1": 35.5,
+    "top5": 62.5,
+    "mean_rank": 7.46,
+    "n": 200,
+    "n_landmarks": 107,
+    "landmark_rate": 0.535,
+    "landmark_acc": 0.4766355140186916
+  },
+  "recovery_diag": {
+    "n_queries": 200,
+    "n_gallery": 200,
+    "n_mutual_pairs": 103,
+    "landmark_rate": 0.515,
+    "k_csls": 10,
+    "rho": 0.1,
+    "moment_match": true,
+    "orientation": true,
+    "min_landmark_rate": 0.0,
+    "abstained": false,
+    "weight_share_top1": 0.052753519266843796,
+    "weight_entropy": 4.258172988891602,
+    "r_minus_i_frobenius": 1.8846917152404785
+  }
+}

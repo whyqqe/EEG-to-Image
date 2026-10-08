@@ -1,0 +1,12 @@
+{
+  "last": {
+    "top1": 33.5,
+    "top5": 67.5,
+    "mean_rank": 6.19,
+    "n": 200,
+    "offset_ratio": 0.5816443562507629,
+    "spec_top_frac": 0.9676993489265442
+  },
+  "best_seen": 35.5,
+  "out_dir": "/project/peilab/why/CLIP/outputs/stage1/sqa_attr/dense/sub01_k20_seed2025"
+}

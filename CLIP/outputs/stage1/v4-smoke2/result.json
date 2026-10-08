@@ -1,0 +1,12 @@
+{
+  "last": {
+    "top1": 0.0,
+    "top5": 2.0,
+    "mean_rank": 95.36,
+    "n": 200,
+    "offset_ratio": 0.9765514731407166,
+    "spec_top_frac": 0.857125461101532
+  },
+  "best_seen": 0.5,
+  "out_dir": "/project/peilab/why/CLIP/outputs/stage1/v4-smoke2"
+}

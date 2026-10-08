@@ -1,0 +1,75 @@
+# v7 -- the G3 recipe plus CROSS-TRIAL REPETITION COLLAPSE, grouped by STIMULUS (T2'').
+#
+# WHY THIS IS THE ONE DELTA WORTH A 10-FOLD SWEEP. Starting from G3 (`g3_loso_k20.yaml`:
+# 10-fold Top-1 45.53 +- 9.26, raw 26.82), the gap to SCORE's 53.23 is +7.70. G-a
+# (`probe_g_a.py`, `probe_whiten_variants.py`, 10 folds x 3 seeds) falsified every
+# deployment-side operator change, and docs/eeg2image_v7_architecture.md §1-2 concludes the
+# remaining gap can only come from the FEATURES -- specifically from the mutual-NN landmark
+# rate (0.551 ours vs ~0.98 required), which is what caps the recovery rung at +3.62 where
+# SCORE gets +23.90.
+#
+# The two halves of "cross-subject concept CLIP" already exist in G3:
+#   * cross-SUBJECT consistency  -- `recovery_aware.terms: [img, cross]` trains the
+#     multi-positive `cross_subject_loss` (that is the +31.22pp subject gap being attacked);
+#   * recovery-aware scoring      -- `csls_k: 20`, measured +5.5pp raw on 3/3 seeds (G1b).
+# What no other recipe has is the cross-TRIAL half: every recipe (SCORE, SAMGA, our G3)
+# AVERAGES the repetitions before training, which is the operation that destroys the
+# within-concept scatter. G3 then measured that scatter as controlling the whole result:
+# the deployed repetition cloud (T2) is +9.81 of our +18.71 and is encoder-quality
+# independent (5/5 checkpoints positive, +4.50..+12.00).
+#
+# TWO DEFECTS OF THE FIRST IMPLEMENTATION, BOTH DIAGNOSED AND FIXED HERE. The first v7 ran
+# with `reps_group: row` (each row's repeats are positives, everything else negatives) at
+# weight 0.5 and LOST to G3 on the same fold and seed (sub-08/seed2025: best rung 30.0 vs
+# 42.0, raw 22.0 vs 27.0). Two causes, separated by a three-arm weight probe:
+#
+#   1. `row` grouping is an ANTI-T1 TERM on a cross-subject batch. The sampler tiles 9
+#      subjects per stimulus, so a row's negatives include other subjects' views of the
+#      SAME image -- the term actively pushes apart what `cross_subject_loss` pulls
+#      together. `reps_group: stimulus` makes those views POSITIVES, so the term is a strict
+#      superset of T1's positive set and cannot fight it.
+#   2. The term DISPLACES the SMN's scale gate, which is worth ~5pp raw. Both remove the
+#      within-concept scatter, so the auxiliary term found it cheaper to let the gate decay
+#      than to shape the encoding: the gate went 0.498 (G3) -> 0.203 (w=0.1) -> 0.000
+#      (w=0.5), dragging the deployment rung 42.0 -> 37.5 -> 30.0 with it. A clean monotone
+#      dose-response in the WRONG direction, which is what identified it. `reps_detach_gate`
+#      cuts only the gate's own gradient, so the term still shapes the ENCODER (its purpose)
+#      but cannot move the one scalar whose optimum is defined by the deployed regime.
+base: g3_loso_k20.yaml
+
+# Fold keys stay absent for the same reason as the parent: `base`'s ancestors hard-code
+# sub-08, and a fold's identity must be auditable from the artefact rather than from the
+# command line that launched it. `null` shadows, and the runner dies loudly if forgotten.
+target_subject: null
+source_subjects: null
+seed: null
+out_dir: null
+
+# ------------------------------------------------------------ the v7 delta
+# `reps_weight: 0.0` would make this file bit-identical to G3 except for the (unread)
+# `concept` block -- which is the point: the switch is inert when off, so the comparison arm
+# does not silently become the treatment.
+concept:
+  enabled: true
+  reps_weight: 0.25     # relative to the fine terms (w_img = w_cross = 1.0 at this phase).
+                        # 0.25, not 0.5: 0.5 is where the gate died, and the dose-response
+                        # probe puts the harmful arm there. The mechanism is introduced at
+                        # the weight where it does not displace the gate, so "the mechanism
+                        # works" and "the weight was too high" stay distinguishable.
+  reps_group: stimulus  # THE FIX. Positives = the repeats of an image AND the other
+                        # subjects' views of it; negatives = other images. `row` is the
+                        # rejected anti-T1 arm and is kept runnable for attribution.
+  reps_n_stim: 32       # 32 stimulus groups x
+  reps_subj_sel: 2      # 2 subjects each x
+  reps_r_use: 2         # 2 of the available R=4 reps -> 32 groups of 4 positives over 128
+                        # encoder passes, i.e. +11% of a 1152-row batch. Balanced on purpose:
+                        # a contiguous PREFIX would draw all its rows from the first ~7
+                        # stimuli (the sampler is stimulus-major) and make the contrast a
+                        # 7-way problem while wasting the other 121 stimuli as negatives.
+  reps_detach_gate: true   # defect 2 above. Runs are logged with the gate each epoch, so a
+                           # gate trajectory that stays near G3's ~0.50 is the confirmation
+                           # this flag worked.
+  reps_csls_k: null     # raw-cosine positives. The deployment metric this term serves is
+                        # the repetition cloud's geometry, not the 200-way retrieval, so
+                        # there is no single "deployed k" to match here -- unlike the fine
+                        # contrasts, where `csls_k: 20` is deliberate.

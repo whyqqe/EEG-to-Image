@@ -1,0 +1,14 @@
+# Attribution arm for the NEW default: is the linear image head actually better?
+#
+# `default.yaml` switched `img_head` from `mlp` to `linear` on a parameter-count argument
+# (2.30M vs 0.66M; the MLP was 69% of the model and 2.27x the whole EEG encoder). That
+# argument is about CAPACITY, not about performance -- it is a reason to expect no loss,
+# not a reason to expect a gain. This arm is the only way to tell, and it is the cheaper
+# of the two directions to be wrong in: if `mlp` wins, the default reverts and the change
+# was a mistake; if `linear` wins, capacity was indeed being spent on a frozen target.
+#
+# Single variable against the new default: everything else -- batch 64x3, `mean` fusion,
+# recovery off -- is identical.
+base: default.yaml
+out_dir: outputs/stage1/ablation_opt_mlphead
+img_head: mlp

@@ -1,0 +1,19 @@
+# Attribution arm for the NEW default: is 64 concepts/step actually better than 24?
+#
+# This is the highest-value arm in the set, because "concepts per step" is the one lever
+# with a CONFIRMED gain so far (8 -> 24 gave +4.5pp Top-1, ~+50% relative), and this arm
+# tests whether that curve is still rising. The hypothesis behind the new default is
+# explicitly a mismatch argument: the evaluation is 200-way while a step at 24 concepts
+# discriminates 24 ways, and the `img` term was measured approaching its floor.
+#
+# If this arm MATCHES the new default, the concept-count story is wrong (or saturated)
+# and the batch change should be reverted -- it would then be pure train-time cost.
+#
+# 24 x 9 = 216 rows, so this remembers the previous arm's exact layout: the comparison is
+# clean against both the new default (192 rows, 64 concepts) and the historical run
+# (216 rows, 24 concepts, mlp head, routed fusion) already on disk at
+# outputs/eval/sub-08.json.
+base: default.yaml
+out_dir: outputs/stage1/ablation_opt_batch24
+batch_stimuli: 24
+subjects_per_stimulus: null   # null = all 9 source subjects

@@ -1,0 +1,79 @@
+# v7b -- G3 + SCORE's SOURCE-ONLY RECOVERY EPISODE, run in the deployment metric.
+#
+# WHY THE EPISODE AND NOTHING ELSE. The target is SCORE (arXiv 2608.19134, 53.23/83.55
+# Top-1/Top-5 on THINGS-EEG2). Its own abstract names exactly two mechanisms:
+#
+#   "SCORE combines (i) recovery-aware source training with (ii) coordinate alignment at
+#    deployment. During training, SCORE aligns source subject EEG with a common image space
+#    and SIMULATES UNSEEN-SUBJECT RECOVERY THROUGH SOURCE-ONLY EPISODES. At deployment ...
+#    SCORE selects reliable EEG-image landmarks through HUBNESS-CORRECTED MATCHING and
+#    estimates an orthogonal transformation ..."
+#
+# Map onto this project, component by component:
+#   * "recovery-aware source training"  -> `recovery_aware.csls_k: 20`, ALREADY IN G3
+#                                          (measured +5.5pp raw, 3/3 seeds, G1b).
+#   * "hubness-corrected matching"      -> CSLS, ALREADY IN G3 (that is what CSLS is).
+#   * "orthogonal transformation"       -> `coordinate_recovery`, ALREADY IN G3.
+#   * "SOURCE-ONLY EPISODES"            -> THIS FILE. The only one we never shipped.
+#
+# So v7b is not a new architecture; it is the one component of the SOTA recipe that our
+# 45.53 stack was missing, and the literature says it is the load-bearing one. That is a
+# far stronger prior than the T2'' mechanism it replaces, which was falsified on-device
+# (see `docs/eeg2image_v7_architecture.md` for that verdict).
+#
+# WHY `episode_whiten: false` -- AND WHY THAT IS DEPLOYMENT-FAITHFUL, NOT A WORKAROUND.
+# The first attempt at this episode (`v6-rat`, job 642512) whitened the EEG query block,
+# then fitted Procrustes, and lost 9.00pp in a way the ledger could not charge to anything
+# else; `raw cosine` fell 8.50pp, i.e. the ENCODER was damaged, not just the ladder rung.
+# The diagnosis on record: whitening the query cloud to unit covariance BEFORE the rotation
+# removes the very structure the rotation is supposed to align to.
+#
+# v7b settles that with the project's own measurements rather than with that story. G3's
+# 10-fold ladder scores TWO recovery rungs and the non-whitened one WINS:
+#
+#     + CSLS + recovery             35.72    <-- deployment's actual operator
+#     + whiten + CSLS + recovery    33.98    <-- whitening costs 1.74pp
+#
+# An episode is a simulation of deployment, so it must simulate the rung that deployment
+# runs. Whitening inside the episode trains the encoder for a ladder we do not use. Turning
+# it off is therefore REQUIRED for the "this episode is a matched proxy" argument to hold --
+# the same rule that made `episode_csls_k` a separate, explicitly-set knob at deployment's
+# k=10 rather than inheriting the loss's 20.
+#
+# CONFIRMED LIVE on the running v6b attribution job (2026-10-04): with whitening removed the
+# same episode trains cleanly -- `landmark_rate` 0.82-0.94 against the 0.551 deployment
+# bottleneck, `episode fires 4772 abstains 1`, `raw cosine` 24.5-26.5 (vs 18.5 whitened),
+# `smn_gate` 0.55 (healthy) -- so the flag is a fix, not a hope.
+#
+# WHAT THIS FILE DOES NOT CHANGE. `concept` / T2' is ABSENT: it was falsified on fold 8
+# (best rung 37.0 vs the 40.5 baseline, raw 21.0 vs 25.5, under both groupings and with the
+# gate protected -- see the v7 doc). The retracted-vs-shipped distinction matters more than
+# shipping everything at once, so the sweep runs ONE variable.
+base: g3_loso_k20.yaml
+
+# Fold keys stay absent for the same reason as the parent's: an ancestor hard-codes sub-08,
+# and a fold's identity must be auditable from the artefact, not from the launching command.
+# `null` shadows, and the runner dies loudly if a fold is forgotten.
+target_subject: null
+source_subjects: null
+seed: null
+out_dir: null
+
+recovery_aware:
+  enabled: true
+  block_per_subject: false
+  csls_k: 20                 # the LOSS keeps G3's k=20 (that is the measured +5.5pp arm)
+  terms: [img, cross]
+  recovery_episode: true     # <- the v7b delta: SCORE's source-only episode
+  in_loop_full: true         # run the WHOLE deployment ladder, not a subset of it
+  episode_whiten: false      # <- deployment-faithful (see the header); the 9.00pp fix
+  episode_csls_k: 10         # deployment's k, NOT the loss's 20 -- the episode must select
+                             # landmarks in the metric the score is produced in
+  episode_rho: 0.1           # deployment's rho
+  episode_shrink: 0.1        # unused while `episode_whiten: false`, set anyway so flipping
+                             # the switch cannot silently fall back to a different shrink
+  episode_min_landmarks: 8   # abstain rather than fit a rotation from a handful of pairs
+  episode_max_cond: 1000.0   # same guard as the deployment whitening path (`1.0e3` in YAML
+                             # parses as a STRING under this loader -- harmless because the
+                             # reader wraps it in float(), but write the number explicitly so
+                             # a future type check does not fire on it)

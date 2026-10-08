@@ -1,0 +1,21 @@
+# D1 2x2 ARM "C1 only": the shared head is nonlinear (C1 active) but the SMN is DISABLED,
+# so nothing subtracts the per-subject offset in the forward pass.
+#
+# This is the arm that answers the complementary question to `d1_c1off`: is C1 alone able
+# to keep the shipped embedding free of a per-subject offset, WITHOUT C2 doing the work?
+#
+# The docstring of `models/samclip.py` claims a shared map makes a subject-specific bias
+# in the EEG branch appear in the image branch "in the SAME direction ... and cancel
+# instead of displacing one against the other". That claim is testable and this arm tests
+# it. Note the theoretical doubt that motivates the arm: with `share_head` linear the
+# sharing is provably inert, and even with a nonlinearity the two private maps `eeg_pre`
+# and `img_pre` are separate, so an EEG-side bias b_s reaches the output as
+# `share_head(eeg_pre(h) + b_s) - share_head(eeg_pre(h))`, which is not zero unless the
+# bias happens to lie in the null space of the shared map. A 64->128->64 head has no
+# such null space on the image side. So the pre-registered prediction here is: this arm
+# shows a LARGE offset and a LARGE centring headroom -- i.e. C1 alone does NOT remove D1,
+# and `smn.enabled=true` in the shipped config is load-bearing.
+base: loso_sub08_v4_nospec_nofreeze_lr3.yaml
+smn:
+  enabled: false
+out_dir: outputs/stage1/v4-d1-c2off-sub-08

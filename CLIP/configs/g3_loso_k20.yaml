@@ -1,0 +1,44 @@
+# G3 -- the 10-fold x 3-seed LOSO sweep of the current best recipe.
+#
+# WHY THIS FILE EXISTS SEPARATELY. The recipe it encodes was developed on sub-08, and the
+# config that carries it (`configs/loso_sub08_k20.yaml`) inherits a chain that ENDS in
+# `loso_sub08_v4.yaml`, which hard-codes `target_subject: 8` and sub-08's source list.
+# Running fold 3 off that chain would mean two of the values that decide WHICH EXPERIMENT
+# RUNS are visible only in the command line that launched it -- and the failure mode is not
+# hypothetical: with `source_subjects` left at sub-08's list, fold 3 trains on a set that
+# contains its own held-out subject. `things_eeg.load_loso` refuses that (it raises rather
+# than leaking), so it fails loud, but a fold's identity should be auditable from the
+# artefact, not from a reader noticing what was overridden.
+#
+# So the fold keys are DELIBERATELY ABSENT here and set to `null` to SHADOW the values
+# `v4.yaml` carries (`target_subject: 8`, `source_subjects: [1..7,9,10]`). `_deep_merge`
+# copies an explicit `null` through, and `merge_cli_overrides` only applies non-None CLI
+# values -- so a run that forgets `--target-subject`/`--source-subjects` DOES NOT silently
+# fall back to fold 8. It hits `None` and dies. Every fold in `slurm/g3_loso10x3.sbatch`
+# passes all four of these explicitly.
+base: v4.yaml
+
+target_subject: null        # MUST come from --target-subject (1..10)
+source_subjects: null       # MUST come from --source-subjects (the other nine)
+seed: null                  # MUST come from --seed (2025/2026/2027)
+out_dir: null               # MUST come from --out-dir
+
+# ---------------------------------------------------------------- the recipe itself
+# This is `v5-a1-k20` (configs/loso_sub08_k20.yaml), the arm that held the sub-08 anchor
+# (raw 34.00 -> `+ CSLS + recovery` 35.50/73.50). Everything architecture/objective/
+# schedule related comes from `v4.yaml`; only the deltas are stated here.
+epochs: 50
+lr: 0.001
+mvnn: train
+channel_set: all63
+
+# v5 pillar A, the `a1` arm: the fine contrasts are scored in the metric the score is
+# PRODUCED in, at the neighbourhood size deployment uses. `terms: [img, cross]` is what
+# distinguishes this from `loso_sub08_v5_a1_img_k20.yaml` (`terms: [img]`), whose recorded
+# output went to `outputs/stage1/v5-a1-img-k20`; the two are different arms and the tags
+# must not be confused.
+recovery_aware:
+  enabled: true
+  block_per_subject: false
+  csls_k: 20
+  terms: [img, cross]

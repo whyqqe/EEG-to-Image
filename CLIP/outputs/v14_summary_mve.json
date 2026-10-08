@@ -1,0 +1,111 @@
+{
+  "arg": {
+    "off": "/project/peilab/why/CLIP/outputs/eval/v14_mve_off",
+    "raw": "/project/peilab/why/CLIP/outputs/eval/v14_mve_raw",
+    "whit": "/project/peilab/why/CLIP/outputs/eval/v14_mve_whit",
+    "whit05": "/project/peilab/why/CLIP/outputs/eval/v14_mve_whit05",
+    "base": "/project/peilab/why/CLIP/outputs/eval/v14_anchor_off",
+    "out": "/project/peilab/why/CLIP/outputs/v14_summary_mve.json"
+  },
+  "n_folds": {
+    "off": 10,
+    "raw": 10,
+    "whit": 8,
+    "whit05": 10
+  },
+  "n_folds_base_fuse16": 10,
+  "kill_switch_cont_only_vs_fuse16": {
+    "mean": 0.0,
+    "sd": 0.0,
+    "t": NaN,
+    "folds_positive": 0,
+    "n": 10
+  },
+  "kill_switch_ok": true,
+  "h2_structural_off_twin_identical": true,
+  "per_arm": {
+    "off": {
+      "n_folds": 10,
+      "multi_top1": 54.95,
+      "cont_only_top1": 55.05,
+      "delta_top1": {
+        "mean": -0.1,
+        "sd": 1.6295875415440424,
+        "t": -0.19405386820594528,
+        "folds_positive": 4,
+        "n": 10
+      },
+      "delta_top5": {
+        "mean": -0.5,
+        "sd": 0.7071067811865476,
+        "t": -2.23606797749979,
+        "folds_positive": 0,
+        "n": 10
+      },
+      "row_multi": "+ MVE B=16 views=cont+stride+rand"
+    },
+    "raw": {
+      "n_folds": 10,
+      "multi_top1": 44.45,
+      "cont_only_top1": 43.95,
+      "delta_top1": {
+        "mean": 0.5,
+        "sd": 1.130388330520878,
+        "t": 1.3987572123604708,
+        "folds_positive": 6,
+        "n": 10
+      },
+      "delta_top5": {
+        "mean": -0.2,
+        "sd": 1.3165611772087666,
+        "t": -0.4803844614152614,
+        "folds_positive": 3,
+        "n": 10
+      },
+      "row_multi": "+ MVE B=16 views=cont+stride+rand"
+    },
+    "whit": {
+      "n_folds": 8,
+      "multi_top1": 0.625,
+      "cont_only_top1": 0.5625,
+      "delta_top1": {
+        "mean": 0.0625,
+        "sd": 0.4172614801981401,
+        "t": 0.42365927286816174,
+        "folds_positive": 3,
+        "n": 8
+      },
+      "delta_top5": {
+        "mean": 0.0625,
+        "sd": 1.1160357137142674,
+        "t": 0.15839698777049718,
+        "folds_positive": 3,
+        "n": 8
+      },
+      "row_multi": "+ MVE B=16 views=cont+stride+rand"
+    },
+    "whit05": {
+      "n_folds": 10,
+      "multi_top1": 0.8,
+      "cont_only_top1": 0.5,
+      "delta_top1": {
+        "mean": 0.3,
+        "sd": 0.4216370213557839,
+        "t": 2.25,
+        "folds_positive": 4,
+        "n": 10
+      },
+      "delta_top5": {
+        "mean": 0.15000000000000013,
+        "sd": 1.1316163464511972,
+        "t": 0.41917178954936035,
+        "folds_positive": 6,
+        "n": 10
+      },
+      "row_multi": "+ MVE B=16 views=cont+stride+rand"
+    }
+  },
+  "H1_pass": false,
+  "H3_pass": false,
+  "reading": "NOT A WIN. Either the multi-family pool did not beat its own cont-only control (the added families were duplicates, not new views), or a guard failed -- and a gain with a live structural-off twin or an unreproduced kill switch is unbookable. The shipped 54.83/83.45 stands unchanged either way."
+}

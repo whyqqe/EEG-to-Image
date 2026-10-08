@@ -1,0 +1,35 @@
+# P1（SCORE 的另一半）——单一实验：source-only 回合，跑在**正确基座**上。
+#
+# 基座修正（本轮最重要的纪律动作）：
+#   上一版 `loso_sub08_v5_ep.yaml` 继承 `loso_sub08_v5_a1_img_k20.yaml`，即
+#   `terms: [img]` —— 而该臂已被 k=20 实测证伪（25.00 raw / 26.50 +CSLS，
+#   比 `terms: [img, cross]` 的 27.00 / 34.00 低 7.5pp）。把支柱 A2 叠在一个
+#   已证伪的基座上，得到的任何数字都无法归因。本文件改继承 `loso_sub08_k20.yaml`
+#   （= 当前真实主臂 `v5-a1-k20`：`terms: [img, cross]`, `csls_k: 20`）。
+#
+# 依据 docs/eeg2image_v5_master_plan.md §10.2 / §11.1 / §13：
+#   部署端坐标恢复在**未联合训练**的模型上已把 27.00 → 35.50（+8.50pp，免重训）。
+#   SCORE 的训练端做法：每步把一个源被试当作临时目标，隐藏其 EEG–图像配对，
+#   **先施加部署时的恢复**，再揭晓配对算 loss —— 让编码器在被优化的坐标系里就可恢复。
+#
+# 这是当前**成功率最高**的一项：它与已 3/3 seeds 验证的 A1（+5.50pp）同族
+# （"在部署度量里训练"），不是新假设。
+#
+# 预登记读数（看探针，不只看 Top-1）：
+#   ① raw cosine 上升（基座当前 27.00）；
+#   ② **恢复的边际增益收缩**：当前 +4.00（从 +whiten+CSLS 的 31.50 到 +recovery 的 35.50）
+#      —— 若真把恢复训进了网络，部署端再恢复的余量就该变小；
+#   ③ 训练/留出被试 raw 差下降（基座当前 +29.78pp）。
+#   失败判据：若 raw 不涨且 ② 的余量不缩，说明入环的算子选错 —— 记录该负结果。
+base: loso_sub08_k20.yaml
+
+recovery_aware:
+  enabled: true
+  block_per_subject: false
+  csls_k: 20
+  terms: [img, cross]
+  recovery_episode: true
+  episode_rho: 0.1
+  episode_min_landmarks: 8
+
+out_dir: outputs/stage1/v5-ep2

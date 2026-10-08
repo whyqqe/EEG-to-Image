@@ -1,0 +1,16 @@
+# A1 归因的两个结论合并成候选新主臂：
+#   (1) terms=[img] 单独就复现全部效果，terms=[cross] 单独反而有害（17.50 < base 21.00）
+#       → 去掉 cross 是无风险的简化
+#   (2) k=5 22.50 / k=10 26.00 / k=20 27.00，且 k=20 的 +CSLS = 34.00（最高）
+#       → 邻域越大越好（有边际递减）
+#
+# 两个改动都各自单变量测过，所以合并是可解释的（不是一次改两处然后无法归因）。
+base: loso_sub08_v5_rat_csls.yaml
+
+recovery_aware:
+  enabled: true
+  block_per_subject: false
+  csls_k: 20
+  terms: [img]
+
+out_dir: outputs/stage1/v5-a1-img-k20

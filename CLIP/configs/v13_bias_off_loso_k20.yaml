@@ -1,0 +1,24 @@
+# v13 TWIN -- the OFF arm. Identical to `v13_bias_loso_k20.yaml` EXCEPT `bias_anchor.enabled`.
+#
+# WHY A SEPARATE FILE RATHER THAN A FLAG ON THE COMMAND LINE. The paired comparison is the whole
+# experiment, and a pair whose two members are produced by two different spellings of the same
+# command is a pair that can silently diverge (a forgotten override, a different default). Two
+# files that differ in exactly one key can be DIFFED to prove the single-variable claim, which
+# `slurm/v13_bias_twin10x1.sbatch` asserts BEFORE training and `summarize_v13.py` re-asserts.
+#
+# WHY `weight` IS *NOT* OVERRIDDEN HERE. An earlier version also set `weight: 0.0`, which made the
+# pair differ in TWO keys and the job's own gate refused to run it (correctly: a two-key difference
+# cannot attribute a result to either key). `enabled` is the switch that takes the branch --
+# `Trainer` only reads `self.ba_weight` inside `if self.ba_weight > 0:` gated behind
+# `bias_anchor_enabled`, so an inherited `weight: 2.0` is fully inert with `enabled: false`, and the
+# data path (`concept.enabled: true, reps_weight: 0.0`) is identical in both arms.
+#
+# WHY `concept.enabled` STAYS TRUE HERE. It is what makes the loader pass per-repetition EEG, and
+# the ON arm needs it. Leaving it on in BOTH arms keeps the DATA PATH identical -- sampler,
+# augmentation stream, per-step encoder passes -- so the only difference between the arms is the
+# loss term, not the plumbing. Without this the OFF arm would be v8-on-a-different-data-path and a
+# null result could not be attributed.
+base: v13_bias_loso_k20.yaml
+
+bias_anchor:
+  enabled: false

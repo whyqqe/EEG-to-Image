@@ -1,0 +1,19 @@
+# Arm for the anti-collapse diagnosis: is the decorrelation term actually load-bearing?
+#
+# Measured on a trained checkpoint, `vicreg_terms` at the default weights is lopsided:
+# all 512 per-dim stds sat at 0.28-0.55 (every one below the 1.0 hinge target), so the
+# `var` term was a large UNIFORM push (0.5988) that cannot raise the rank, while `cov`
+# contributed 0.0569 -- an order of magnitude less. The representation still occupied only
+# ~13 effective dimensions (top-13 PCs = 92.9% of variance, top-50 = 100%).
+#
+# 0.5 raises `cov` to roughly parity with `var`, so the two act on the same scale.
+#
+# HONEST WARNING, do not oversell this arm: rank is NOT established to cause the score.
+# The `cross=0` arm reached effective rank 36.7 against the reference's 13.2 -- 2.8x --
+# and scored WORSE (12.0 vs 13.5). So "raise the rank, raise the score" is NOT supported
+# and this arm may well come back flat. It is run to CLOSE the question, not because a
+# gain is expected; a flat result is a genuine finding (it would mean the low rank is a
+# symptom of the objective, not a cause of the weak retrieval).
+base: default.yaml
+out_dir: outputs/stage1/ablation_opt_cov
+vicreg_cov_weight: 0.5

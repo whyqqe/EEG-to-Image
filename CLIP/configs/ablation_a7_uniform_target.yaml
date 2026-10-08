@@ -1,0 +1,14 @@
+# A7 ablation: uniform target fusion instead of a learned routed blend.
+#
+# `mean` spends NO capacity on fusing the K visual layers. Running it answers the
+# question underneath the whole structured-target design -- "do these layers carry
+# complementary information at all?" -- without being confounded by routing capacity.
+#
+# The published comparison attributes ~5.7 Top-1 points to the visual-target change
+# (29.6 -> 35.3), which is larger than the spread between most EEG backbones. If
+# `mean` here lands at the same place as `routed`, that attribution does not transfer
+# to this pipeline and the extra parameters in the router are not buying anything.
+base: default.yaml
+
+out_dir: outputs/stage1/ablation_a7_uniform_target
+target_fusion: mean

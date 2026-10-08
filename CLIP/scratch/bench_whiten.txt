@@ -1,0 +1,10 @@
+== fwd+bwd per training step, B=128 ==
+  identity        66.4 ms/step (fwd+bwd)
+  chol         16774.2 ms/step (fwd+bwd)
+  newton-schulz 1252996.8 ms/step (fwd+bwd)
+  eigh           124.5 ms/step (fwd+bwd)
+
+== whiteness + O-invariance ==
+  chol  max|WW^T-I|=2.42e-04   Gram-invariance max|d|=6.77e-05
+  ns    max|WW^T-I|=5.30e-02   Gram-invariance max|d|=2.65e-02
+  eigh  max|WW^T-I|=1.95e-04   Gram-invariance max|d|=6.76e-05

@@ -1,0 +1,24 @@
+# D1 2x2 ARM "neither": linear shared head AND the SMN disabled.
+#
+# The hard floor of the 2x2. Neither mechanism is present, so this arm is the "v4 minus
+# its two advertised D1 components" configuration -- one shared LINEAR map plus private
+# per-modality pre-projections, at the best-known schedule (spec off, no Stage-2 freeze,
+# lr 1e-3). It bounds how much of v4's behaviour is attributable to C1/C2 at all: if this
+# arm matches the shipped arm on raw Top-1 and centring headroom, then the two components
+# the redesign is named after are decorative and should be removed rather than reported.
+#
+# It also separates two confounded changes in the shipped arm. `arch: v4` changes BOTH
+# the head topology (one shared map, d_align 64) and the SMN; a v3-vs-v4 comparison
+# credits all of the difference to "Subject-as-Modality". This arm isolates the topology
+# change on its own, so the 2x2 gives:
+#
+#   arch/head              C2 on (shipped)        C2 off
+#   nonlinear (C1 real)    loso_sub08_v4_nospec_nofreeze_lr3   d1_c2off
+#   linear    (C1 inert)   d1_c1off                            d1_c1off_c2off  <- this
+#
+# which is the smallest design that can attribute an effect to C1 and to C2 separately.
+base: loso_sub08_v4_nospec_nofreeze_lr3.yaml
+share_head_hidden: 0
+smn:
+  enabled: false
+out_dir: outputs/stage1/v4-d1-c1off-c2off-sub-08

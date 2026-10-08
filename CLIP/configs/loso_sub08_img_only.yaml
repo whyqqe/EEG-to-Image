@@ -1,0 +1,11 @@
+# A1 归因消融（master plan §8）：效果是否只来自 `img` 项？
+# 目的不是再涨点，而是决定 P1(A2) 该往哪个方向加码。
+base: loso_sub08_v5_rat_csls.yaml
+
+recovery_aware:
+  enabled: true
+  block_per_subject: false
+  csls_k: 10
+  terms: [img]
+
+out_dir: outputs/stage1/v5-a1-img

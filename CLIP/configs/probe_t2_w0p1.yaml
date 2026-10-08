@@ -1,0 +1,11 @@
+# Probe arm: the T2' weight is halved. See `v7_loso_k20.yaml` for what the term is and why
+# the weight is the one thing worth separating from the mechanism. Everything else is
+# inherited unchanged, so this file and `v7_loso_k20.yaml` differ in exactly one number.
+base: v7_loso_k20.yaml
+
+concept:
+  enabled: true
+  reps_weight: 0.1
+  reps_n_rows: 64
+  reps_r_use: 2
+  reps_csls_k: null

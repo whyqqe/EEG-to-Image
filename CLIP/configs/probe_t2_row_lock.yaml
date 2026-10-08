@@ -1,0 +1,18 @@
+# Probe arm: the rejected `row` grouping, at the SAME weight, WITH gate protection.
+#
+# This is the arm that attributes the first failure. `row`-grouping and `stimulus`-grouping
+# differ in exactly one thing -- whether another subject's view of the same image is a
+# positive or a negative -- so running them side by side at one weight and one fold is what
+# separates "the mechanism is wrong" from "the grouping was wrong". Gate protection is held
+# ON here so the only live difference against `v7_loso_k20.yaml` is the grouping; if
+# `row` also loses with the gate pinned, the loss is the anti-T1 conflict and not the gate.
+base: v7_loso_k20.yaml
+
+concept:
+  enabled: true
+  reps_weight: 0.25
+  reps_group: row
+  reps_n_rows: 64
+  reps_r_use: 2
+  reps_detach_gate: true
+  reps_csls_k: null

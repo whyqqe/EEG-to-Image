@@ -1,0 +1,223 @@
+{
+  "config": {
+    "stage1_root": "/project/peilab/why/CLIP/outputs/stage1/v13_bias_off",
+    "src_metric_root": "/project/peilab/why/CLIP/outputs/src_metric/v8",
+    "src_tag_fmt": "sub{:02d}_seed{seed}",
+    "tag_fmt": "sub02_k20_seed2025",
+    "folds": [
+      2
+    ],
+    "seed": 2025,
+    "outdir": "/project/peilab/why/CLIP/outputs/probe/v13_bias_off",
+    "rep_shrink": 0.1,
+    "fuse": 16,
+    "n_split": 20,
+    "embed_batch": 64,
+    "mvnn": null
+  },
+  "per_fold": {
+    "sub02": {
+      "C": 200,
+      "R": 80,
+      "d": 64,
+      "whiten": {
+        "cond": 81.9710356570186,
+        "rank_deficient": false
+      },
+      "bias_curve": {
+        "R_for_average": [
+          1,
+          2,
+          4,
+          8,
+          16,
+          32,
+          64,
+          80
+        ],
+        "corr_with_gallery": [
+          0.13413497756989703,
+          0.2305715286022914,
+          0.3426557357636707,
+          0.4427537380602591,
+          0.5086326651809996,
+          0.5705066555959972,
+          0.5864032729194515,
+          0.5959755402560235
+        ],
+        "corr_shuffled_control": [
+          -0.0006071378347555756,
+          -0.001470234795080263,
+          0.00484883721353732,
+          -0.004103084536667365,
+          0.0008247034887719936,
+          0.0038838635812430077,
+          0.001456960294866637,
+          0.0016766451425321842
+        ],
+        "corr_with_gallery_raw_frame": [
+          0.262632997216385,
+          0.36737662821189593,
+          0.4700347314846769,
+          0.5514783824107901,
+          0.5942638433512771,
+          0.6390443808548049,
+          0.6508726158433288,
+          0.6599212139293392
+        ],
+        "corr_shuffled_control_raw_frame": [
+          -0.0006563077532190252,
+          -0.00011439116278095241,
+          -0.0012227143348746627,
+          -0.002983447431778323,
+          0.00181738333157275,
+          -0.004359248597846607,
+          -0.0012692065125190547,
+          0.0031202150829122313
+        ]
+      },
+      "bias_headroom_R80_minus_R1": 0.4618405626861265,
+      "bias_headroom_R80_minus_R1_raw_frame": 0.3972882167129542,
+      "fusion_corr_with_gallery": 0.6100437531566849,
+      "single_mean_corr_with_gallery": 0.5959755402560235,
+      "fusion_minus_mean": 0.014068212900661403,
+      "fusion_diag": {
+        "weights": [
+          0.06348960365610885,
+          0.06277909768111589,
+          0.06312081838344732,
+          0.06334666180365063,
+          0.0618566908762172,
+          0.06166246183601018,
+          0.06293361159436901,
+          0.061842875305140384,
+          0.0617515039928956,
+          0.059656828328525514,
+          0.060952270935365566,
+          0.06141132899046539,
+          0.0636842604477242,
+          0.06296416115105247,
+          0.06419308058202212,
+          0.06435474443588968
+        ],
+        "resid": [
+          1.290785733132457,
+          1.3053942847078663,
+          1.2983271932959546,
+          1.293698395639194,
+          1.3248603356174886,
+          1.3290334830715869,
+          1.3021892925157383,
+          1.3251563069134356,
+          1.3271170909305727,
+          1.3737149749734345,
+          1.3445188486213175,
+          1.3344683794831713,
+          1.2868403249206828,
+          1.3015574833178294,
+          1.2766403038307206,
+          1.273433286927882
+        ],
+        "weight_range": 0.004697916107364163,
+        "is_flat": false
+      },
+      "rho": 0.0,
+      "rho_raw": -0.07010945595308218,
+      "rho_model_ok": false,
+      "rho_fit": {
+        "alpha": -1.5223420815520177,
+        "beta": 23.23613319370644,
+        "r2": 0.9709562968749367,
+        "rho_raw": -0.07010945595308218,
+        "model_ok": false,
+        "spearman_brown_pred": [
+          0.04136198294127406,
+          0.0794382426453657,
+          0.14718441409058736,
+          0.2566011397692594,
+          0.4084050724581981,
+          0.5799539925617808,
+          0.6331439065803646
+        ],
+        "observed_over_SB": [
+          1.0,
+          1.4215913735775891,
+          1.8372966104816548,
+          1.8847830543946478,
+          1.6608592214936921,
+          1.4116739084533119,
+          1.3414363693916287
+        ]
+      },
+      "k_eff_at_R": 80.0,
+      "gallery_reliability_raw_layers": {
+        "n_views": 5,
+        "split_half_m1": 0.7695259851746927,
+        "split_half_m2": 0.7219998567896043
+      },
+      "source_vs_target": {
+        "corr_target80_with_gallery": 0.6310032127159316,
+        "corr_source9pool_with_gallery": 0.7922144819736205,
+        "corr_source9pool_shuffled_control": -0.0009538242043014424,
+        "source_minus_target": 0.16121126925768892,
+        "n_source_subjects": 9
+      },
+      "split_half_curve": {
+        "m": [
+          1,
+          2,
+          4,
+          8,
+          16,
+          32,
+          40
+        ],
+        "corr": [
+          0.04136198294127406,
+          0.11292872047681524,
+          0.27042142512436446,
+          0.4836374799754527,
+          0.6783033306969979,
+          0.818705919402792,
+          0.8493222633455968
+        ]
+      },
+      "effrank_single": 48.08563298514269,
+      "effrank_pooled": 23.521327527557315,
+      "target_subject": 2
+    }
+  },
+  "verdict": {
+    "n_folds": 1,
+    "bias_R1_mean": 0.13413497756989703,
+    "bias_R80_mean": 0.5959755402560235,
+    "bias_headroom_mean": 0.4618405626861265,
+    "bias_headroom_folds_positive": 1,
+    "shuffled_control_max_abs": 0.0016766451425321842,
+    "bias_R1_mean_raw_frame": 0.262632997216385,
+    "bias_R80_mean_raw_frame": 0.6599212139293392,
+    "bias_headroom_mean_raw_frame": 0.3972882167129542,
+    "bias_headroom_folds_positive_raw_frame": 1,
+    "shuffled_control_max_abs_raw_frame": 0.0031202150829122313,
+    "rho_mean": 0.0,
+    "rho_raw_mean": -0.07010945595308218,
+    "rho_exchangeable_model_folds_ok": 0,
+    "k_eff_at_R_mean": 80.0,
+    "fusion_minus_mean_mean": 0.014068212900661403,
+    "fusion_minus_mean_folds_positive": 1,
+    "effrank_single_mean": 48.08563298514269,
+    "effrank_pooled_mean": 23.521327527557315,
+    "control_separates": true,
+    "GO_bias_channel": true,
+    "GO_bias_channel_raw_frame": true,
+    "GO_variance_channel": false,
+    "bottleneck_corr_target80": 0.6310032127159316,
+    "bottleneck_corr_source9pool": 0.7922144819736205,
+    "bottleneck_source9pool_shuffled_control": -0.0009538242043014424,
+    "bottleneck_source_minus_target": 0.16121126925768892,
+    "bottleneck_paired_t": NaN,
+    "bottleneck_folds_positive": 1,
+    "EEG_side_saturated": false,
+    "reading": "GO: bias headroom exists in the DEPLOYMENT frame (R1 0.134 -> R80 0.596) AND in the ENCODER frame the training loop actually sees (R1 0.263 -> R80 0.660); both concept-shuffle controls collapse (<= 0.003). The EEG side is NOT saturated: a 9-subject pooled metric beats the target's own 80 repetitions on the same gallery (0.792 vs 0.631, delta +0.1612, t=+nan, 1/1 folds, its own shuffle control 0.001), so the residual is SUBJECT-SPECIFIC BIAS -- exactly what an exogenous-anchored L_bias targets. Variance channel: rho_mean=0.000 (exchangeable model valid on 0/1 folds) -> exhausted (independent view errors)."
+  }
+}

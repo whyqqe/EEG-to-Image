@@ -1,0 +1,20 @@
+# Probe arm: stimulus grouping ON, gate protection OFF.
+#
+# `v7_loso_k20.yaml` makes two changes to the rejected first implementation: it regroups the
+# reps contrast by STIMULUS (so same-image-different-subject views are positives instead of
+# negatives) and it stops the term's gradient from reaching the SMN scale gate. The second
+# change is only justified if the first one does not already fix the gate on its own, so this
+# arm removes it. If the gate stays near G3's ~0.50 without the protection, the protection is
+# unnecessary machinery and should be dropped rather than kept "because it cannot hurt" --
+# a flag nobody can show is load-bearing is a flag that will be forgotten and then break.
+base: v7_loso_k20.yaml
+
+concept:
+  enabled: true
+  reps_weight: 0.25
+  reps_group: stimulus
+  reps_n_stim: 32
+  reps_subj_sel: 2
+  reps_r_use: 2
+  reps_detach_gate: false
+  reps_csls_k: null

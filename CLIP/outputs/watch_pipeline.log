@@ -1,0 +1,377 @@
+[watch 16:25:29]
+    637530    PENDING
+    637528    PENDING
+    637533    RUNNING
+    637527    RUNNING
+    637529    RUNNING
+[watch 16:26:29]
+    637530    PENDING
+    637528    PENDING
+    637533    RUNNING
+    637527    RUNNING
+    637529    RUNNING
+[watch 16:27:29]
+    637530    PENDING
+    637528    PENDING
+    637533    RUNNING
+    637527    RUNNING
+    637529    RUNNING
+[watch 16:28:29]
+    637530    PENDING
+    637528    PENDING
+    637533    RUNNING
+    637527    RUNNING
+    637529    RUNNING
+[watch 16:29:29]
+    637530    PENDING
+    637528    PENDING
+    637533    RUNNING
+    637527    RUNNING
+    637529    RUNNING
+[watch 16:30:29]
+    637530    PENDING
+    637528    PENDING
+    637527    RUNNING
+    637529    RUNNING
+[watch 16:31:30]
+    637530    PENDING
+    637528    PENDING
+    637527    RUNNING
+    637529    RUNNING
+[watch 16:32:30]
+    637530    PENDING
+    637528    PENDING
+    637527    RUNNING
+    637529    RUNNING
+[watch 16:33:30]
+    637530    PENDING
+    637528    PENDING
+    637527    RUNNING
+    637529    RUNNING
+[watch 16:34:30]
+    637530    PENDING
+    637528    PENDING
+    637527    RUNNING
+    637529    RUNNING
+[watch 16:35:30]
+    637530    PENDING
+    637528    PENDING
+    637527    RUNNING
+    637529    RUNNING
+[watch 16:36:30]
+    637530    PENDING
+    637528    PENDING
+    637527    RUNNING
+    637529    RUNNING
+[watch 16:37:30]
+    637530    PENDING
+    637528    PENDING
+    637527    RUNNING
+    637529    RUNNING
+[watch 16:38:31]
+    637530    PENDING
+    637528    PENDING
+    637527    RUNNING
+    637529    RUNNING
+[watch 16:39:31]
+    637530    PENDING
+    637528    PENDING
+    637527    RUNNING
+    637529    RUNNING
+[watch 16:40:31]
+    637530    PENDING
+    637528    PENDING
+    637527    RUNNING
+    637529    RUNNING
+[watch 16:41:31]
+    637530    PENDING
+    637528    PENDING
+    637527    RUNNING
+    637529    RUNNING
+[watch 16:42:31]
+    637530    PENDING
+    637528    PENDING
+    637527    RUNNING
+    637529    RUNNING
+[watch 16:43:31]
+    637530    PENDING
+    637528    PENDING
+    637527    RUNNING
+    637529    RUNNING
+[watch 16:44:31]
+    637530    PENDING
+    637528    PENDING
+    637527    RUNNING
+    637529    RUNNING
+[watch 16:45:32]
+    637530    PENDING
+    637528    PENDING
+    637527    RUNNING
+    637529    RUNNING
+[watch 16:46:32]
+    637530    PENDING
+    637528    PENDING
+    637527    RUNNING
+    637529    RUNNING
+[watch 16:47:32]
+    637530    PENDING
+    637528    PENDING
+    637527    RUNNING
+    637529    RUNNING
+[watch 16:48:32]
+    637530    PENDING
+    637528    PENDING
+    637527    RUNNING
+    637529    RUNNING
+[watch 16:49:32]
+    637530    PENDING
+    637528    PENDING
+    637527    RUNNING
+    637529    RUNNING
+[watch 16:50:32]
+    637530    PENDING
+    637528    PENDING
+    637527    RUNNING
+    637529    RUNNING
+[watch 16:51:32]
+    637530    PENDING
+    637528    PENDING
+    637527    RUNNING
+    637529    RUNNING
+[watch 16:52:33]
+    637530    PENDING
+    637528    PENDING
+    637527    RUNNING
+    637529    RUNNING
+[watch 16:53:33]
+    637530    PENDING
+    637528    PENDING
+    637527    RUNNING
+    637529    RUNNING
+[watch 16:54:33]
+    637530    PENDING
+    637528    PENDING
+    637527    RUNNING
+    637529    RUNNING
+[watch 16:55:33]
+    637530    PENDING
+    637528    PENDING
+    637527    RUNNING
+    637529    RUNNING
+[watch 16:56:33]
+    637530    PENDING
+    637528    PENDING
+    637527    RUNNING
+    637529    RUNNING
+[watch 16:57:33]
+    637530    PENDING
+    637528    PENDING
+    637527    RUNNING
+    637529    RUNNING
+[watch 16:58:33]
+    637530    PENDING
+    637528    PENDING
+    637527    RUNNING
+    637529    RUNNING
+[watch 16:59:34]
+    637530    PENDING
+    637528    PENDING
+    637527    RUNNING
+    637529    RUNNING
+[watch 17:00:34]
+    637530    PENDING
+    637528    PENDING
+    637527    RUNNING
+    637529    RUNNING
+[watch 17:01:34]
+    637530    PENDING
+    637528    PENDING
+    637527    RUNNING
+    637529    RUNNING
+[watch 17:02:34]
+    637530    PENDING
+    637528    PENDING
+    637527    RUNNING
+    637529    RUNNING
+[watch 17:03:34]
+    637530    PENDING
+    637528    PENDING
+    637527    RUNNING
+    637529    RUNNING
+[watch 17:04:34]
+    637530    PENDING
+    637528    PENDING
+    637527    RUNNING
+    637529    RUNNING
+[watch 17:05:34]
+    637530    PENDING
+    637528    PENDING
+    637527    RUNNING
+    637529    RUNNING
+[watch 17:06:35]
+    637530    PENDING
+    637528    PENDING
+    637527    RUNNING
+    637529    RUNNING
+[watch 17:07:35]
+    637530    PENDING
+    637528    PENDING
+    637527    RUNNING
+    637529    RUNNING
+[watch] all jobs left the queue at 17:08:35
+
+###################### sacct ######################
+           JobID          JobName      State    Elapsed     MaxRSS ExitCode 
+  -------------- ---------------- ---------- ---------- ---------- -------- 
+          637527       samclip-s1 CANCELLED+   00:56:06                 0:0 
+    637527.batch            batch  CANCELLED   00:56:07  32523100K     0:15 
+          637528     samclip-eval CANCELLED+   00:00:00                 0:0 
+          637529       samclip-s1 CANCELLED+   00:56:06                 0:0 
+    637529.batch            batch  CANCELLED   00:56:07  32918416K     0:15 
+          637530     samclip-eval CANCELLED+   00:00:00                 0:0 
+          637533     probe-fusion  COMPLETED   00:17:19                 0:0 
+    637533.batch            batch  COMPLETED   00:17:19  33013728K      0:0 
+
+################### reference 637527 ###################
+  [16:12:05 INFO samclip.train] epoch -1 (init) | test top1 0.50 top5 2.50 meanrank 99.9
+  [16:13:10 INFO samclip.train] epoch 0 | loss 6.7090 | test top1 8.00 top5 21.50 meanrank 29.8
+  [16:14:15 INFO samclip.train] epoch 1 | loss 6.1810 | test top1 5.00 top5 24.50 meanrank 27.7
+  [16:15:19 INFO samclip.train] epoch 2 | loss 5.9853 | test top1 10.50 top5 29.50 meanrank 26.0
+  [16:16:25 INFO samclip.train] epoch 3 | loss 5.8718 | test top1 7.50 top5 27.00 meanrank 25.0
+  [16:17:31 INFO samclip.train] epoch 4 | loss 5.8017 | test top1 9.50 top5 32.00 meanrank 22.7
+  [16:18:36 INFO samclip.train] epoch 5 | loss 5.7438 | test top1 8.50 top5 30.50 meanrank 25.6
+  [16:19:41 INFO samclip.train] epoch 6 | loss 5.7016 | test top1 10.00 top5 31.00 meanrank 20.4
+  [16:20:46 INFO samclip.train] epoch 7 | loss 5.6591 | test top1 8.50 top5 30.00 meanrank 22.5
+  [16:21:51 INFO samclip.train] epoch 8 | loss 5.6255 | test top1 10.50 top5 31.00 meanrank 21.5
+  [16:22:56 INFO samclip.train] epoch 9 | loss 5.5985 | test top1 10.00 top5 30.00 meanrank 23.4
+  [16:24:01 INFO samclip.train] epoch 10 | loss 5.5666 | test top1 14.00 top5 38.50 meanrank 19.5
+  [16:25:05 INFO samclip.train] epoch 11 | loss 5.5454 | test top1 6.00 top5 26.00 meanrank 23.8
+  [16:26:11 INFO samclip.train] epoch 12 | loss 5.5188 | test top1 10.50 top5 31.50 meanrank 23.8
+  [16:27:16 INFO samclip.train] epoch 13 | loss 5.4919 | test top1 8.00 top5 28.50 meanrank 23.0
+  [16:28:21 INFO samclip.train] epoch 14 | loss 5.4689 | test top1 11.00 top5 30.00 meanrank 21.4
+  [16:29:25 INFO samclip.train] epoch 15 | loss 5.4399 | test top1 15.50 top5 36.00 meanrank 19.5
+  [16:30:28 INFO samclip.train] epoch 16 | loss 5.4207 | test top1 8.50 top5 27.50 meanrank 23.8
+  [16:31:30 INFO samclip.train] epoch 17 | loss 5.3989 | test top1 12.50 top5 30.00 meanrank 21.4
+  [16:32:33 INFO samclip.train] epoch 18 | loss 5.3777 | test top1 10.50 top5 37.00 meanrank 20.2
+  [16:33:36 INFO samclip.train] epoch 19 | loss 5.3545 | test top1 12.50 top5 30.00 meanrank 24.2
+  [16:34:38 INFO samclip.train] epoch 20 | loss 5.3401 | test top1 13.00 top5 34.00 meanrank 21.1
+  [16:35:39 INFO samclip.train] epoch 21 | loss 5.3140 | test top1 11.00 top5 32.50 meanrank 20.9
+  [16:36:39 INFO samclip.train] epoch 22 | loss 5.2960 | test top1 13.00 top5 35.00 meanrank 21.8
+  [16:37:40 INFO samclip.train] epoch 23 | loss 5.2703 | test top1 9.50 top5 36.00 meanrank 20.8
+  [16:38:43 INFO samclip.train] epoch 24 | loss 5.2555 | test top1 8.00 top5 28.50 meanrank 23.8
+  [16:39:43 INFO samclip.train] epoch 25 | loss 5.2316 | test top1 10.50 top5 32.00 meanrank 22.1
+  [16:40:46 INFO samclip.train] epoch 26 | loss 5.2105 | test top1 11.50 top5 33.00 meanrank 21.4
+  [16:41:47 INFO samclip.train] epoch 27 | loss 5.1946 | test top1 10.50 top5 33.00 meanrank 21.9
+  [16:43:01 INFO samclip.train] epoch 28 | loss 5.1743 | test top1 10.50 top5 32.50 meanrank 21.5
+  [16:44:16 INFO samclip.train] epoch 29 | loss 5.1560 | test top1 11.00 top5 27.00 meanrank 24.0
+  [16:45:28 INFO samclip.train] epoch 30 | loss 5.1385 | test top1 11.00 top5 34.50 meanrank 20.7
+  [16:46:38 INFO samclip.train] epoch 31 | loss 5.1215 | test top1 9.00 top5 25.50 meanrank 23.8
+  [16:47:45 INFO samclip.train] epoch 32 | loss 5.1083 | test top1 10.00 top5 26.50 meanrank 22.9
+  [16:48:51 INFO samclip.train] epoch 33 | loss 5.0938 | test top1 9.50 top5 28.50 meanrank 22.9
+  [16:49:58 INFO samclip.train] epoch 34 | loss 5.0773 | test top1 10.00 top5 24.50 meanrank 23.6
+  [16:51:04 INFO samclip.train] epoch 35 | loss 5.0634 | test top1 11.50 top5 29.50 meanrank 23.8
+  [16:52:10 INFO samclip.train] epoch 36 | loss 5.0522 | test top1 12.50 top5 30.50 meanrank 23.1
+  [16:53:15 INFO samclip.train] epoch 37 | loss 5.0392 | test top1 8.50 top5 32.00 meanrank 23.4
+  [16:54:18 INFO samclip.train] epoch 38 | loss 5.0309 | test top1 9.50 top5 28.50 meanrank 23.9
+  [16:55:21 INFO samclip.train] epoch 39 | loss 5.0148 | test top1 10.00 top5 26.50 meanrank 23.8
+  [16:56:24 INFO samclip.train] epoch 40 | loss 5.0042 | test top1 10.50 top5 27.00 meanrank 23.8
+  [16:57:27 INFO samclip.train] epoch 41 | loss 4.9904 | test top1 11.00 top5 30.00 meanrank 22.9
+  [16:58:31 INFO samclip.train] epoch 42 | loss 4.9815 | test top1 11.00 top5 29.00 meanrank 24.4
+  [16:59:34 INFO samclip.train] epoch 43 | loss 4.9749 | test top1 12.50 top5 28.50 meanrank 23.8
+  [17:00:37 INFO samclip.train] epoch 44 | loss 4.9675 | test top1 9.50 top5 30.00 meanrank 23.2
+  [17:01:40 INFO samclip.train] epoch 45 | loss 4.9578 | test top1 9.50 top5 26.50 meanrank 24.3
+  [17:02:43 INFO samclip.train] epoch 46 | loss 4.9497 | test top1 10.00 top5 26.00 meanrank 25.1
+  [17:03:46 INFO samclip.train] epoch 47 | loss 4.9380 | test top1 8.50 top5 27.50 meanrank 25.2
+  [17:04:49 INFO samclip.train] epoch 48 | loss 4.9387 | test top1 8.50 top5 29.50 meanrank 24.4
+  [17:05:51 INFO samclip.train] epoch 49 | loss 4.9311 | test top1 10.00 top5 28.50 meanrank 24.0
+  [17:06:55 INFO samclip.train] epoch 50 | loss 4.9239 | test top1 9.00 top5 27.00 meanrank 24.9
+
+#################### A2 637529 ####################
+  [16:12:05 INFO samclip.train] epoch -1 (init) | test top1 0.50 top5 2.50 meanrank 99.9
+  [16:13:11 INFO samclip.train] epoch 0 | loss 5.2367 | test top1 1.50 top5 8.50 meanrank 49.1
+  [16:14:16 INFO samclip.train] epoch 1 | loss 4.9114 | test top1 7.50 top5 22.00 meanrank 34.6
+  [16:15:22 INFO samclip.train] epoch 2 | loss 4.6923 | test top1 8.00 top5 27.50 meanrank 25.5
+  [16:16:28 INFO samclip.train] epoch 3 | loss 4.5035 | test top1 7.00 top5 21.00 meanrank 26.3
+  [16:17:33 INFO samclip.train] epoch 4 | loss 4.3756 | test top1 11.50 top5 31.50 meanrank 21.8
+  [16:18:38 INFO samclip.train] epoch 5 | loss 4.2853 | test top1 12.50 top5 29.00 meanrank 22.6
+  [16:19:44 INFO samclip.train] epoch 6 | loss 4.2203 | test top1 8.50 top5 34.00 meanrank 20.6
+  [16:20:48 INFO samclip.train] epoch 7 | loss 4.1576 | test top1 10.50 top5 29.50 meanrank 22.2
+  [16:21:53 INFO samclip.train] epoch 8 | loss 4.1085 | test top1 7.50 top5 27.00 meanrank 24.2
+  [16:22:58 INFO samclip.train] epoch 9 | loss 4.0683 | test top1 12.00 top5 33.50 meanrank 21.7
+  [16:24:03 INFO samclip.train] epoch 10 | loss 4.0311 | test top1 13.50 top5 33.00 meanrank 20.2
+  [16:25:08 INFO samclip.train] epoch 11 | loss 4.0061 | test top1 10.00 top5 28.00 meanrank 23.0
+  [16:26:13 INFO samclip.train] epoch 12 | loss 3.9809 | test top1 10.50 top5 33.50 meanrank 21.3
+  [16:27:18 INFO samclip.train] epoch 13 | loss 3.9532 | test top1 12.00 top5 32.00 meanrank 21.1
+  [16:28:23 INFO samclip.train] epoch 14 | loss 3.9283 | test top1 10.00 top5 33.00 meanrank 21.6
+  [16:29:28 INFO samclip.train] epoch 15 | loss 3.9033 | test top1 10.00 top5 34.00 meanrank 21.6
+  [16:30:33 INFO samclip.train] epoch 16 | loss 3.8852 | test top1 12.00 top5 32.50 meanrank 21.0
+  [16:31:39 INFO samclip.train] epoch 17 | loss 3.8676 | test top1 15.50 top5 35.50 meanrank 21.0
+  [16:32:46 INFO samclip.train] epoch 18 | loss 3.8507 | test top1 13.50 top5 38.00 meanrank 20.4
+  [16:33:51 INFO samclip.train] epoch 19 | loss 3.8308 | test top1 16.00 top5 37.00 meanrank 20.3
+  [16:34:57 INFO samclip.train] epoch 20 | loss 3.8192 | test top1 11.00 top5 39.50 meanrank 20.6
+  [16:36:03 INFO samclip.train] epoch 21 | loss 3.7979 | test top1 17.00 top5 37.00 meanrank 19.6
+  [16:37:08 INFO samclip.train] epoch 22 | loss 3.7826 | test top1 12.50 top5 38.50 meanrank 20.9
+  [16:38:15 INFO samclip.train] epoch 23 | loss 3.7636 | test top1 13.00 top5 31.50 meanrank 21.4
+  [16:39:20 INFO samclip.train] epoch 24 | loss 3.7484 | test top1 15.00 top5 31.00 meanrank 21.5
+  [16:40:26 INFO samclip.train] epoch 25 | loss 3.7313 | test top1 13.00 top5 42.00 meanrank 20.1
+  [16:41:33 INFO samclip.train] epoch 26 | loss 3.7143 | test top1 12.00 top5 34.50 meanrank 21.4
+  [16:42:44 INFO samclip.train] epoch 27 | loss 3.7023 | test top1 16.00 top5 37.50 meanrank 21.1
+  [16:44:00 INFO samclip.train] epoch 28 | loss 3.6851 | test top1 13.00 top5 33.50 meanrank 21.7
+  [16:45:06 INFO samclip.train] epoch 29 | loss 3.6730 | test top1 15.50 top5 34.00 meanrank 21.0
+  [16:46:12 INFO samclip.train] epoch 30 | loss 3.6590 | test top1 11.50 top5 38.50 meanrank 20.6
+  [16:47:18 INFO samclip.train] epoch 31 | loss 3.6428 | test top1 13.00 top5 33.00 meanrank 23.2
+  [16:48:24 INFO samclip.train] epoch 32 | loss 3.6345 | test top1 8.50 top5 31.50 meanrank 22.7
+  [16:49:30 INFO samclip.train] epoch 33 | loss 3.6218 | test top1 9.50 top5 33.50 meanrank 23.2
+  [16:50:36 INFO samclip.train] epoch 34 | loss 3.6096 | test top1 12.00 top5 35.50 meanrank 22.9
+  [16:51:41 INFO samclip.train] epoch 35 | loss 3.5975 | test top1 13.50 top5 39.00 meanrank 21.7
+  [16:52:47 INFO samclip.train] epoch 36 | loss 3.5862 | test top1 11.00 top5 35.00 meanrank 23.0
+  [16:53:53 INFO samclip.train] epoch 37 | loss 3.5758 | test top1 10.50 top5 39.00 meanrank 21.5
+  [16:54:58 INFO samclip.train] epoch 38 | loss 3.5692 | test top1 11.00 top5 38.00 meanrank 22.4
+  [16:56:05 INFO samclip.train] epoch 39 | loss 3.5570 | test top1 11.00 top5 34.00 meanrank 23.4
+  [16:57:10 INFO samclip.train] epoch 40 | loss 3.5472 | test top1 12.00 top5 37.50 meanrank 23.2
+  [16:58:16 INFO samclip.train] epoch 41 | loss 3.5367 | test top1 13.50 top5 36.00 meanrank 22.6
+  [16:59:21 INFO samclip.train] epoch 42 | loss 3.5290 | test top1 13.00 top5 36.50 meanrank 23.5
+  [17:00:27 INFO samclip.train] epoch 43 | loss 3.5220 | test top1 14.00 top5 34.00 meanrank 24.0
+  [17:01:33 INFO samclip.train] epoch 44 | loss 3.5169 | test top1 12.50 top5 37.50 meanrank 23.1
+  [17:02:39 INFO samclip.train] epoch 45 | loss 3.5078 | test top1 13.00 top5 34.50 meanrank 23.7
+  [17:03:44 INFO samclip.train] epoch 46 | loss 3.5021 | test top1 11.50 top5 38.00 meanrank 23.7
+  [17:04:50 INFO samclip.train] epoch 47 | loss 3.4941 | test top1 11.00 top5 35.50 meanrank 23.8
+  [17:05:56 INFO samclip.train] epoch 48 | loss 3.4904 | test top1 12.00 top5 36.00 meanrank 24.6
+  [17:07:01 INFO samclip.train] epoch 49 | loss 3.4859 | test top1 12.00 top5 36.00 meanrank 24.2
+
+#################### eval tables ####################
+--- outputs/slurm/samclip-eval-637528.out ---
+  (missing)
+--- outputs/slurm/samclip-eval-637530.out ---
+  (missing)
+
+#################### fusion probe ####################
+  [probe] job=637533 host=dgx-10 date=2026-10-03T16:12:15+08:00
+  ##############################################################################
+  # a_uniform__seed2025: target_fusion=mean
+  ##############################################################################
+  [probe] a_uniform__seed2025 -> top1 12.50 top5 29.00 meanrank 22.9 layer_weights None dec 0.4768 -> 0.252
+  ##############################################################################
+  # b_routed__seed2025: target_fusion=routed
+  ##############################################################################
+  [probe] b_routed__seed2025 -> top1 10.00 top5 29.00 meanrank 22.7 layer_weights [0.569, 0.177, 0.09, 0.066, 0.098] dec 0.4768 -> 0.2488
+  ##############################################################################
+  # c_routed_sr__seed2025: target_fusion=routed_sr
+  ##############################################################################
+  [probe] c_routed_sr__seed2025 -> top1 8.00 top5 29.00 meanrank 24.1 layer_weights [0.461, 0.188, 0.099, 0.095, 0.157] dec 0.4768 -> 0.3498
+  ##############################################################################
+  # a_uniform__seed2026: target_fusion=mean
+  ##############################################################################
+  [probe] a_uniform__seed2026 -> top1 13.50 top5 35.00 meanrank 20.0 layer_weights None dec 0.4626 -> 0.2393
+  ##############################################################################
+  # b_routed__seed2026: target_fusion=routed
+  ##############################################################################
+  [probe] b_routed__seed2026 -> top1 11.50 top5 33.50 meanrank 20.2 layer_weights [0.549, 0.191, 0.095, 0.068, 0.098] dec 0.4626 -> 0.2369
+  ##############################################################################
+  # c_routed_sr__seed2026: target_fusion=routed_sr
+  ##############################################################################
+  [probe] c_routed_sr__seed2026 -> top1 9.00 top5 29.50 meanrank 23.2 layer_weights [0.439, 0.205, 0.096, 0.104, 0.156] dec 0.4626 -> 0.3501
+  [probe] summary (watch `dec` for the routed_sr arm, and whether the learned layer weights left uniform):
+  [probe] finished rc=0 at 2026-10-03T16:29:33+08:00
+
+============== WATCHER DONE 17:08:35 ==============

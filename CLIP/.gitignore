@@ -1,0 +1,19 @@
+# The repository root ignores `outputs/` and `logs/` generically (safety net for
+# the other sub-projects). This project deliberately tracks its small result
+# JSONs and run logs, so re-include them here — while still refusing binaries.
+
+!outputs/
+!outputs/**
+!logs/
+!logs/**
+
+# never track these
+.venv/
+__pycache__/
+*.pyc
+*.pt
+*.pth
+*.ckpt
+*.npz
+*.npy
+data/

@@ -1,0 +1,91 @@
+{
+  "target_subject": 8,
+  "reference": {
+    "top1": 26.22,
+    "top5": 57.98,
+    "note": "SAMGA encoder re-measured by SCORE, final epoch"
+  },
+  "checkpoints": {
+    "stage1/smoke": {
+      "ckpt": "/project/peilab/why/CLIP/outputs/stage1/smoke/last.pt",
+      "epoch": 0,
+      "channel_set": "all63",
+      "feature_set": "clip_h14_multilevel",
+      "target_layers": [
+        20,
+        24,
+        28,
+        32,
+        36
+      ],
+      "target_fusion": "routed",
+      "target_layer_weights": [
+        0.19915436208248138,
+        0.20022693276405334,
+        0.19990122318267822,
+        0.20019149780273438,
+        0.20052605867385864
+      ],
+      "mvnn": "test",
+      "n_queries": 200,
+      "rows": {
+        "raw cosine": {
+          "top1": 0.0,
+          "top5": 2.5,
+          "mean_rank": 99.98,
+          "n": 200
+        },
+        "+ SAW whiten": {
+          "top1": 1.0,
+          "top5": 2.0,
+          "mean_rank": 106.305,
+          "n": 200,
+          "diag": {
+            "whiten": true,
+            "csls": false,
+            "recovery": false,
+            "whiten_diag": {
+              "eig_max": 0.03105796229352005,
+              "eig_min": 3.105796229352005e-05,
+              "cond": 999.9999999999999,
+              "n_samples": 200,
+              "d_embed": 512,
+              "rank_deficient": true
+            }
+          }
+        },
+        "+ CSLS": {
+          "top1": 0.0,
+          "top5": 1.5,
+          "mean_rank": 99.545,
+          "n": 200,
+          "diag": {
+            "whiten": false,
+            "csls": true,
+            "recovery": false
+          }
+        },
+        "+ whiten + CSLS": {
+          "top1": 1.0,
+          "top5": 2.5,
+          "mean_rank": 106.005,
+          "n": 200,
+          "diag": {
+            "whiten": true,
+            "csls": true,
+            "recovery": false,
+            "whiten_diag": {
+              "eig_max": 0.03105796229352005,
+              "eig_min": 3.105796229352005e-05,
+              "cond": 999.9999999999999,
+              "n_samples": 200,
+              "d_embed": 512,
+              "rank_deficient": true
+            }
+          }
+        }
+      }
+    }
+  },
+  "n_queries": 200
+}

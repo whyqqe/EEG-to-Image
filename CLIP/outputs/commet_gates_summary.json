@@ -1,0 +1,117 @@
+{
+  "g0": {
+    "n_folds": 10,
+    "folds": [
+      "sub01_seed2025",
+      "sub02_seed2025",
+      "sub03_seed2025",
+      "sub04_seed2025",
+      "sub05_seed2025",
+      "sub06_seed2025",
+      "sub07_seed2025",
+      "sub08_seed2025",
+      "sub09_seed2025",
+      "sub10_seed2025"
+    ],
+    "identity": {
+      "n": 10,
+      "mean": 55.1,
+      "base": 55.1,
+      "delta": 0.0,
+      "sd": 0.0,
+      "t": NaN,
+      "pos": 0,
+      "delta_agreement": 0.0
+    },
+    "within": {
+      "n": 10,
+      "mean": 53.9,
+      "base": 55.1,
+      "delta": -1.2000000000000006,
+      "sd": 1.9177533151523378,
+      "t": -1.9787389557455262,
+      "pos": 2,
+      "delta_agreement": -0.038597348258198466
+    },
+    "total": {
+      "n": 10,
+      "mean": 54.2,
+      "base": 55.1,
+      "delta": -0.9,
+      "sd": 1.679947089113887,
+      "t": -1.6941306738730282,
+      "pos": 2,
+      "delta_agreement": -0.11797125461155947
+    },
+    "shuffled": {
+      "n": 10,
+      "mean": 54.2,
+      "base": 55.1,
+      "delta": -0.9,
+      "sd": 1.8073922282301278,
+      "t": -1.5746719775034719,
+      "pos": 2,
+      "delta_agreement": -0.11796792033549193
+    },
+    "lda_k": {
+      "n": 10,
+      "mean": 38.55,
+      "base": 55.1,
+      "delta": -16.55,
+      "sd": 3.3370812263280474,
+      "t": -15.683075036616414,
+      "pos": 0,
+      "delta_agreement": -0.0020311077786550474
+    },
+    "verdict": {
+      "pass": false,
+      "criterion": "within > 0 on a majority of folds AND within > total AND within > shuffled",
+      "reading": "G0 FAILS: the BEST-CASE linear adapter does not separate from its controls. A learned phi cannot do better than the optimal linear map, so I5 is closed at the price of this job."
+    }
+  },
+  "g1": {
+    "n_folds": 10,
+    "folds": [
+      "sub01_seed2025",
+      "sub02_seed2025",
+      "sub03_seed2025",
+      "sub04_seed2025",
+      "sub05_seed2025",
+      "sub06_seed2025",
+      "sub07_seed2025",
+      "sub08_seed2025",
+      "sub09_seed2025",
+      "sub10_seed2025"
+    ],
+    "gv_vs_twin": {
+      "n": 10,
+      "mean": 55.0,
+      "base": 55.1,
+      "delta": -0.09999999999999928,
+      "sd": 1.30809445802324,
+      "t": -0.24174688920761217,
+      "pos": 4
+    },
+    "gvoff_vs_off": {
+      "n": 10,
+      "mean": 50.4,
+      "base": 50.4,
+      "delta": 0.0,
+      "sd": 0.0,
+      "t": NaN,
+      "pos": 0
+    },
+    "mean_gallery_weights": [
+      0.1548553002783521,
+      0.22360387633862153,
+      0.2587517761044653,
+      0.21337149597930108,
+      0.1494175512992599
+    ],
+    "verdict": {
+      "pass": false,
+      "criterion": "gv beats its fuse=16 twin on a majority of folds AND the structural-off twin is flat (|delta| < 0.5pp)",
+      "reading": "G1 FAILS: the gallery-side view ensemble does not beat the single fused gallery. The gallery metric is already clean enough that pooling its layer views adds nothing -- I4's second half is closed."
+    }
+  }
+}

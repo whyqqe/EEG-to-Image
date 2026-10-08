@@ -1,0 +1,12 @@
+{
+  "last": {
+    "top1": 26.0,
+    "top5": 57.49999999999999,
+    "mean_rank": 9.82,
+    "n": 200,
+    "offset_ratio": 0.47850221395492554,
+    "spec_top_frac": 0.9542064666748047
+  },
+  "best_seen": 27.0,
+  "out_dir": "/project/peilab/why/CLIP/outputs/stage1/v5-rat-csls_seed2027"
+}

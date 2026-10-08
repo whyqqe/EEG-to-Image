@@ -1,0 +1,17 @@
+# A2 ablation: cross-subject same-stimulus contrast OFF.
+#
+# This is the control for the ONE term the independent evidence singles out. An LOSO
+# study on THINGS-EEG2 measures +2.23pp Top-1 (95% CI [+1.28, +3.19]) from pulling
+# same-stimulus cross-subject representations together, and NO improvement from
+# suppressing subject identity. If this arm matches the default, that result does not
+# reproduce here and the headline configuration should be reconsidered -- so this is
+# the first arm to run, not a footnote.
+#
+# Note what turns off with it: with `cross: 0.0` the batch's cross-subject structure is
+# no longer used by any term, and `subjects_per_stimulus` / `batch_stimuli` stop
+# mattering. Keep them at their defaults so the comparison is single-variable.
+base: default.yaml
+
+out_dir: outputs/stage1/ablation_a2_no_cross
+loss_weights:
+  cross: 0.0

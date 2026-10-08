@@ -1,0 +1,36 @@
+# SQA (Symmetry-Quotient Alignment) -- the group-action arm, 10-fold LOSO.
+#
+# THE CLAIM.  Volume conduction is a linear channel mixing X -> A X, A invertible
+# (A in GL(C)). The nuisance that separates a held-out subject from the nine sources is
+# dominated by that group orbit, and the `cross` contrast can only ever teach invariance to
+# the mixing present in the nine sources. So we MANUFACTURE the group orbit during training
+# (`augment.mixing`, X -> M X, M = I + mixing*G) and let the encoder quotient it out. The
+# signal the concept lives in is a temporal factor the spatial mixing does not touch, which
+# is why this augmentation is not simply "more noise": it is the one transformation whose
+# orbit is a group action on the channels and the identity on time.
+#
+# THE TWIN.  `configs/sqa_loso_k20_noaug.yaml` is byte-identical except `augment.enabled:
+# false`. Same base, same fold keys, same seed, same data order, so the paired difference
+# IS the group-action augmentation and nothing else.
+#
+# ONLY `mixing` IS ON.  noise/gain/shift/channel_dropout are forced to zero so the arm
+# isolates the GROUP direction (the full GL(C) orbit) rather than a bundle of unrelated
+# nuisances -- the diagonal subgroup is already covered by `gain`, and shipping the bundle
+# would make a win unattributable to the group claim.
+base: g3_loso_k20.yaml
+
+augment:
+  enabled: true
+  noise: 0.0
+  gain: 0.0
+  shift: 0
+  channel_dropout: 0.0
+  #: `mixing` IS THE FROBENIUS NORM ||M - I||_F, shared by every mode so the arms are
+  #: magnitude-matched (E ||Mx - x||/||x|| = ||M - I||_F / sqrt(63) = 0.397). 3.15 is the
+  #: value the already-banked dense arm ran at: that run used the earlier entry-scale
+  #: parameterisation `M = I + 0.05*G`, whose Frobenius norm is 0.05 * E||G||_F = 0.05*63.
+  #: So this is the SAME perturbation, stated in the units the attribution needs.
+  mixing: 3.15
+  mixing_mode: dense          # full GL(63): off-diagonal recombination + diagonal rescaling
+
+out_dir: null               # MUST come from --out-dir (per fold / per arm)

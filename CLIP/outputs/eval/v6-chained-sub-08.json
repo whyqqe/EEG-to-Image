@@ -1,0 +1,668 @@
+{
+  "target_subject": 8,
+  "reference": {
+    "top1": 22.0,
+    "top5": 50.0,
+    "note": "SAMGA encoder re-measured by SCORE, final epoch"
+  },
+  "checkpoints": {
+    "stage1/v6-rat": {
+      "ckpt": "/project/peilab/why/CLIP/outputs/stage1/v6-rat/last.pt",
+      "epoch": 49,
+      "channel_set": "all63",
+      "feature_set": "internvit_multilevel",
+      "target_layers": [
+        20,
+        24,
+        28,
+        32,
+        36
+      ],
+      "target_fusion": "routed",
+      "arch": "v4",
+      "objective": "v4",
+      "d_align": 64,
+      "smn_gate": 0.16276797652244568,
+      "target_layer_weights": [
+        0.17420552670955658,
+        0.1763826459646225,
+        0.19312269985675812,
+        0.2329721301794052,
+        0.223316952586174
+      ],
+      "mvnn": "test",
+      "n_queries": 200,
+      "rows": {
+        "raw cosine": {
+          "top1": 18.5,
+          "top5": 46.5,
+          "mean_rank": 11.17,
+          "n": 200
+        },
+        "+ CSLS": {
+          "top1": 21.5,
+          "top5": 53.0,
+          "mean_rank": 10.105,
+          "n": 200,
+          "diag": {
+            "center": false,
+            "whiten": false,
+            "csls": true,
+            "recovery": false
+          }
+        },
+        "+ centre": {
+          "top1": 17.5,
+          "top5": 47.0,
+          "mean_rank": 11.355,
+          "n": 200,
+          "diag": {
+            "center": true,
+            "whiten": false,
+            "csls": false,
+            "recovery": false,
+            "center_diag": {
+              "offset_ratio": 0.06313733659119604,
+              "n_samples": 200
+            }
+          }
+        },
+        "+ centre + CSLS": {
+          "top1": 22.5,
+          "top5": 53.5,
+          "mean_rank": 10.29,
+          "n": 200,
+          "diag": {
+            "center": true,
+            "whiten": false,
+            "csls": true,
+            "recovery": false,
+            "center_diag": {
+              "offset_ratio": 0.06313733659119604,
+              "n_samples": 200
+            }
+          }
+        },
+        "+ SAW whiten": {
+          "top1": 21.0,
+          "top5": 50.0,
+          "mean_rank": 12.035,
+          "n": 200,
+          "diag": {
+            "center": false,
+            "whiten": true,
+            "csls": false,
+            "recovery": false,
+            "whiten_diag": {
+              "eig_max": 0.2302190328596864,
+              "eig_min": 0.0015645597702130599,
+              "cond": 147.1462051132348,
+              "n_samples": 200,
+              "d_embed": 64,
+              "rank_deficient": false
+            }
+          }
+        },
+        "+ whiten + CSLS": {
+          "top1": 22.0,
+          "top5": 50.5,
+          "mean_rank": 11.765,
+          "n": 200,
+          "diag": {
+            "center": false,
+            "whiten": true,
+            "csls": true,
+            "recovery": false,
+            "whiten_diag": {
+              "eig_max": 0.2302190328596864,
+              "eig_min": 0.0015645597702130599,
+              "cond": 147.1462051132348,
+              "n_samples": 200,
+              "d_embed": 64,
+              "rank_deficient": false
+            }
+          }
+        },
+        "+ whiten + CSLS + recovery": {
+          "top1": 25.5,
+          "top5": 56.00000000000001,
+          "mean_rank": 9.155,
+          "n": 200,
+          "diag": {
+            "center": false,
+            "whiten": true,
+            "csls": true,
+            "recovery": true,
+            "whiten_diag": {
+              "eig_max": 0.2302190328596864,
+              "eig_min": 0.0015645597702130599,
+              "cond": 147.1462051132348,
+              "n_samples": 200,
+              "d_embed": 64,
+              "rank_deficient": false
+            }
+          },
+          "recovery_diag": {
+            "n_queries": 200,
+            "n_gallery": 200,
+            "n_mutual_pairs": 117,
+            "landmark_rate": 0.585,
+            "k_csls": 10,
+            "rho": 0.1,
+            "moment_match": true,
+            "orientation": true,
+            "min_landmark_rate": 0.0,
+            "abstained": false,
+            "weight_share_top1": 0.03430502489209175,
+            "weight_entropy": 4.46437931060791,
+            "r_minus_i_frobenius": 1.1560542583465576
+          }
+        }
+      },
+      "offset_ratio": 0.5725784301757812,
+      "per_concept_rank": [
+        1,
+        6,
+        2,
+        4,
+        3,
+        1,
+        17,
+        2,
+        2,
+        1,
+        92,
+        1,
+        18,
+        2,
+        6,
+        16,
+        49,
+        14,
+        5,
+        4,
+        3,
+        1,
+        13,
+        5,
+        5,
+        7,
+        3,
+        3,
+        11,
+        3,
+        9,
+        1,
+        1,
+        1,
+        1,
+        3,
+        4,
+        13,
+        1,
+        1,
+        6,
+        24,
+        2,
+        2,
+        1,
+        38,
+        8,
+        1,
+        5,
+        1,
+        23,
+        27,
+        5,
+        1,
+        1,
+        2,
+        4,
+        5,
+        6,
+        11,
+        9,
+        2,
+        1,
+        2,
+        41,
+        1,
+        16,
+        9,
+        6,
+        5,
+        24,
+        10,
+        6,
+        1,
+        1,
+        27,
+        1,
+        12,
+        4,
+        11,
+        54,
+        23,
+        9,
+        101,
+        19,
+        12,
+        5,
+        2,
+        1,
+        14,
+        26,
+        5,
+        31,
+        1,
+        1,
+        6,
+        4,
+        5,
+        16,
+        41,
+        7,
+        2,
+        7,
+        1,
+        1,
+        1,
+        1,
+        1,
+        2,
+        3,
+        3,
+        11,
+        1,
+        2,
+        1,
+        12,
+        11,
+        6,
+        6,
+        1,
+        1,
+        28,
+        1,
+        16,
+        1,
+        17,
+        33,
+        2,
+        8,
+        3,
+        19,
+        9,
+        4,
+        1,
+        10,
+        1,
+        2,
+        1,
+        2,
+        3,
+        4,
+        6,
+        8,
+        4,
+        4,
+        6,
+        12,
+        43,
+        11,
+        12,
+        2,
+        7,
+        4,
+        7,
+        5,
+        4,
+        1,
+        1,
+        9,
+        4,
+        17,
+        21,
+        1,
+        28,
+        6,
+        1,
+        2,
+        3,
+        2,
+        12,
+        6,
+        7,
+        1,
+        10,
+        1,
+        2,
+        7,
+        33,
+        15,
+        1,
+        22,
+        5,
+        17,
+        8,
+        1,
+        1,
+        3,
+        5,
+        1,
+        1,
+        2,
+        1,
+        32,
+        5,
+        1,
+        9,
+        48,
+        6,
+        3,
+        15
+      ],
+      "rank_row": "+ whiten + CSLS + recovery"
+    },
+    "stage1/v6-multiroute": {
+      "ckpt": "/project/peilab/why/CLIP/outputs/stage1/v6-multiroute/last.pt",
+      "epoch": 49,
+      "channel_set": "all63",
+      "feature_set": "v6[alpha+gamma+beta]",
+      "target_layers": {
+        "alpha": [
+          20,
+          24,
+          28,
+          32,
+          36
+        ],
+        "gamma": [
+          0
+        ],
+        "beta": [
+          0
+        ]
+      },
+      "target_fusion": "routed",
+      "arch": "v4",
+      "objective": "v6",
+      "routes": [
+        "alpha",
+        "gamma",
+        "beta"
+      ],
+      "primary": "alpha",
+      "fusion_weight": 1.0,
+      "fusion_normalize": true,
+      "d_align": 64,
+      "smn_gate": 0.0,
+      "target_layer_weights": [
+        0.18342046439647675,
+        0.1854485720396042,
+        0.197397843003273,
+        0.22316096723079681,
+        0.21057209372520447
+      ],
+      "mvnn": "test",
+      "n_queries": 200,
+      "offset_ratio": 0.4584002196788788,
+      "rows": {
+        "+ CSLS": {
+          "top1": 21.5,
+          "top5": 47.0,
+          "mean_rank": 13.52,
+          "n": 200,
+          "diag": {
+            "fused": true,
+            "n_routes": 3,
+            "normalize": true
+          },
+          "best_route": "alpha",
+          "best_route_top1": 23.0
+        },
+        "+ centre": {
+          "top1": 15.0,
+          "top5": 42.5,
+          "mean_rank": 14.89,
+          "n": 200,
+          "diag": {
+            "fused": true,
+            "n_routes": 3,
+            "normalize": true
+          },
+          "best_route": "alpha",
+          "best_route_top1": 21.0
+        },
+        "+ centre + CSLS": {
+          "top1": 20.0,
+          "top5": 45.5,
+          "mean_rank": 13.82,
+          "n": 200,
+          "diag": {
+            "fused": true,
+            "n_routes": 3,
+            "normalize": true
+          },
+          "best_route": "alpha",
+          "best_route_top1": 21.5
+        },
+        "+ SAW whiten": {
+          "top1": 21.0,
+          "top5": 44.5,
+          "mean_rank": 14.53,
+          "n": 200,
+          "diag": {
+            "fused": true,
+            "n_routes": 3,
+            "normalize": true
+          },
+          "best_route": "alpha",
+          "best_route_top1": 22.5
+        },
+        "+ whiten + CSLS": {
+          "top1": 22.5,
+          "top5": 45.0,
+          "mean_rank": 13.82,
+          "n": 200,
+          "diag": {
+            "fused": true,
+            "n_routes": 3,
+            "normalize": true
+          },
+          "best_route": "alpha",
+          "best_route_top1": 23.0
+        },
+        "+ whiten + CSLS + recovery": {
+          "top1": 23.5,
+          "top5": 45.5,
+          "mean_rank": 13.58,
+          "n": 200,
+          "diag": {
+            "fused": true,
+            "n_routes": 3,
+            "normalize": true
+          },
+          "best_route": "alpha",
+          "best_route_top1": 24.0
+        },
+        "+ fused + C2 reps": {
+          "top1": 20.5,
+          "top5": 45.0,
+          "mean_rank": 13.525,
+          "n": 200,
+          "diag": {
+            "fused": true,
+            "n_routes": 3,
+            "route_diags": {
+              "alpha": {
+                "n_concepts": 200,
+                "n_reps": 80,
+                "k": 10,
+                "rho": 0.1,
+                "whiten_diag": {
+                  "cond": 120.84365373798025,
+                  "n_samples": 16000,
+                  "d": 64,
+                  "rank_deficient": false
+                },
+                "n_mutual": 103,
+                "reason": "validated landmarks below floor",
+                "n_validated": 0
+              },
+              "gamma": {
+                "n_concepts": 200,
+                "n_reps": 80,
+                "k": 10,
+                "rho": 0.1,
+                "whiten_diag": {
+                  "cond": 138.26820868483952,
+                  "n_samples": 16000,
+                  "d": 64,
+                  "rank_deficient": false
+                },
+                "n_mutual": 91,
+                "reason": "validated landmarks below floor",
+                "n_validated": 0
+              },
+              "beta": {
+                "n_concepts": 200,
+                "n_reps": 80,
+                "k": 10,
+                "rho": 0.1,
+                "whiten_diag": {
+                  "cond": 112.37594144806972,
+                  "n_samples": 16000,
+                  "d": 64,
+                  "rank_deficient": false
+                },
+                "n_mutual": 54,
+                "reason": "validated landmarks below floor",
+                "n_validated": 0
+              }
+            }
+          },
+          "best_route": "alpha",
+          "best_route_top1": 19.5
+        }
+      },
+      "route_rows": {
+        "alpha": {
+          "+ CSLS": {
+            "top1": 23.0,
+            "top5": 49.0,
+            "mean_rank": 11.15,
+            "n": 200
+          },
+          "+ centre": {
+            "top1": 21.0,
+            "top5": 43.0,
+            "mean_rank": 12.515,
+            "n": 200
+          },
+          "+ centre + CSLS": {
+            "top1": 21.5,
+            "top5": 46.5,
+            "mean_rank": 11.49,
+            "n": 200
+          },
+          "+ SAW whiten": {
+            "top1": 22.5,
+            "top5": 49.5,
+            "mean_rank": 12.35,
+            "n": 200
+          },
+          "+ whiten + CSLS": {
+            "top1": 23.0,
+            "top5": 50.5,
+            "mean_rank": 11.84,
+            "n": 200
+          },
+          "+ whiten + CSLS + recovery": {
+            "top1": 24.0,
+            "top5": 52.5,
+            "mean_rank": 10.275,
+            "n": 200
+          }
+        },
+        "gamma": {
+          "+ CSLS": {
+            "top1": 4.0,
+            "top5": 19.5,
+            "mean_rank": 42.74,
+            "n": 200
+          },
+          "+ centre": {
+            "top1": 5.0,
+            "top5": 19.5,
+            "mean_rank": 44.18,
+            "n": 200
+          },
+          "+ centre + CSLS": {
+            "top1": 5.5,
+            "top5": 19.0,
+            "mean_rank": 43.075,
+            "n": 200
+          },
+          "+ SAW whiten": {
+            "top1": 6.0,
+            "top5": 21.5,
+            "mean_rank": 42.965,
+            "n": 200
+          },
+          "+ whiten + CSLS": {
+            "top1": 7.5,
+            "top5": 22.5,
+            "mean_rank": 42.225,
+            "n": 200
+          },
+          "+ whiten + CSLS + recovery": {
+            "top1": 7.000000000000001,
+            "top5": 20.0,
+            "mean_rank": 42.56,
+            "n": 200
+          }
+        },
+        "beta": {
+          "+ CSLS": {
+            "top1": 3.5000000000000004,
+            "top5": 13.5,
+            "mean_rank": 46.765,
+            "n": 200
+          },
+          "+ centre": {
+            "top1": 2.5,
+            "top5": 12.0,
+            "mean_rank": 50.03,
+            "n": 200
+          },
+          "+ centre + CSLS": {
+            "top1": 3.0,
+            "top5": 14.000000000000002,
+            "mean_rank": 46.465,
+            "n": 200
+          },
+          "+ SAW whiten": {
+            "top1": 3.0,
+            "top5": 12.5,
+            "mean_rank": 49.695,
+            "n": 200
+          },
+          "+ whiten + CSLS": {
+            "top1": 4.5,
+            "top5": 13.5,
+            "mean_rank": 47.31,
+            "n": 200
+          },
+          "+ whiten + CSLS + recovery": {
+            "top1": 3.0,
+            "top5": 12.0,
+            "mean_rank": 50.155,
+            "n": 200
+          }
+        }
+      }
+    }
+  },
+  "n_queries": 200
+}

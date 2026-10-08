@@ -1,0 +1,156 @@
+{
+  "rank": 64,
+  "tau": 0.05,
+  "rho": 0.1,
+  "csls_k": 10,
+  "per_fold": {
+    "1_2025": {
+      "deployed": {
+        "+ CSLS + recovery": 50.0,
+        "+ T2 reps": 51.0,
+        "+ T1(CSLS + recovery) + T2 reps": 53.0
+      },
+      "s3r_tau0.01": {
+        "+ CSLS + recovery": 51.5,
+        "+ T2 reps": 56.49999999999999,
+        "+ T1(CSLS + recovery) + T2 reps": 54.50000000000001
+      },
+      "s3r_tau0.02": {
+        "+ CSLS + recovery": 51.5,
+        "+ T2 reps": 56.49999999999999,
+        "+ T1(CSLS + recovery) + T2 reps": 54.0
+      },
+      "s3r_tau0.05": {
+        "+ CSLS + recovery": 51.0,
+        "+ T2 reps": 56.49999999999999,
+        "+ T1(CSLS + recovery) + T2 reps": 53.5
+      },
+      "s3r_tau0.1": {
+        "+ CSLS + recovery": 51.0,
+        "+ T2 reps": 54.50000000000001,
+        "+ T1(CSLS + recovery) + T2 reps": 52.0
+      },
+      "s3r_tau0.2": {
+        "+ CSLS + recovery": 50.5,
+        "+ T2 reps": 53.0,
+        "+ T1(CSLS + recovery) + T2 reps": 51.0
+      },
+      "s3r_tau0.5": {
+        "+ CSLS + recovery": 48.5,
+        "+ T2 reps": 49.0,
+        "+ T1(CSLS + recovery) + T2 reps": 47.5
+      }
+    },
+    "2_2025": {
+      "deployed": {
+        "+ CSLS + recovery": 48.0,
+        "+ T2 reps": 53.5,
+        "+ T1(CSLS + recovery) + T2 reps": 52.0
+      },
+      "s3r_tau0.01": {
+        "+ CSLS + recovery": 50.5,
+        "+ T2 reps": 56.00000000000001,
+        "+ T1(CSLS + recovery) + T2 reps": 54.0
+      },
+      "s3r_tau0.02": {
+        "+ CSLS + recovery": 51.5,
+        "+ T2 reps": 54.50000000000001,
+        "+ T1(CSLS + recovery) + T2 reps": 54.50000000000001
+      },
+      "s3r_tau0.05": {
+        "+ CSLS + recovery": 51.0,
+        "+ T2 reps": 55.00000000000001,
+        "+ T1(CSLS + recovery) + T2 reps": 54.0
+      },
+      "s3r_tau0.1": {
+        "+ CSLS + recovery": 50.5,
+        "+ T2 reps": 55.50000000000001,
+        "+ T1(CSLS + recovery) + T2 reps": 52.5
+      },
+      "s3r_tau0.2": {
+        "+ CSLS + recovery": 48.5,
+        "+ T2 reps": 52.5,
+        "+ T1(CSLS + recovery) + T2 reps": 51.0
+      },
+      "s3r_tau0.5": {
+        "+ CSLS + recovery": 47.5,
+        "+ T2 reps": 50.5,
+        "+ T1(CSLS + recovery) + T2 reps": 49.5
+      }
+    },
+    "5_2025": {
+      "deployed": {
+        "+ CSLS + recovery": 37.5,
+        "+ T2 reps": 40.5,
+        "+ T1(CSLS + recovery) + T2 reps": 41.0
+      },
+      "s3r_tau0.01": {
+        "+ CSLS + recovery": 41.5,
+        "+ T2 reps": 40.0,
+        "+ T1(CSLS + recovery) + T2 reps": 43.5
+      },
+      "s3r_tau0.02": {
+        "+ CSLS + recovery": 43.0,
+        "+ T2 reps": 42.5,
+        "+ T1(CSLS + recovery) + T2 reps": 43.0
+      },
+      "s3r_tau0.05": {
+        "+ CSLS + recovery": 43.5,
+        "+ T2 reps": 42.0,
+        "+ T1(CSLS + recovery) + T2 reps": 43.0
+      },
+      "s3r_tau0.1": {
+        "+ CSLS + recovery": 42.5,
+        "+ T2 reps": 43.0,
+        "+ T1(CSLS + recovery) + T2 reps": 42.5
+      },
+      "s3r_tau0.2": {
+        "+ CSLS + recovery": 42.5,
+        "+ T2 reps": 42.0,
+        "+ T1(CSLS + recovery) + T2 reps": 42.5
+      },
+      "s3r_tau0.5": {
+        "+ CSLS + recovery": 40.5,
+        "+ T2 reps": 41.0,
+        "+ T1(CSLS + recovery) + T2 reps": 42.0
+      }
+    },
+    "8_2025": {
+      "deployed": {
+        "+ CSLS + recovery": 33.0,
+        "+ T2 reps": 34.5,
+        "+ T1(CSLS + recovery) + T2 reps": 35.0
+      },
+      "s3r_tau0.01": {
+        "+ CSLS + recovery": 35.5,
+        "+ T2 reps": 39.5,
+        "+ T1(CSLS + recovery) + T2 reps": 37.5
+      },
+      "s3r_tau0.02": {
+        "+ CSLS + recovery": 34.5,
+        "+ T2 reps": 39.0,
+        "+ T1(CSLS + recovery) + T2 reps": 38.0
+      },
+      "s3r_tau0.05": {
+        "+ CSLS + recovery": 35.0,
+        "+ T2 reps": 39.5,
+        "+ T1(CSLS + recovery) + T2 reps": 37.5
+      },
+      "s3r_tau0.1": {
+        "+ CSLS + recovery": 36.0,
+        "+ T2 reps": 39.0,
+        "+ T1(CSLS + recovery) + T2 reps": 37.0
+      },
+      "s3r_tau0.2": {
+        "+ CSLS + recovery": 35.0,
+        "+ T2 reps": 38.0,
+        "+ T1(CSLS + recovery) + T2 reps": 35.5
+      },
+      "s3r_tau0.5": {
+        "+ CSLS + recovery": 32.5,
+        "+ T2 reps": 34.5,
+        "+ T1(CSLS + recovery) + T2 reps": 35.5
+      }
+    }
+  }
+}

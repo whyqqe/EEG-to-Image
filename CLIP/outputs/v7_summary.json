@@ -1,0 +1,177 @@
+{
+  "n_runs": 1,
+  "missing": [
+    [
+      1,
+      2025
+    ],
+    [
+      1,
+      2026
+    ],
+    [
+      1,
+      2027
+    ],
+    [
+      2,
+      2025
+    ],
+    [
+      2,
+      2026
+    ],
+    [
+      2,
+      2027
+    ],
+    [
+      3,
+      2025
+    ],
+    [
+      3,
+      2026
+    ],
+    [
+      3,
+      2027
+    ],
+    [
+      4,
+      2025
+    ],
+    [
+      4,
+      2026
+    ],
+    [
+      4,
+      2027
+    ],
+    [
+      5,
+      2025
+    ],
+    [
+      5,
+      2026
+    ],
+    [
+      5,
+      2027
+    ],
+    [
+      6,
+      2025
+    ],
+    [
+      6,
+      2026
+    ],
+    [
+      6,
+      2027
+    ],
+    [
+      7,
+      2025
+    ],
+    [
+      7,
+      2026
+    ],
+    [
+      7,
+      2027
+    ],
+    [
+      8,
+      2026
+    ],
+    [
+      8,
+      2027
+    ],
+    [
+      9,
+      2025
+    ],
+    [
+      9,
+      2026
+    ],
+    [
+      9,
+      2027
+    ],
+    [
+      10,
+      2025
+    ],
+    [
+      10,
+      2026
+    ],
+    [
+      10,
+      2027
+    ]
+  ],
+  "rows": {
+    "raw cosine": {
+      "top1": 22.0,
+      "top1_std_across_folds": null,
+      "top5": 48.5,
+      "n_runs": 1
+    },
+    "+ CSLS": {
+      "top1": 25.0,
+      "top1_std_across_folds": null,
+      "top5": 56.00000000000001,
+      "n_runs": 1
+    },
+    "+ CSLS + recovery": {
+      "top1": 28.499999999999996,
+      "top1_std_across_folds": null,
+      "top5": 57.99999999999999,
+      "n_runs": 1
+    },
+    "+ whiten + CSLS + recovery": {
+      "top1": 22.0,
+      "top1_std_across_folds": null,
+      "top5": 48.0,
+      "n_runs": 1
+    },
+    "+ T2 reps": {
+      "top1": 28.000000000000004,
+      "top1_std_across_folds": null,
+      "top5": 64.5,
+      "n_runs": 1
+    },
+    "+ T1(CSLS + recovery) + T2 reps": {
+      "top1": 30.0,
+      "top1_std_across_folds": null,
+      "top5": 66.0,
+      "n_runs": 1
+    },
+    "+ T1(whiten + CSLS + recovery) + T2 reps": {
+      "top1": 28.499999999999996,
+      "top1_std_across_folds": null,
+      "top5": 59.0,
+      "n_runs": 1
+    }
+  },
+  "headline_row": "+ T1(CSLS + recovery) + T2 reps",
+  "per_fold": {
+    "8": {
+      "top1": 30.0,
+      "top5": 66.0
+    }
+  },
+  "best_epoch_raw_cosine": {
+    "last_epoch_mean": 26.5,
+    "best_seen_mean": 28.5,
+    "n_runs": 30
+  }
+}

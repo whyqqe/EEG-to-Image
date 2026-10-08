@@ -1,0 +1,23 @@
+# A7 ablation: SAMGA's subject-aware target blend, residual DROPPED at inference.
+#
+# During training the target blend gets a per-subject residual on top of the global
+# weights; at inference the residual is dropped, so the deployed model is
+# subject-agnostic and needs no subject identity. This is the mechanism SAMGA credits
+# for part of its inter-subject gain, so it has to be measured rather than assumed.
+#
+# It is not the default, for a reason this project measured: making the training target
+# a function of the row's subject turns the alignment objective into an incentive to
+# ENCODE subject identity, which is the opposite of what `loss_weights.dec`/`mmd` want.
+# Under v1's stronger decorrelation pressure the subject-dependence term rose
+# 0.22 -> 0.48 in the first epochs instead of falling. v2's decorrelation pressure is
+# much lighter (dec 0.2 -> 0.05), so the trade-off is genuinely different and worth
+# re-measuring -- which is why this is a live arm and not a rejected option.
+#
+# Watch `dec` in the step log: if it climbs while `cross` falls, the residual is
+# buying target fit at the cost of subject invariance, and the deployed (residual-free)
+# number will be worse than the training log suggests.
+base: default.yaml
+
+out_dir: outputs/stage1/ablation_a7_routed_sr
+target_fusion: routed_sr
+target_subject_dropout: 0.3

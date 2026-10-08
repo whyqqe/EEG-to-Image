@@ -1,0 +1,25 @@
+# D1 2x2 ARM "C2 only": the shared head is LINEAR (`share_head_hidden: 0`), so C1 is
+# INERT and the SMN (C2) is carrying the per-subject offset alone.
+#
+# WHY THIS ARM EXISTS. The previous analysis credited C1 (the nonlinear `share_head`)
+# with removing the per-subject offset, and read `subject_offset_ratio` as the evidence.
+# That reading is unsound, and the arithmetic is why: `SubjectModalityNorm` subtracts the
+# per-subject mean, so the SHIPPED embedding is mean-zero to numerical precision no
+# matter what the head is (measured: 6.9e-08 on the lr1e-3 arm). A diagnostic that C2
+# pins to ~0 by construction cannot possibly attribute anything to C1.
+#
+# So the C1 test has to be on the metric C1 is supposed to buy -- raw Top-1 -- and on the
+# quantity it is supposed to remove -- the *centring headroom* (`+ centre` minus `raw
+# cosine`), which is the size of the translation the deployment still needs.
+# `docs/eeg2image_v4_architecture.md` §3.3 argues the reference needs no such translation;
+# this arm asks whether the nonlinearity is what supplies that, or whether C2 alone does.
+#
+# `share_head_hidden: 0` also restores a case we have already PROVED is vacuous: with a
+# linear shared head, `share_head o img_pre` is a single linear map, so `img_pre` can
+# absorb any effective image map (fit residual 8.3e-07). The sharing constraint then
+# constrains nothing and C1 cannot be credited with any effect, by construction. The
+# prediction if C1 is real: this arm should be WORSE on raw Top-1 than the nonlinear arm,
+# or need a LARGER centring headroom, or both.
+base: loso_sub08_v4_nospec_nofreeze_lr3.yaml
+share_head_hidden: 0
+out_dir: outputs/stage1/v4-d1-c1off-sub-08

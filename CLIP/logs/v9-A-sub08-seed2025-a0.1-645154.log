@@ -1,0 +1,28 @@
+/project/peilab/why/CLIP/src/samclip/evaluate.py:184: UserWarning: The given NumPy array is not writable, and PyTorch does not support non-writable tensors. This means writing to this tensor will result in undefined behavior. You may want to copy the array to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at ../torch/csrc/utils/tensor_numpy.cpp:206.)
+  x = torch.as_tensor(flat[i:i + batch], dtype=torch.float32, device=device)
+[eval] recovery operator: fgw_recovery(tau=0.01,alpha=0.1)
+[eval] device=cuda target=sub-08
+[eval] g3/sub08_k20_seed2025: /project/peilab/why/CLIP/outputs/stage1/g3/sub08_k20_seed2025/last.pt
+
+============================================================================================
+LOSO retrieval | target sub-08 | 200-way | reference: 22.00/50.00  (caller-supplied reference for this fold (22.00/50.00))
+============================================================================================
+
+[g3/sub08_k20_seed2025]  /project/peilab/why/CLIP/outputs/stage1/g3/sub08_k20_seed2025/last.pt  (epoch 49)
+  arch=v4  objective=v4  d_align=64  smn_gate=0.4982  offset_ratio=0.519
+  fusion=routed  layer weights=[0.174, 0.181, 0.197, 0.232, 0.216]
+  row                             Top-1    Top-5  mean rank  ΔTop-1 vs ref
+  raw cosine                      25.50    60.00        9.1          +3.50
+  + CSLS                          34.50    66.00        7.9         +12.50
+  + centre                        25.50    61.50        9.4          +3.50
+  + centre + CSLS                 32.50    65.00        8.1         +10.50
+  + SAW whiten                    28.50    61.50       10.2          +6.50
+  + whiten + CSLS                 30.00    61.50       10.0          +8.00
+  + whiten + CSLS + recovery      30.50    68.00        8.2          +8.50
+  + CSLS + recovery               37.00    72.50        5.7         +15.00
+  + T2 reps                       39.50    71.50        5.3         +17.50
+  + T1(whiten + CSLS + recovery) + T2 reps    40.00    75.00        5.7         +18.00
+  + T1(CSLS + recovery) + T2 reps    41.50    75.50        4.7         +19.50
+
+============================================================================================
+[eval] wrote /project/peilab/why/CLIP/outputs/eval/fgw_a0.1/sub08_seed2025.json

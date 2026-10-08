@@ -1,0 +1,65 @@
+# v8 -- G3 + an operator-aligned soft-plan term. ONE variable added to the banked best.
+#
+# WHY THIS IS A DIFFERENT KIND OF PILLAR FROM THE FOUR THAT FAILED. Four training-side
+# attempts to lift the recovery rung are now falsified on this project: T2' (stimulus-grouped
+# repetition collapse, -4.5pp), T2'' (row-grouped, gate decay), SCORE's source-only recovery
+# episode (-0.48pp on the named rung / -1.21pp best rung; 2 positive vs 6 negative folds), and
+# the noise-corrected low-rank concept frame (G-a, 30 runs). All four tried to raise the HARD
+# mutual-NN landmark rate. The operator's measured behaviour over the 30-run G3 grid says
+# that was the wrong quantity: its contribution is +3.62 +- 1.72 Top-1 and FLAT, with
+# corr(raw, gain) = -0.19 and corr(landmark_rate, gain) = -0.21 -- it does not consume the
+# landmark rate, so pushing it could not help.
+#
+# The swappable-operator probe then located the real bottleneck: the ESTIMATOR. Replacing hard
+# mutual-NN matching with a Sinkhorn soft plan raises the effective number of matched pairs
+# from ~42 to ~465 and the 10-fold x 3-seed headline from 45.53 to 48.42 (+3.20 +- 2.01,
+# 28/30 runs positive, t = 8.72, 9/10 folds; `outputs/probe/s3r_full.json`). That makes the
+# soft plan a quantity training CAN move -- it is now the object the recovery fit is computed
+# from, which is exactly what the four failures were missing.
+#
+# SO THIS FILE ADDS `soft_plan` AND NOTHING ELSE. `base: g3_loso_k20.yaml` carries the entire
+# banked recipe (v5-a1-k20: `recovery_aware.csls_k: 20`, `terms: [img, cross]`, lr 1e-3,
+# 50 epochs, mvnn train, all63). A single added term against a banked baseline is the only
+# form of this experiment whose result is interpretable in one number.
+base: g3_loso_k20.yaml
+
+# The fold keys inherit the same shadowing discipline as G3 -- see g3_loso_k20.yaml. They MUST
+# come from the command line; a forgotten `--target-subject` dies on `None` rather than
+# silently training fold 8.
+target_subject: null
+source_subjects: null
+seed: null
+out_dir: null
+
+soft_plan:
+  enabled: true
+
+  # `tau` FOR TRAINING IS NOT THE DEPLOYMENT `tau`, AND CONFLATING THEM WOULD SILENTLY
+  # DISABLE THE TERM. Deployment wants the sharpest plan and uses 0.01-0.05 (gradients be
+  # damned). At training tau = 0.05 the exponent `(s - rowmax)/tau` spans ~-40 on a
+  # CSLS-corrected cosine, the plan collapses to a near-permutation, and the Jacobian through
+  # the Sinkhorn loop vanishes -- the loss would report as active while contributing nothing,
+  # which is the failure mode this project has already paid for once (a `--reps` flag that was
+  # accepted and produced no row). The gradient probe measured |grad| = 2.2e1 at tau = 0.05
+  # and 8.0e0 at 0.2 on this task, so 0.1 is chosen for flow, not for sharpness.
+  tau: 0.1
+  iters: 20
+
+  # The plan is built in the deployed metric (see `losses.soft_plan.soft_plan_loss`), at the
+  # same neighbourhood size `recovery_aware` uses.
+  csls_k: 20
+
+  # Modest on purpose: InfoNCE still has to build the representation, and this term only has
+  # to align it with the operator. The loss starts near 5-8 and should fall toward 0 if the
+  # mechanism is real, so its contribution is comparable to, not dominant over, InfoNCE.
+  weight: 0.5
+
+  # TRUE, AND THIS IS NOT A KNOB TO FLIP CASUALLY. A doubly-stochastic plan is only the
+  # correct prior when the block is a 1-to-1 retrieval set. Pooling subjects would force the
+  # column marginal to balance ACROSS subjects, i.e. it would ask the model to make different
+  # subjects' concept distributions equiprobable -- a constraint with no basis in the task.
+  # Note this differs from `recovery_aware.block_per_subject: false` in G3: that flag was
+  # measured (separately inert, harmful in combination) for an InfoNCE term where the block is
+  # only a density-estimation window. Here the block is a structural requirement, not a
+  # regulariser.
+  block_per_subject: true

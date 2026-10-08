@@ -1,0 +1,78 @@
+# v6 PILLARS B+C -- the MULTI-ROUTE arm (docs/eeg2image_v6_architecture.md §2, §3).
+#
+# THE HYPOTHESIS THIS ARM TESTS.  A single 64-d alignment space has to absorb the whole
+# concept manifold, and the measured subject gap (+31.22pp within-vs-cross on this fold)
+# says it is spending part of that space on subject structure. Three ROUTES with different
+# visual geometries disagree about WHICH directions are subject structure, so fusing their
+# SCORES (not their embeddings) keeps the disagreement that makes the ensemble worth
+# having. Axiom A5: concatenating embeddings before the contrast imposes one similarity
+# geometry and throws that disagreement away.
+#
+# The three routes, and why each:
+#   alpha  semantic   InternViT-6B layers [20,24,28,32,36] (SAMGA's layout, 3200-d)
+#   gamma  self-sup   DINOv2 ViT-L/14 CLS (1024-d)
+#   beta   low-level  24x24 RGB pixels, z-scored on train (1728-d). HVF's finding is that
+#                     the low-level route is the MISSING one, not the semantic one.
+#
+# ONE TRUNK.  All three routes share a single ATM-S EEG encoder (868k params, no scaling);
+# see `MultiRouteSAMCLIP`. The routes add only their per-route image projector and one
+# shared-head instance each -- 3x the head, 1x the encoder.
+#
+# FUSION IS A SUM OF SCORES WITH UNIFORM WEIGHTS, and both of those are measured choices:
+# CORTIVA's four weight controls all landed inside interval-crossing-zero of each other
+# with uniform on top, and fitting the weights on this fold would be selecting on the test
+# set. `normalize` is ON because a CSLS-corrected matrix is unbounded while a cosine matrix
+# is bounded -- without it the routes are weighted by the scale of their scores rather than
+# by their information (the 35.50 -> 18.00 collapse recorded in `calibration`).
+base: v4.yaml
+
+# v6 = v4's shared-head topology with a multi-route target stack and score fusion. It reads
+# every v4 sub-term plus `fuse`, so the comparison against `loso_sub08_v6_rat.yaml` (same
+# fold, same schedule, same recovery episodes) isolates the routes and the fusion.
+objective: v6
+arch: v4
+
+routes:
+  - name: alpha
+    feature_set: internvit_multilevel
+    layers: [20, 24, 28, 32, 36]
+  - name: gamma
+    feature_set: dinov2_l14
+    layers: [0]
+  - name: beta
+    feature_set: pixel_ll
+    layers: [0]
+
+fusion:
+  weight: 1.0        # the fusion term's weight, on the same fine-phase scale as `img`
+  normalize: true    # per-route global std normalisation before the sum (see above)
+
+# ------------------------------------------------------------------ recovery-aware (A)
+# MATCHED TO V0 EXACTLY (`block_per_subject: false`, same k, same episode), so V1 - V0 is
+# the routes and the fusion and nothing else. The temptation is to turn blocking on here
+# because the FUSION term is defined per subject block -- but blocking was measured on this
+# fold as inert alone and HARMFUL in combination (`outputs/probe`), and mixing it into this
+# arm would make the two changes unattributable. The fusion keeps its block structure
+# (CSLS's density is a retrieval-set property and deployment is one subject), while the
+# per-route `img`/`cross` terms stay whole-batch, exactly as V0 scores them.
+recovery_aware:
+  enabled: true
+  block_per_subject: false
+  csls_k: 10
+  terms: [img, cross]
+  recovery_episode: true
+  in_loop_full: true          # whiten -> CSLS(k) -> mutual-NN -> Procrustes -> apply
+  episode_whiten: true
+  episode_shrink: 0.1
+  episode_csls_k: 10
+  episode_rho: 0.1
+  episode_min_landmarks: 8
+
+# ------------------------------------------------------------------------- protocol
+target_subject: 8
+source_subjects: [1, 2, 3, 4, 5, 6, 7, 9, 10]
+channel_set: all63
+mvnn: train
+seed: 2025
+epochs: 50
+out_dir: outputs/stage1/v6-multiroute

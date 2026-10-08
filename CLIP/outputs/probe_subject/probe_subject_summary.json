@@ -1,0 +1,23 @@
+{
+  "A__ids__anchor_stats__seed2025": {
+    "z_source": "ids",
+    "anchor": "stats",
+    "z_norm": "mark",
+    "top1": 2.0,
+    "mean_rank": 33.78
+  },
+  "B__support__noanchor__seed2025": {
+    "z_source": "support",
+    "anchor": "none",
+    "z_norm": "mark",
+    "top1": 8.0,
+    "mean_rank": 28.365
+  },
+  "C__support__stats__seed2025": {
+    "z_source": "support",
+    "anchor": "stats",
+    "z_norm": "mark",
+    "top1": 5.5,
+    "mean_rank": 32.755
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "last": {
+    "top1": 15.0,
+    "top5": 35.0,
+    "mean_rank": 20.075,
+    "n": 200
+  },
+  "best_seen": 16.5,
+  "out_dir": "/project/peilab/why/CLIP/outputs/stage1/v32-aug-sub-08_seed2025"
+}

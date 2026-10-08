@@ -1,0 +1,92 @@
+{
+  "eeg": {
+    "n": 10,
+    "cells": [
+      "sub01_eeg",
+      "sub02_eeg",
+      "sub03_eeg",
+      "sub04_eeg",
+      "sub05_eeg",
+      "sub06_eeg",
+      "sub07_eeg",
+      "sub08_eeg",
+      "sub09_eeg",
+      "sub10_eeg"
+    ],
+    "m1_top1": 64.7,
+    "base_top1": 51.5,
+    "delta_top1": 13.199999999999998,
+    "t_top1": 8.897191702544257,
+    "pos": 10,
+    "m1_top5": 90.55,
+    "delta_top5": 9.75
+  },
+  "gallery": {
+    "n": 10,
+    "cells": [
+      "sub01_gallery",
+      "sub02_gallery",
+      "sub03_gallery",
+      "sub04_gallery",
+      "sub05_gallery",
+      "sub06_gallery",
+      "sub07_gallery",
+      "sub08_gallery",
+      "sub09_gallery",
+      "sub10_gallery"
+    ],
+    "m1_top1": 70.55,
+    "base_top1": 51.5,
+    "delta_top1": 19.05,
+    "t_top1": 9.13698548768465,
+    "pos": 10,
+    "m1_top5": 93.25,
+    "delta_top5": 12.45
+  },
+  "self": {
+    "n": 10,
+    "cells": [
+      "sub01_self",
+      "sub02_self",
+      "sub03_self",
+      "sub04_self",
+      "sub05_self",
+      "sub06_self",
+      "sub07_self",
+      "sub08_self",
+      "sub09_self",
+      "sub10_self"
+    ],
+    "m1_top1": 51.5,
+    "base_top1": 51.5,
+    "delta_top1": 0.0,
+    "t_top1": NaN,
+    "pos": 0,
+    "m1_top5": 80.8,
+    "delta_top5": 0.0
+  },
+  "rand": {
+    "n": 10,
+    "cells": [
+      "sub01_rand",
+      "sub02_rand",
+      "sub03_rand",
+      "sub04_rand",
+      "sub05_rand",
+      "sub06_rand",
+      "sub07_rand",
+      "sub08_rand",
+      "sub09_rand",
+      "sub10_rand"
+    ],
+    "m1_top1": 41.9,
+    "base_top1": 51.5,
+    "delta_top1": -9.6,
+    "t_top1": -8.282841243019933,
+    "pos": 0,
+    "m1_top5": 75.25,
+    "delta_top5": -5.55
+  },
+  "plumbing_self_bitflat": true,
+  "verdict": "NO-EEG-NEEDED: the public gallery metric reproduces the gain -> the arm is an estimator of the gallery geometry, not a neural leak."
+}

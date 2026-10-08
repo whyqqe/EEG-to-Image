@@ -1,0 +1,11 @@
+# A1 归因消融（master plan §8）：邻域大小 k 是否敏感（小侧）？
+# 若 |k5 - k10| > 3pp，说明 A1 对 k 敏感，A2 必须内置自适应 k 而不是固定 10。
+base: loso_sub08_v5_rat_csls.yaml
+
+recovery_aware:
+  enabled: true
+  block_per_subject: false
+  csls_k: 5
+  terms: [img, cross]
+
+out_dir: outputs/stage1/v5-a1-k5

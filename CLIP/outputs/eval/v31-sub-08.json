@@ -1,0 +1,91 @@
+{
+  "target_subject": 8,
+  "reference": {
+    "top1": 26.22,
+    "top5": 57.98,
+    "note": "SAMGA encoder re-measured by SCORE, final epoch"
+  },
+  "checkpoints": {
+    "stage1/v31-sub-08": {
+      "ckpt": "/project/peilab/why/CLIP/outputs/stage1/v31-sub-08/last.pt",
+      "epoch": 49,
+      "channel_set": "all63",
+      "feature_set": "internvit_multilevel",
+      "target_layers": [
+        20,
+        24,
+        28,
+        32,
+        36
+      ],
+      "target_fusion": "routed",
+      "target_layer_weights": [
+        0.16519801318645477,
+        0.1578022539615631,
+        0.17468760907649994,
+        0.23454223573207855,
+        0.26776987314224243
+      ],
+      "mvnn": "test",
+      "n_queries": 200,
+      "rows": {
+        "raw cosine": {
+          "top1": 14.499999999999998,
+          "top5": 37.5,
+          "mean_rank": 18.28,
+          "n": 200
+        },
+        "+ SAW whiten": {
+          "top1": 16.0,
+          "top5": 49.5,
+          "mean_rank": 14.825,
+          "n": 200,
+          "diag": {
+            "whiten": true,
+            "csls": false,
+            "recovery": false,
+            "whiten_diag": {
+              "eig_max": 0.15135083433327026,
+              "eig_min": 0.0001608656938056441,
+              "cond": 940.852152828374,
+              "n_samples": 200,
+              "d_embed": 512,
+              "rank_deficient": true
+            }
+          }
+        },
+        "+ CSLS": {
+          "top1": 19.0,
+          "top5": 45.0,
+          "mean_rank": 14.25,
+          "n": 200,
+          "diag": {
+            "whiten": false,
+            "csls": true,
+            "recovery": false
+          }
+        },
+        "+ whiten + CSLS": {
+          "top1": 17.5,
+          "top5": 49.0,
+          "mean_rank": 15.05,
+          "n": 200,
+          "diag": {
+            "whiten": true,
+            "csls": true,
+            "recovery": false,
+            "whiten_diag": {
+              "eig_max": 0.15135083433327026,
+              "eig_min": 0.0001608656938056441,
+              "cond": 940.852152828374,
+              "n_samples": 200,
+              "d_embed": 512,
+              "rank_deficient": true
+            }
+          }
+        }
+      }
+    }
+  },
+  "n_queries": 200
+}

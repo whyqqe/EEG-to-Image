@@ -1,0 +1,12 @@
+{
+  "last": {
+    "top1": 25.0,
+    "top5": 56.00000000000001,
+    "mean_rank": 10.79,
+    "n": 200,
+    "offset_ratio": 0.4408772587776184,
+    "spec_top_frac": 0.9896265268325806
+  },
+  "best_seen": 27.500000000000004,
+  "out_dir": "/project/peilab/why/CLIP/outputs/stage1/v6-multiroute-nowhiten"
+}

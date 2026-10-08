@@ -1,0 +1,31 @@
+# TQA Arm A -- the v8 recipe plus the group-action augmentation. THE SOTA ARM.
+#
+# WHY THIS IS THE ARM THAT SHOULD BREAK SOTA. Two measured facts, and this arm is their
+# composition:
+#   * v8 (configs/v8_loso_k20.yaml = g3 + the soft-plan term) is the shipped best encoder:
+#     55.10 Top-1 on the deployed cell at seed 2025 (54.83 over 3 seeds), against SCORE's
+#     published 53.23.
+#   * the group-action augmentation is worth a PAIRED +2.10pp Top-1 / +1.70pp Top-5
+#     (8/10 folds, t=1.98 / t=3.39) when added to the g3 recipe (job 648728).
+# The two were only ever measured separately. Composing them is the single change with the
+# best evidence behind it, and +2.1pp on a 55.10 base lands at ~57.
+#
+# NOTHING ELSE IS ADDED, so `tqa_v8 - v8` is the augmentation and nothing else, and the
+# result is interpretable in one number.
+base: v8_loso_k20.yaml
+
+augment:
+  enabled: true
+  noise: 0.0
+  gain: 0.0
+  shift: 0
+  channel_dropout: 0.0
+  #: ||M - I||_F, matched across modes (see `data/augment.py`). 3.15 is what the banked
+  #: dense arm ran at.
+  mixing: 3.15
+  mixing_mode: dense
+
+target_subject: null
+source_subjects: null
+seed: null
+out_dir: null

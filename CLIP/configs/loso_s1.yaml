@@ -1,0 +1,30 @@
+# Stage A -- shared cross-subject encoder pretraining, one LOSO fold (template).
+#
+# Protocol: all 1654 training concepts, no validation holdout, last epoch is the
+# reported checkpoint (SOTA protocol; /project/peilab/why/eeg-retrieval/PROTOCOL_INTER.md §3).
+#
+# This config *is* the training run: there is no Stage 1 -> Stage 2 chain any more, and
+# no mapping network. Deployment calibration (SAW + CSLS + coordinate recovery) is a
+# test-time operation with no parameters and lives in `calibration:` + scripts/run_eval.py.
+base: default.yaml
+
+target_subject: 1
+out_dir: outputs/stage1/sub-01
+epochs: 60
+
+# ---------------------------------------------------------------- ablation matrix
+# The v1 matrix rows here were about conditioning (A1-A4) and no longer exist -- there
+# is nothing to condition. The live rows, one flag each, all inheriting this file:
+#
+#   A2  + cross-subject loss    loss_weights.cross: 0.0  (off) vs 0.5 (default)
+#                               configs/ablation_a2_no_cross.yaml
+#   A3  + subject decorrelation loss_weights.dec: 0.0 vs 0.05 (default), 0.2 (v1 value)
+#   A4  + distribution matching loss_weights.mmd: 0.0 vs 0.1 (default)
+#   A5  + prototype anchoring   loss_weights.proto: 0.0 vs 0.1 (default)
+#   A6  + geometry matching     loss_weights.rkd: 0.0 (default) vs 0.1
+#   A7  target fusion           target_fusion: mean | routed (default) | routed_sr
+#                               configs/ablation_a7_*.yaml
+#   A8  prototype granularity   prototype_level: concept (default) | stimulus
+#
+# Read them in that order: A2 is the term the independent study singles out (+2.23pp
+# Top-1), A7 decides the visual target, and everything after is a smaller effect.

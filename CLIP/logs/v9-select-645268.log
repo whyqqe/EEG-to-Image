@@ -1,0 +1,34 @@
+[alpha] alpha=0.1: 30 reports from outputs/eval/fgw_a0.1
+[alpha] alpha=0.25: 30 reports from outputs/eval/fgw_a0.25
+[alpha] alpha=0.5: 30 reports from outputs/eval/fgw_a0.5
+[alpha] alpha=0.75: 30 reports from outputs/eval/fgw_a0.75
+[alpha] 30 folds present in EVERY alpha: 30 runs
+
+FULL GRID (mean over all shared runs) -- the shape is the robust evidence
+   alpha     mean      sd     n
+     0.1    47.97    9.12    30
+    0.25    48.60    9.16    30
+     0.5    49.80    9.12    30
+    0.75    50.53    8.67    30
+
+LEAVE-ONE-SUBJECT-OUT SELECTION over 10 subjects (criterion: accuracy)
+  held-out  selected alpha   held-out value
+     sub01            0.75            58.33   (other-subject means: 0.1:46.96, 0.25:47.65, 0.5:48.93, 0.75:49.67)
+     sub02            0.75            53.33   (other-subject means: 0.1:47.76, 0.25:48.35, 0.5:49.37, 0.75:50.22)
+     sub03            0.75            51.33   (other-subject means: 0.1:48.09, 0.25:48.50, 0.5:49.76, 0.75:50.44)
+     sub04            0.75            34.00   (other-subject means: 0.1:49.63, 0.25:50.35, 0.5:51.48, 0.75:52.37)
+     sub05            0.75            46.50   (other-subject means: 0.1:48.61, 0.25:49.24, 0.5:50.43, 0.75:50.98)
+     sub06            0.75            55.67   (other-subject means: 0.1:47.26, 0.25:47.87, 0.5:49.15, 0.75:49.96)
+     sub07            0.75            43.50   (other-subject means: 0.1:48.70, 0.25:49.37, 0.5:50.59, 0.75:51.31)
+     sub08            0.75            44.67   (other-subject means: 0.1:48.89, 0.25:49.54, 0.5:50.74, 0.75:51.19)
+     sub09            0.75            52.50   (other-subject means: 0.1:47.54, 0.25:48.26, 0.5:49.61, 0.75:50.31)
+     sub10            0.75            65.50   (other-subject means: 0.1:46.22, 0.25:46.87, 0.5:47.94, 0.75:48.87)
+
+============================================================================
+NESTED-LOSO HEADLINE (each run scored by its subject's held-out-selected alpha)
+  nested-LOSO mean        50.53  (n=30 runs)
+  best fixed alpha        50.53  <- for reference; this one IS selected on the reported runs
+  alpha chosen per-subject: {'0.75': 10}
+============================================================================
+[alpha] selected_alpha = 0.75  (mode of the per-subject choices)
+[alpha] wrote /project/peilab/why/CLIP/outputs/fgw_alpha.json

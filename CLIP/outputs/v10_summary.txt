@@ -1,0 +1,64 @@
+[sum] 30 sweep checkpoints
+[sum] FIDELITY R=80,a=0.75,t=0.03 vs outputs/eval/v8scr/a0.75_t0.03 on 30 ckpts: max|diff|=0.000 mean|diff|=0.000
+[sum] FIDELITY R=80,a=0.75,t=0.01 vs outputs/eval/v8_fgw075 on 30 ckpts: max|diff|=0.000 mean|diff|=0.000
+
+[gating curve] alpha=0.75 tau=0.03
+    R      on     off     gain   n_pos       t
+--------------------------------------------------
+   80   53.80   50.72    +3.08  25/30     6.23
+   40   46.15   43.83    +2.32  22/30     3.93
+   20   35.80   34.68    +1.12  24/30     2.46
+   10   27.43   26.82    +0.62  17/30     1.15
+    5   18.53   18.23    +0.30  14/30     0.62
+    1    5.08    5.52    -0.43  11/30    -1.69
+
+[gating curve] alpha=0.75 tau=0.01
+    R      on     off     gain   n_pos       t
+--------------------------------------------------
+   80   52.82   50.22    +2.60  26/30     6.54
+   40   45.75   43.97    +1.78  20/30     2.39
+   20   35.17   34.17    +1.00  18/30     1.98
+   10   26.87   26.45    +0.42  16/30     0.82
+    5   17.82   18.17    -0.35  12/30    -0.98
+    1    4.63    5.43    -0.80   7/30    -2.68
+
+[gating curve] alpha=0.75 tau=0.05
+    R      on     off     gain   n_pos       t
+--------------------------------------------------
+   80   53.10   50.58    +2.52  23/30     4.96
+
+[gate] GATED at tau=0.03: gain falls +3.52pp as R goes 80 -> 1. The structural term rides on target-side estimation variance.
+
+[gate] GATED at tau=0.01: gain falls +3.40pp as R goes 80 -> 1. The structural term rides on target-side estimation variance.
+
+[gate] tau=0.05: R not swept (only ['80']); no gate computed.
+
+[alpha grid at R=full, tau=0.03]
+  value     top1      off     gain
+   0.25    51.92    50.72    +1.20
+    0.5    53.08    50.72    +2.37
+   0.75    53.80    50.72    +3.08
+  0.875    50.72    50.72    +0.00
+
+[tau grid at R=full, alpha=0.75]
+  value     top1      off     gain
+   0.01    52.82    50.22    +2.60
+   0.03    53.80    50.72    +3.08
+   0.05    53.10    50.58    +2.52
+
+[nested-LOSO] 9 candidate cells x 10 held-out subjects
+ held-out                 picked   train    held
+        1     R=80,a=0.75,t=0.03   52.70   63.67
+        2     R=80,a=0.75,t=0.03   53.46   56.83
+        3     R=80,a=0.75,t=0.03   53.39   57.50
+        4     R=80,a=0.75,t=0.03   55.85   35.33
+        5     R=80,a=0.75,t=0.03   53.93   52.67
+        6     R=80,a=0.75,t=0.03   53.09   60.17
+        7     R=80,a=0.75,t=0.03   54.87   44.17
+        8     R=80,a=0.75,t=0.03   54.74   45.33
+        9     R=80,a=0.75,t=0.03   53.80   53.83
+       10     R=80,a=0.75,t=0.03   52.17   68.50
+  fixed-config mean 53.80  vs  nested-LOSO mean 53.80 (optimism +0.00pp)
+  -> selection optimism is small; the fixed config is safe to report.
+
+[sum] wrote outputs/v10_summary.json  (SELECTION OPTIMISM SMALL)
