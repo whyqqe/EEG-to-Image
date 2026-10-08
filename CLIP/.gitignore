@@ -1,19 +1,37 @@
-# The repository root ignores `outputs/` and `logs/` generically (safety net for
-# the other sub-projects). This project deliberately tracks its small result
-# JSONs and run logs, so re-include them here — while still refusing binaries.
+# --- what this project does NOT track -------------------------------------
+.venv/
+__pycache__/
+*.pyc
+data/
+*.pth
+*.ckpt
 
+# Result JSONs and run logs ARE tracked, even though the repository root
+# ignores `outputs/` and `logs/` generically as a safety net for the other
+# sub-projects.
 !outputs/
 !outputs/**
 !logs/
 !logs/**
 
-# never track these
-.venv/
-__pycache__/
-*.pyc
+# Tensors are excluded by default ...
 *.pt
-*.pth
-*.ckpt
 *.npz
 *.npy
-data/
+
+# ... except the key experiment checkpoints that are deliberately published.
+# (See the commit message for what each run is.)
+!outputs/stage1/v8/**
+!outputs/stage1/v7b/**
+!outputs/stage1/g3/**
+!outputs/stage1/v14_anchor_off/**
+!outputs/stage1/v14_anchor_raw/**
+!outputs/stage1/v14_anchor_whit/**
+!outputs/stage1/v14_anchor_whit05/**
+!outputs/stage1/v13_bias/**
+!outputs/stage1/v13_bias_off/**
+!outputs/stage1/tqa_v8/**
+!outputs/stage1/tqa_v8_gqf/**
+!outputs/stage1/sqa/**
+!outputs/stage1/sqa_noaug/**
+!outputs/stage1/sqa_attr/**
